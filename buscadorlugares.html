@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--Proyecto Original Base: https://docs.maptiler.com/leaflet/examples/geocoding-control/-->
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BUSCADOR DE LUGARES</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/leaflet.umd.js"></script>
+  <link href="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/style.css" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    #map {
+        position: absolute;
+        top: 20;
+        bottom: 0;
+        width: 100%;
+		height: 80%;
+    }
+	#encabezado {
+		top: 0;
+		bottom: 0;
+		width: 100%;
+		height: 20%;
+		border: 1px solid #1E679A;
+	}
+	#titulo{
+		background-color: #1E679A;
+		font-weight: bold;
+		color: #ffffff;
+		text-align: center;
+		padding: 10px 0;
+		border: 2px solid red;
+	}
+	#interlineado {
+		height: 5px;
+	}
+	#cuerpo{
+		background-color: #ffffcc;
+		text-align: center;
+		padding: 10px 0;
+		border: 2px solid red;
+	}
+  </style>
+</head>
+<body>
+  <div id="map"></div>
+  <div id="encabezado">
+	<div id="titulo">
+		Hola. Bienvenido al buscador de lugares on-line...!!!.-
+	</div>
+	<div id="interlineado"></div>
+	<div id="cuerpo">
+		¿Cómo se usa? Muy sencillo: escribí lo que deseás buscar en la barra de la lupita y listo.
+		Podés buscar una calle, un distrito, un departamento, una provincia o un país.-
+	</div>
+  </div>
+</body>
+<script>
+  const key = 'ARceMNxFkhRIPZcbKDIG';
+  const mapa = L.map('map').setView([0,0], 2);
+  const layer = L.tileLayer(`https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`,{
+    tileSize: 512,
+    zoomOffset: -1,
+    minZoom: 1,
+    attribution: "\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e",
+    crossOrigin: true
+  }).addTo(mapa);
+  L.control.maptilerGeocoding({apiKey:key}).addTo(mapa);
+</script>
+</html>
