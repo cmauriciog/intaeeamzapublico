@@ -1,75 +1,1044 @@
-<!DOCTYPE html>
-<!--Proyecto Original Base: https://docs.maptiler.com/leaflet/examples/geocoding-control/-->
+<!doctype html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BUSCADOR DE LUGARES</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script src="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/leaflet.umd.js"></script>
-  <link href="https://cdn.maptiler.com/maptiler-geocoding-control/v1.3.3/style.css" rel="stylesheet">
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-    }
-    #map {
-        position: absolute;
-        top: 20;
-        bottom: 0;
-        width: 100%;
-		height: 80%;
-    }
-	#encabezado {
-		top: 0;
-		bottom: 0;
-		width: 100%;
-		height: 20%;
-		border: 1px solid #1E679A;
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+	<meta name="generator" content="Hugo 0.101.0">
+	<title>Mapa Web del INTA EEA Mendoza</title>
+	<link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/dashboard/">
+	<link rel="canonical" href="https://getbootstrap.com/docs/5.2/examples/modals/">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+	<link href="assets/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="modals.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<link href="files/dashboard.css" rel="stylesheet">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+	
+	<!-- CSS -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+	integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
+	crossorigin=""/>
+	<link type="text/css" rel="stylesheet" href='css\component-chosen.css'>
+	<link type="text/css" rel="stylesheet" href='css\component-chosen.min.css'>
+
+	<!-- JS -->
+	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
+	integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
+	crossorigin=""></script>
+
+	<!-- Repositorios en línea y locales -->
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css" />
+	<link rel="stylesheet" href="libs/leaflet-measure-path.css" />
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
+	<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+	<script src="libs/editable.js" ></script>
+	<script src="libs/measure.js"></script>
+	<script src="leaflet.MeasurePolygon.js"></script>
+	<script src="js/jquery-3.4.1.min.js" ></script>
+	<script src="js/chosen.jquery.js" type="text/javascript"></script>
+
+	<!-- Añado un pluging de minimapa -->
+   <script src="https://cdn.jsdelivr.net/gh/maneoverland/leaflet.WorldMiniMap@1.0.0/dist/Control.WorldMiniMap.js" integrity="sha512-PFw8St3qenU1/dmwCfiYYN/bRcqY1p3+sBATR+rZ6622eyXOk/8izVtlmm/k8qW7KbRIJsku838WCV5LMs6FCg==" crossorigin=""></script>
+   
+   <!-- Importo el geoJSON -->
+   <script src="geojson/ensayos.geojson" type="text/javascript"></script>
+   <script src="geojson/personal.geojson" type="text/javascript"></script>
+   
+	<!--Icono para la pestaña del navegador-->
+	 <link rel="shortcut icon" href="./image/icono.ico" type="image/x-icon"/>
+	 
+<!--Clases para personalizar algunos elementos-->
+<meta name="theme-color" content="#712cf9">
+	<style>
+	.bd-placeholder-img {
+		font-size: 1.125rem;
+		text-anchor: middle;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		user-select: none;
 	}
-	#titulo{
-		background-color: #1E679A;
-		font-weight: bold;
-		color: #ffffff;
+
+	@media (min-width: 768px) {
+		.bd-placeholder-img-lg {
+		font-size: 3.5rem;
+		}
+	}
+
+	.b-example-divider {
+		height: 3rem;
+		background-color: rgba(0, 0, 0, .1);
+		border: solid rgba(0, 0, 0, .15);
+		border-width: 1px 0;
+		box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+	}
+
+	.b-example-vr {
+		flex-shrink: 0;
+		width: 1.5rem;
+		height: 100vh;
+	}
+
+	.bi {
+		vertical-align: -.125em;
+		fill: currentColor;
+	}
+
+	.nav-scroller {
+		position: relative;
+		z-index: 2;
+		height: 2.75rem;
+		overflow-y: hidden;
+	}
+	.nav-scroller .nav {
+		display: flex;
+		flex-wrap: nowrap;
+		padding-bottom: 1rem;
+		margin-top: -1px;
+		overflow-x: auto;
 		text-align: center;
-		padding: 10px 0;
-		border: 2px solid red;
+		white-space: nowrap;
+		-webkit-overflow-scrolling: touch;
 	}
-	#interlineado {
-		height: 5px;
+	.popups.leaflet-popup-tip,
+	.popups.leaflet-popup-content-wrapper {
+	background-color: #3182bd;
+	<!--color: red;-->
 	}
-	#cuerpo{
-		background-color: #ffffcc;
-		text-align: center;
-		padding: 10px 0;
-		border: 2px solid red;
+	.boton_predeterminado {
+	background-color: #fdae6b;
 	}
-  </style>
+	.boton_predeterminado:hover {
+	background-color: #e6550d;
+	cursor: pointer;
+	}
+	</style>
 </head>
 <body>
-  <div id="map"></div>
-  <div id="encabezado">
-	<div id="titulo">
-		Hola. Bienvenido al buscador de lugares on-line...!!!.-
+
+<!--Ventana modal inicial-->
+<dialog id="modal_inicial" style="text-align: center; background-color:yellow">
+	<div id="Apaisado"><h4>Parece que estas usando un dispositivo movil (celular o tablet).<br/>En ese caso, te recomendamos girarlo.<br/>Al usarlo en "modo apaisado", podrás ver herramientas de filtrado<br/>y estadísticas sobre el margen izquierdo.-</h4></div>
+	<div id="Conectividad"><h4>Parece que no tenes conexión a Internet. Por favor soluciona eso porque algunas herramientas no funcionarán correctamente.</h4></div>
+	<div style="text-align: right">
+		<button id="btn-cerrar-modal-inicial" style="height:30px; width:90px; background-color:red;border-color:white;color:white">Ok. Cerrar</button>
 	</div>
-	<div id="interlineado"></div>
-	<div id="cuerpo">
-		¿Cómo se usa? Muy sencillo: escribí lo que deseás buscar en la barra de la lupita y listo.
-		Podés buscar una calle, un distrito, un departamento, una provincia o un país.-
+</dialog>
+
+<!--Ventana modal estadísticas-->
+<dialog id="modal_estadisticas" style="text-align: center; background-color:#66FBA2">
+	<p id="titulo"></p>
+	<img id="imagenmodal" width="480" height="380" />
+	<p id="subtitulo"></p>
+	<div style="text-align: right">
+		<button id="btn-cerrar-modal-estadisticas" style="height:30px; width:90px; background-color:red;border-color:white;color:white">Ok. Cerrar</button>
 	</div>
-  </div>
-</body>
-<script>
-  const key = 'ARceMNxFkhRIPZcbKDIG';
-  const mapa = L.map('map').setView([0,0], 2);
-  const layer = L.tileLayer(`https://api.maptiler.com/maps/streets-v2/{z}/{x}/{y}.png?key=${key}`,{
-    tileSize: 512,
-    zoomOffset: -1,
-    minZoom: 1,
-    attribution: "\u003ca href=\"https://www.maptiler.com/copyright/\" target=\"_blank\"\u003e\u0026copy; MapTiler\u003c/a\u003e \u003ca href=\"https://www.openstreetmap.org/copyright\" target=\"_blank\"\u003e\u0026copy; OpenStreetMap contributors\u003c/a\u003e",
-    crossOrigin: true
-  }).addTo(mapa);
-  L.control.maptilerGeocoding({apiKey:key}).addTo(mapa);
+</dialog>
+
+<!--Barra con el título y logo-->
+<header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+	<a style="font-size:15px; color:white">VISOR DE PARCELAS CON CULTIVOS Y CONSTRUCCIONES DE LA EEA INTA MENDOZA</a>
+	<select id="encontrar_a" name="encontraralgo" data-placeholder="¿Necesitás ubicar una persona o un lugar?. Buscalo acá..." class="form-control chosenbusqueda" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="EncontrarA(value)">
+		<option value=""></option>
+	</select>
+	<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:grey; color:blue;width:80px"><strong>Activar/Desactivar mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="./image/slide_off.jpg" width="50" height="30"></img></a></div>
+	<img src="./image/INTA.png" width="60" height="60"></img>
+</header>
+
+<!--Barra lateral con su formato y elementos-->
+<div class="container-fluid">
+	<div class="row">
+		<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+			<div id="barrabotones" class="position-sticky pt-3 sidebar-sticky"">
+				<p></p>
+				<p style="font-size:12px; color:blue">¿Necesitás filtrar por variedad de vid?. Hacelo desde aquí...</p>
+				<div id="opciones_cob" style="font-size:12px">
+					<select id="cobertura_vid" onchange="CoberturasAbuscar(value)">
+						<option value="" ></option>
+						<option value="Ancelotta" >Ancelotta (tinta para vino)</option>
+						<option value="Barbera Dasty" >Barbera D'Asty (tinta para vino)</option>
+						<option value="Cabernet">Cabernet (tinta para vino)</option>
+						<option value="Chardonnay" >Chardonnay (blanca para vino)</option>
+						<option value="Chenin" >Chenin (blanca para vino)</option>
+						<option value="Malbec" >Malbec (tinta para vino)</option>
+						<option value="Merlot" >Merlot (tinta para vino)</option>
+						<option value="Pinot" >Pinot (tinta para vino)</option>
+						<option value="Riesling" >Riesling (blanca para vino)</option>
+						<option value="Sauvignon" >Sauvignon (blanca para vino)</option>
+						<option value="Semillon" >Semillón (blanca para vino)</option>
+						<option value="Syrah" >Syrah (tinta para vino)</option>
+						<option value="Torrontes" >Torrontés (blanca para vino)</option>
+						<option value="Coleccion vinificacion" >Colección de variedades p/vino</option>
+						<option value="Coleccion varietal" >Colección de varietales</option>
+						<option value="Coleccion criollas" >Colección de variedades criollas</option>
+						<option value="Americanas" >Americanas</option>
+						<option value="Portainjertos" >Portainjertos</option>
+						<option value="Variedades de mesa" >Colección de variedades p/mesa</option>
+					</select>
+				</div>
+				<p style="font-size:12px; color:blue"></br>¿Querés hacer la búsqueda con otro criterio?. Hacelo desde aquí...</p>
+				<div id="opciones_otr" style="font-size:12px">
+					<select id="otro_criterio" onchange="CriterioAbuscar(value)">
+						<option value="" ></option>
+						<option value="Cobertura">Tipo cobertura (cultivos/construc.)</option>
+						<option value="Especie">Especie de cultivo</option>
+						<option value="Conduccion">Conducción del cultivo</option>
+						<option value="Riego">Tipo de riego</option>
+						<option value="Clon">Clon plantado</option>
+						<option value="Plantacion">Año de plantación</option>
+						<option value="Superficie">Según superficie</option>
+						<option value="Responsable">Responsable del ensayo</option>
+					</select>
+				</div>
+				<div id="cobertura" style="font-size:12px">
+					<select id="sel_cobertura" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="Cultivo">Cultivos</option>
+						<option value="Edificio">Edificios</option>
+						<option value="Media Sombra">Media Sombra</option>
+						<option value="Invernaculo">Invernáculos</option>
+						<option value="Estructura">Otros</option>
+					</select>
+				</div>
+				<div id="especie" style="font-size:12px">
+					<select id="sel_especie" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="Vid">Vid</option>
+						<option value="Cerezo">Cerezos</option>
+						<option value="Huerta">Huerta Orgánica</option>
+						<option value="Inculto">Inculto</option>
+						<option value="Hortalizas">Hortalizas</option>
+						<option value="Tomate">Tomate</option>
+						<option value="Flores">Flores</option>
+						<option value="Hidroponia">Hidroponia</option>
+					</select>
+				</div>
+				<div id="conduccion" style="font-size:12px">
+					<select id="sel_conduccion" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="Espaldero">Espaldero</option>
+						<option value="Parral">Parral</option>
+					</select>
+				</div>
+				<div id="riego" style="font-size:12px">
+					<select id="sel_riego" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="Goteo">Goteo</option>
+						<option value="Superficial">Superficial</option>
+					</select>
+				</div>
+				<div id="clon" style="font-size:12px">
+					<select id="sel_clon" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="12">12</option>
+						<option value="18">18</option>
+						<option value="19">19</option>
+					</select>
+				</div>
+				<div id="plantacion" style="font-size:12px">
+					<select id="sel_plantacion" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="Antes de 1990">Antes de 1990</option>
+						<option value="Entre 1991 y 2000">Entre 1990 y 2000</option>
+						<option value="Entre 2001 y 2010">Entre 2001 y 2010</option>
+						<option value="Entre 2011 y 2020">Entre 2011 y 2020</option>
+					</select>
+				</div>
+				<div id="superficie" style="font-size:12px">
+					<select id="sel_superficie" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="Menos de 0,1 ha">Menor a 0,1 ha</option>
+						<option value="Entre 0,1 y 0,2 ha">Entre 0,1 y 0,2 ha</option>
+						<option value="Entre 0,2 y 0,3 ha">Entre 0,2 y 0,3 ha</option>
+						<option value="Entre 0,3 y 0,5 ha">Entre 0,3 y 0,5 ha</option>
+						<option value="Entre 0,5 y 0,7 ha">Entre 0,5 y 0,7 ha</option>
+						<option value="Entre 0,7 y 1 ha">Entre 0,7 y 1 ha</option>
+						<option value="Entre 1 y 2 ha">Entre 1 y 2 ha</option>
+						<option value="Entre 2 y 3 ha">Entre 2 y 3 ha</option>
+						<option value="Mayor a 3 ha">Mayor a 3 ha</option>
+					</select>
+				</div>
+				<div id="responsable" style="font-size:12px">
+					<select id="sel_responsable" onchange="BuscarOtro(value)">
+						<option value="" ></option>
+						<option value="Ecofisiologia">Ecofisiología</option>
+						<option value="Claudia Lucero">Claudia Lucero</option>
+						<option value="Gustavo Aliquo">Gustavo Aliquo</option>
+						<option value="Santiago Sari">Santiago Sari</option>
+						<option value="S. Gomez Talquenca">S. Gomez Talquenca</option>
+						<option value="Rocio Torres">Rocío Torres</option>
+						<option value="Cooperadora">Cooperadora</option>
+						<option value="German Aguado">Germán Aguado</option>
+						<option value="Gabriel Pisi">Gabriel Pisi</option>
+						<option value="Virologia">Virología</option>
+						<option value="Viticultura">Viticultura</option>
+						<option value="Juan C. Casciani">Juan C. Casciani</option>
+					</select>
+				</div>
+				<button id="mostrartodo" type="button" style="background-color:green" onclick="MostrarTodo()">Mostrar todas las parcelas</button>
+				<p><br></p>
+				<button id="quitartodo" type="button" style="background-color:red" onclick="ResetearTodo()">Quitar todas las parcelas del mapa</button>
+				<div id="contenedor_resumen" style="background-color:gray">
+					<label id="resumen" style="font-size:12px"><br></label>
+				</div>
+				<p style="font-size:12px; color:blue">¿Querés medir distancia entre dos puntos?</p>
+				<p style="font-size:12px">1ª) Desactivá las capas que pudieran haber en la zona a medir [Botón Rojo Superior]</p>
+				<a style="font-size:12px; color:blue" href="javascript:Medir_Longitud()">2ª) Hacé click AQUI</a>
+				<p style="font-size:12px">3ª) Hacé un click en cada uno de los dos puntos a medir...Y LISTO...!!!</p>
+				<p><img src="image/cultivos.jpg" width="20" height="20">Parcelas con cultivos</img></p>
+				<p><img src="image/construcciones.jpg" width="20" height="20">Parcelas con construcciones</img></p>
+				<!--<a style="font-size:12px; color:blue" href="mailto:cmauriciogodoy@gmail.com?subject=Asunto del correo&body=Cuerpo del mensaje">Hacer un aporte o reportar un error</a> <!--onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()"-->
+				<a style="font-size:12px; color:blue" onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()">Hacer un aporte o reportar un error</a>
+			</div>
+		</nav>
+
+		<!--Dimensionar el tamaño de la pantalla que ocupará el mapa -->
+		<main class="col-md-9 ms-sm-auto col-lg-10">
+			<div id="mapa" style="width:100%;height:560px;">
+			</div>
+		</main>
+	</div>
+</div>
+	
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js" integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE" crossorigin="anonymous"></script>
+<script type="text/javascript">
+	
+<!--Mapas o capas bases-->
+var ign = new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
+	attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="blanck">IGN</a> &copy; Desarrollado por: Mauricio Godoy',
+	}
+);
+
+var igngris=new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
+	attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="blanck">IGN</a> &copy; Desarrollado por: Mauricio Godoy',
+	}
+);
+
+var osm = new L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+	attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy; Desarrollado por: Mauricio Godoy',
+	}
+);
+var googlesatelite = new L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
+	attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="blanck">Google Satelital</a> &copy; Desarrollado por: Mauricio Godoy',
+	}
+);
+var googlecallejero=new L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+	attribution: 'Teselas <a href="https://www.google.com/maps/d/viewer?mid=1pFMZyH1aut3nTDdgkw2U9c3jtxY&hl=en_US&ll=-40.429460336394065%2C-63.6166725&z=4/" target="blanck">Google Maps</a> &copy; Desarrollado por: Mauricio Godoy',
+	}
+);
+var oscuro = new L.tileLayer('http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
+	attribution: 'Teselas <a href="https://carto.com/about-carto/" target="blanck">Carto</a> &copy; Desarrollado por: Mauricio Godoy',
+	}
+);
+var openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
+    attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA)'
+	});
+
+<!--Selector de las capas base-->
+var CapasBase = {
+"OSM": osm,
+"Google Callejero": googlecallejero,
+"Google Satelite": googlesatelite,
+"Topográfico": openTopoMap,
+"IGN": ign,
+"Modo Oscuro": oscuro,
+"IGN Gris": igngris,
+};
+
+<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
+var mapa = L.map('mapa', {editable:true,
+	center: ["-33.00598405638592", "-68.85600484779212"],
+	zoom: 16,
+	layers: [googlesatelite]
+});
+
+L.control.layers(CapasBase).addTo(mapa);
+
+<!--Crear la herramienta de medición de área-->
+let measurePolygonControl = L.control.measurePolygon();
+measurePolygonControl.addTo(mapa);
+
+<!--Añadir el mini-mapa al lienzo-->
+var worldMiniMap = L.control.worldMiniMap({position: 'bottomright', style: {opacity: 0.9, borderRadius: '0px', backgroundColor: 'lightblue'}}).addTo(mapa);
+$('.chosenbusqueda').chosen({no_results_text: "No se encuentran coincidencias...",allow_single_deselect: true});
+$(".chosenbusqueda").chosen().on("chosen:showing_dropdown", function(event) {  
+	$(".chosenbusqueda").trigger('chosen:updated');                                                                           
+});
+
+<!--Establecer variables globales-->
+var capa_filtrada={};
+var capa_buscar={};
+var capa_buscar1={};
+var sup_total=0;
+var tot_parc=0;
+var prom_prod=0;
+var anios_prod=0;
+var coordenadas="-33.00598405638592, -68.85600484779212".split(",");
+var zum=16;
+var medir_lineal="no"
+var firstLatLng, secondLatLng;
+var conexion="";
+var circulo="";
+var marcador="";
+var seguimiento="si";
+var listabusqueda=[];
+var listabusquedafiltrada=[];
+var sector="";
+var coincidencia="";
+var persona="";
+var oficina="";
+var lugar="";
+var ubicacion_real="";
+var borrar_ubicacion_real="";
+var sondeo_posicion="";
+
+<!--Funcion para colorear el fondo según el tipo de coberura (cultivos/edificios)-->
+function ColorFondo(d) {
+	return d == 'Cultivo' ? '#0aa621':
+			'#0b08a1'};
+
+<!--Funcion para colorear perímetro cultivos/edificios-->
+function ColorPerimetro(d) {
+	<!--return d == 'Americanas' ? 'red':-->
+	<!--d=='Ancelotta' ? 'blue':-->
+	<!--d=='Cabernet' ? 'yellow':-->
+	<!--d=='Cabernet Sauvignon' ? 'pink':-->
+	<!--d=='Chardonay' ? 'black':-->
+	<!--d=='Chenin' ? 'white':-->
+	<!--d=='Coleccion criollas' ? 'cyan':-->
+	<!--d=='Coleccion varietal' ? 'green':-->
+	<!--d=='Incremento vivero' ? 'brown':-->
+	<!--d=='Malbec' ? '#EB0474':-->
+	<!--d=='Pinot' ? '#6604EB':-->
+	<!--d=='Portainjertos' ? '#89F4F6':-->
+	<!--d=='Riesling' ? '#89F6B4':-->
+	<!--d=='Sauvignon' ? '#F5B61B':-->
+	<!--d=='Semillon, Malbec, Syrah' ? '#7E8603':-->
+	<!--d=='Syrah' ? '#034651':-->
+	<!--d=='Torrontes' ? '#F7B7CD':-->
+	<!--d=='Torrontes y Bonarda' ? '#460301':-->
+	<!--d=='Variedades de mesa' ? '#A9F9C1':-->
+	return d=='Cultivo' ? 'white':
+			'black'};
+
+<!--Funcion para llamar subfunciones de coloreo perímetros y áreas-->
+function PersonalizarPerimetro(feature) {
+	return {
+	fillColor: ColorFondo(feature.properties.Cobertura),
+	weight: 4,
+	opacity: 1,
+	color: ColorPerimetro(feature.properties.Cobertura),
+	dashArray: '3',
+	fillOpacity: 0.3}};
+	
+function PersonalizarBusquedas(feature) {
+	return {
+	fillColor: 'red',
+	weight: 4,
+	opacity: 1,
+	color: 'blue',
+	dashArray: '3',
+	fillOpacity: 0.8}};
+
+<!--Función para preparar todos los Pop-ups-->
+function onEachFeature(feature, layer) {
+	if (encontrar_a.value=="") {
+	sup_total=sup_total+feature.properties.Sup_Croqui;
+	tot_parc=tot_parc+1;
+	<!--Calcular el promedio general-->
+	prom_prod=prom_prod+feature.properties.Prod_2017+feature.properties.Prod_2018+feature.properties.Prod_2019+feature.properties.Prod_2020+feature.properties.Prod_2021;
+	<!--Calcular los años con producción (se excluyen los que no tienen datos)-->
+	if (feature.properties.Prod_2017 !=null) {anios_prod=anios_prod+1};
+	if (feature.properties.Prod_2018 !=null) {anios_prod=anios_prod+1};
+	if (feature.properties.Prod_2019 !=null) {anios_prod=anios_prod+1};
+	if (feature.properties.Prod_2020 !=null) {anios_prod=anios_prod+1};
+	if (feature.properties.Prod_2021 !=null) {anios_prod=anios_prod+1};
+	<!--Establecer el mini-logo del PopUp de acuerdo al cultivo/uso de la parcela-->
+	if (feature.properties.Variedad=="Ancelotta" || feature.properties.Variedad=="Barbera Dasty" || feature.properties.Variedad=="Cabernet" || feature.properties.Variedad=="Malbec" || feature.properties.Variedad=="Merlot" || feature.properties.Variedad=="Pinot" || feature.properties.Variedad=="Syrah" || feature.properties.Variedad=="Cabernet Sauvignon") {logo='./image/Uvas_Tintas.jpg'};
+	if (feature.properties.Variedad=="Chardonnay" || feature.properties.Variedad=="Chenin" || feature.properties.Variedad=="Riesling" || feature.properties.Variedad=="Sauvignon" || feature.properties.Variedad=="Semillon" || feature.properties.Variedad=="Torrontes") {logo='./image/Uvas_Blancas.jpg'};
+	if (feature.properties.Variedad=="Variedades de mesa" || feature.properties.Variedad=="Coleccion vinificacion" || feature.properties.Variedad=="Coleccion varietal" || feature.properties.Variedad=="Coleccion criollas" || feature.properties.Variedad=="Americanas" || feature.properties.Variedad=="Portainjertos") {logo='./image/Mezcla.jpg'};
+	if (feature.properties.Especie=="Huerta" || feature.properties.Especie=="Hortalizas" ) {logo='./image/Hortalizas.png'};
+	if (feature.properties.Especie=="Cerezo") {logo='./image/Cerezos.jpg'};
+	if (feature.properties.Especie=="Flores") {logo='./image/Flores.jpg'};
+	if (feature.properties.Especie=="Hidroponia") {logo='./image/Hidroponia.jpg'};
+	if (feature.properties.Cobertura=="Invernaculo") {logo='./image/Invernaculos.jpg'};
+	if (feature.properties.Cobertura=="Edificio" || feature.properties.Cobertura=="Estructura") {logo='./image/Edificios.jpg'};
+	if (feature.properties.Especie=="Inculto") {logo='./image/Inculto.jpg'};
+	var formatoPopup = {
+		'maxWidth': '200',
+		'className' : 'popups'}
+	<!--Reconocer las parcelas que tienen o no información sobre producción-->
+	if (feature.properties.id==2 || feature.properties.id==4 || feature.properties.id==8 || feature.properties.id==9 || feature.properties.id==10 || feature.properties.id==11 || feature.properties.id==19 || feature.properties.id==27 || feature.properties.id==28 || feature.properties.id==29 || feature.properties.id==31 || feature.properties.id==33 || feature.properties.id==37 || feature.properties.id==38 || feature.properties.id==42 || feature.properties.id==46 || feature.properties.id==50 || feature.properties.id>59 && feature.properties.id<95 || feature.properties.id==391 || feature.properties.id==392 || feature.properties.id==401) {
+		grafico="SinInfo.jpg"}
+	else {
+		grafico=feature.properties.id+".jpg"};
+	if (feature.properties.Cobertura=="Cultivo" && grafico !="SinInfo.jpg") {
+		if (feature.properties.Responsabl ==null) {respon="Sin información"};
+		if (feature.properties.Plantacion ==null) {planta="Sin información"};
+		if (feature.properties.Conduccion ==null) {conduc="Sin información"};
+		if (feature.properties.Variedad ==null) {varied="Sin información"};
+		if (feature.properties.Responsabl !=null) {respon=feature.properties.Responsabl};
+		if (feature.properties.Plantacion !=null) {planta=feature.properties.Plantacion};
+		if (feature.properties.Conduccion !=null) {conduc=feature.properties.Conduccion};
+		if (feature.properties.Variedad !=null) {varied=feature.properties.Variedad};
+		var id_parcela=feature.properties.id;
+		var variedad_parcela=feature.properties.Variedad;
+		if (feature.properties.Responsabl !=null) {var responsable_parcela=feature.properties.Responsabl};
+		if (feature.properties.Responsabl ==null) {var responsable_parcela="Sin Información"};
+		<!--PopUp a mostrar SI: La parcela tiene un cultivo y tiene datos de producción-->
+		var contenidoPopup="<b><h4>Especie: "+feature.properties.Especie+"   "+"<img src="+logo+" width='35' height='35' /img>"+"</b></h4><br/>Variedad: "+varied+"<br/>Conducción: "+conduc+"<br/>Año de plantación: "+planta+"<br/>Hileras: "+feature.properties.Hileras+"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"+"<br/>Responsable: "+respon+"<br/><p style='cursor: pointer; color:#0000ff' onclick='return Funcion_Modal(\""+id_parcela+"\", \""+variedad_parcela+"\", \""+responsable_parcela+"\", 545, 433)'><u>Ver Gráfico de Estadísticas...</u></p>"};
+	if (feature.properties.Cobertura=="Cultivo" && grafico =="SinInfo.jpg") {
+		if (feature.properties.Responsabl ==null) {respon="Sin información"};
+		if (feature.properties.Plantacion ==null) {planta="Sin información"};
+		if (feature.properties.Conduccion ==null) {conduc="Sin información"};
+		if (feature.properties.Variedad ==null) {varied="Sin información"};
+		if (feature.properties.Responsabl !=null) {respon=feature.properties.Responsabl};
+		if (feature.properties.Plantacion !=null) {planta=feature.properties.Plantacion};
+		if (feature.properties.Conduccion !=null) {conduc=feature.properties.Conduccion};
+		if (feature.properties.Variedad !=null) {varied=feature.properties.Variedad};
+		<!--PopUp a mostrar SI: La parcela tiene un cultivo y no tiene datos de producción-->
+		var contenidoPopup="<b><h4>Especie: "+feature.properties.Especie+"   "+"<img src="+logo+" width='35' height='35' /img>"+"</b></h4><br/>Variedad: "+varied+"<br/>Conducción: "+conduc+"<br/>Año de plantación: "+planta+"<br/>Hileras: "+feature.properties.Hileras+"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"+"<br/>Responsable: "+respon};
+	if (feature.properties.Cobertura !="Cultivo") {
+		<!--PopUp a mostrar SI: La parcela no tiene cultivo-->
+		var contenidoPopup="Cobertura: "+feature.properties.Cobertura+"   "+"<img src="+logo+" width='35' height='35' /img>"+"<br/>Descripción: "+feature.properties.Descripcio+"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"};
+	layer.bindPopup(contenidoPopup, formatoPopup);
+	document.getElementById("resumen").style.display="inline";
+	mapa.flyTo(coordenadas, zum)}
+	else {if (feature.properties.Descripcio==sector) {
+		coord_sector=(feature.geometry.coordinates[0][1]+", "+feature.geometry.coordinates[0][0]).split(",");
+		var centroide=layer.getBounds().getCenter();
+		var coord=[];
+		coord.push(centroide.lat,centroide.lng);
+		mapa.flyTo(coord,18);
+		if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+encontrar_a.value
+		+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre."};
+		if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+encontrar_a.value
+		+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"};
+		if (coincidencia =="persona" && oficina=="") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+encontrar_a.value
+		+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"};
+		if (coincidencia =="persona" && oficina !=="") {var contenidoPopup="<p>Si estás buscando a:</p>"
+		+"<h4><strong><p style='color:blue'>"+encontrar_a.value+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"
+		+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>"};
+		if (coincidencia=="especialidad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+encontrar_a.value
+		+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"+
+		"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>"};
+		lugar=L.marker(coord).addTo(mapa)
+					.bindPopup(contenidoPopup, formatoPopup)
+					.openPopup()};
+	};
+	};
+
+<!--Funcion para filtrar con criterio distinto a vid. Es insensible al uso de mayúsculas/minúsculas y busca con criterio tipo "*...*" -->
+function CriterioAbuscar(valor) {
+	encontrar_a.value="";
+	cobertura_vid.value="";
+	capa_parcelas.remove();
+	criterio=valor;
+	document.getElementById("responsable").style.display="none";
+	document.getElementById("conduccion").style.display="none";
+	document.getElementById("riego").style.display="none";
+	document.getElementById("clon").style.display="none";
+	document.getElementById("superficie").style.display="none";
+	document.getElementById("plantacion").style.display="none";
+	document.getElementById("cobertura").style.display="none";
+	document.getElementById("especie").style.display="none";
+	document.getElementById("quitartodo").style.display="none";
+	document.getElementById("mostrartodo").style.display="none";
+	if (otro_criterio.value=="Responsable") {
+		document.getElementById("responsable").style.display="inline";
+		document.getElementById("sel_responsable").style.display="inline"};
+	if (otro_criterio.value=="Clon") {
+		document.getElementById("clon").style.display="inline";
+		document.getElementById("sel_clon").style.display="inline"};
+	if (otro_criterio.value=="Superficie") {
+		document.getElementById("superficie").style.display="inline";
+		document.getElementById("sel_superficie").style.display="inline"};
+	if (otro_criterio.value=="Riego") {
+		document.getElementById("riego").style.display="inline";
+		document.getElementById("sel_riego").style.display="inline"};
+	if (otro_criterio.value=="Plantacion") {
+		document.getElementById("plantacion").style.display="inline";
+		document.getElementById("sel_plantacion").style.display="inline"};
+	if (otro_criterio.value=="Conduccion") {
+		document.getElementById("conduccion").style.display="inline";
+		document.getElementById("sel_conduccion").style.display="inline"};
+	if (otro_criterio.value=="Cobertura") {
+		document.getElementById("cobertura").style.display="inline";
+		document.getElementById("sel_cobertura").style.display="inline"};
+	if (otro_criterio.value=="Especie") {
+		document.getElementById("especie").style.display="inline";
+		document.getElementById("sel_especie").style.display="inline"};
+	document.getElementById("quitartodo").style.display="inline";
+	document.getElementById("mostrartodo").style.display="inline";
+	document.getElementById("resumen").style.display="inline";
+	document.getElementById("resumen").innerText=("Datos Estadísticos\nCriterio de filtro: "+valor)};
+
+<!--Funcion para filtrar con otro criterio distinto a vid-->
+function CoberturasAbuscar(valor) {
+	encontrar_a.value="";
+	sup_total=0;
+	tot_parc=0;
+	prom_prod=0;
+	anios_prod=0;
+	document.getElementById("responsable").style.display="none";
+	document.getElementById("conduccion").style.display="none";
+	document.getElementById("riego").style.display="none";
+	document.getElementById("clon").style.display="none";
+	document.getElementById("superficie").style.display="none";
+	document.getElementById("plantacion").style.display="none";
+	document.getElementById("cobertura").style.display="none";
+	document.getElementById("especie").style.display="none";
+	document.getElementById("resumen").style.display="inline";
+	document.getElementById("otro_criterio").value="";
+	document.getElementById("resumen").innerText=("Datos Estadísticos\nCobertura Fitlrada: Vid\n Variedad "+valor+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"+"\nPromedio producción anual: "+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha");
+	if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
+	if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
+	if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
+	if (lugar !==""){lugar.remove()};
+	capa_filtrada=L.geoJSON(parcelas,{filter:Filtrar_Vid, style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
+	document.getElementById("quitartodo").style.display="inline";
+	document.getElementById("mostrartodo").style.display="inline";
+	};
+
+<!--Funcion para filtrar parcelas con valores distintos a vid-->
+function BuscarOtro(valor) {
+	encontrar_a.value="";
+	sup_total=0;
+	tot_parc=0;
+	prom_prod=0;
+	anios_prod=0;
+	if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
+	if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
+	if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
+	capa_filtrada=L.geoJSON(parcelas,{filter:Filtrar_Gral, style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
+	document.getElementById("resumen").style.display="inline";
+	if (anios_prod !==0) {document.getElementById("resumen").innerText=("Datos Estadísticos\nCriterios de filtro: "+resumen+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"+"\nPromedio producción anual: "+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha")};
+	if (anios_prod ==0) {document.getElementById("resumen").innerText=("Datos Estadísticos\nCriterios de filtro: "+resumen+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha")};
+	cobertura_vid.value="";
+	document.getElementById("quitartodo").style.display="inline";
+	document.getElementById("mostrartodo").style.display="inline";
+	};
+
+<!--Funcion para filtrar parcelas con vid-->
+function Filtrar_Vid(feature) {
+	criterio="";
+	capa_parcelas.remove();
+	var cadenabusqueda=cobertura_vid.value;
+	var criterio = new RegExp(cadenabusqueda, "gi");
+	if (cobertura_vid.value !="") {if (feature.properties.Variedad==cobertura_vid.value) return true; document.getElementById("resumen").innerText=("Datos Estadísticos\nCriterio de filtro: Vid\nVariedad "+cobertura_vid.value+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"+"\nPromedio producción anual: "+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha")};
+	};
+
+<!--Funcion para filtrado general-->	
+function Filtrar_Gral(feature) {
+	capa_parcelas.remove();
+	if (criterio=="Clon" && sel_clon.value !=""){if (feature.properties.Clon==sel_clon.value) return true; resumen=otro_criterio.value+" "+sel_clon.value};
+	if (criterio=="Cobertura" && sel_cobertura.value !=""){if (feature.properties.Cobertura==sel_cobertura.value) return true; resumen=otro_criterio.value+" "+sel_cobertura.value};
+	if (criterio=="Conduccion" && sel_conduccion.value !=""){if (feature.properties.Conduccion==sel_conduccion.value) return true; resumen=otro_criterio.value+" "+sel_conduccion.value};
+	if (criterio=="Especie" && sel_especie.value !=""){if (feature.properties.Especie==sel_especie.value) return true; resumen=otro_criterio.value+" "+sel_especie.value};
+	if (criterio=="Responsable" && sel_responsable.value !=""){if (feature.properties.Responsabl==sel_responsable.value) return true; resumen=otro_criterio.value+" "+sel_responsable.value};
+	if (criterio=="Riego" && sel_riego.value !=""){if (feature.properties.Riego==sel_riego.value) return true; resumen=otro_criterio.value+" "+sel_riego.value};
+	if (criterio=="Plantacion" && sel_plantacion.value !=""){
+		if (sel_plantacion.value=="Antes de 1990") {if (feature.properties.Plantacion<'1991' && feature.properties.Plantacion !=null) return true};
+		if (sel_plantacion.value=="Entre 1991 y 2000") {
+			base='1991'; tope='2000';
+			if (feature.properties.Plantacion>=base && feature.properties.Plantacion<=tope && feature.properties.Plantacion !=null) return true};
+		if (sel_plantacion.value=="Entre 2001 y 2010") {
+			base='2001'; tope='2010';
+			if (feature.properties.Plantacion>=base && feature.properties.Plantacion<=tope && feature.properties.Plantacion !=null) return true};
+		if (sel_plantacion.value=="Entre 2011 y 2020") {
+			base='2011'; tope='2020';
+			if (feature.properties.Plantacion>=base && feature.properties.Plantacion<=tope && feature.properties.Plantacion !=null) return true};
+		resumen=otro_criterio.value+": "+sel_plantacion.value;
+	};
+	if (criterio=="Superficie" && sel_superficie.value !=""){
+		if (sel_superficie.value=="Menos de 0,1 ha") {if (feature.properties.Sup_Croqui <'0.1' && feature.properties.Sup_Croqui !=null) return true};
+		if (sel_superficie.value=="Entre 0,1 y 0,2 ha") {
+			base='0.1';tope='0.2';
+			if (feature.properties.Sup_Croqui >=base && feature.properties.Sup_Croqui <tope & feature.properties.Sup_Croqui !=null) return true};
+		if (sel_superficie.value=="Entre 0,2 y 0,3 ha") {
+			base='0.2';tope='0.3';
+			if (feature.properties.Sup_Croqui >=base && feature.properties.Sup_Croqui <tope && feature.properties.Sup_Croqui !=null) return true};
+		if (sel_superficie.value=="Entre 0,3 y 0,5 ha") {
+			base='0.3';tope='0.5';
+			if (feature.properties.Sup_Croqui>=base && feature.properties.Sup_Croqui<tope && feature.properties.Sup_Croqui!=null) return true};
+		if (sel_superficie.value=="Entre 0,5 y 0,7 ha") {
+			base='0.5';tope='0.7';
+			if (feature.properties.Sup_Croqui>=base && feature.properties.Sup_Croqui<tope && feature.properties.Sup_Croqui!=null) return true};
+		if (sel_superficie.value=="Entre 0,7 y 1 ha") {
+			base='0.7';tope='1';
+			if (feature.properties.Sup_Croqui>=base && feature.properties.Sup_Croqui<tope && feature.properties.Sup_Croqui!=null) return true};
+		if (sel_superficie.value=="Entre 1 y 2 ha") {
+			base='1';tope='2';
+			if (feature.properties.Sup_Croqui>=base && feature.properties.Sup_Croqui<tope && feature.properties.Sup_Croqui!=null) return true};
+		if (sel_superficie.value=="Entre 2 y 3 ha") {
+			base='2';tope='3';
+			if (feature.properties.Sup_Croqui>=base && feature.properties.Sup_Croqui<tope && feature.properties.Sup_Croqui!=null) return true};
+		if (sel_superficie.value=="Mayor a 3 ha") {if (feature.properties.Sup_Croqui>='3' && feature.properties.Sup_Croqui!=null) return true};
+		resumen=otro_criterio.value+": "+sel_superficie.value;
+	};
+	};
+
+<!--Funcion para buscar sector/actividad-->
+function Filtrar_Buscar(feature) {
+	criterio="";
+	if (feature.properties.Descripcio==encontrar_a.value) {return true,coincidencia="sector",sector=feature.properties.Descripcio};
+	if (feature.properties.Actividad==encontrar_a.value || feature.properties.Actividad1==encontrar_a.value || feature.properties.Actividad2==encontrar_a.value
+	|| feature.properties.Actividad3==encontrar_a.value) {return true,sector=feature.properties.Descripcio,coincidencia="actividad"};
+	};
+
+<!--Funcion para buscar persona/especialidad-->
+function Filtrar_Buscar1(feature) {
+	if (feature.properties.Persona==encontrar_a.value && feature.properties.Ofi_Lab !==null) {return true,sector=feature.properties.Sector,coincidencia="persona",oficina=feature.properties.Ofi_Lab};
+	if (feature.properties.Persona==encontrar_a.value && feature.properties.Ofi_Lab ==null) {return true,sector=feature.properties.Sector,coincidencia="persona"};
+	if (feature.properties.Especial==encontrar_a.value || feature.properties.Especial1==encontrar_a.value
+	|| feature.properties.Especial2==encontrar_a.value || feature.properties.Ofi_Lab==encontrar_a.value) {return true,sector=feature.properties.Sector,coincidencia="especialidad",persona=feature.properties.Persona};
+	};
+
+function Filtrar_Buscar2(feature) {
+	if (feature.properties.Descripcio==sector) {return true,sector=feature.properties.Descripcio};
+	};
+
+<!--Función para encontrar una persona o lugar-->
+function EncontrarA(encontrar) {
+	<!--Resetear variables-->
+	var buscado=encontrar_a.value;
+	ResetearTodo();
+	encontrar_a.value=buscado;
+	coincidencia="";
+	sector="";
+	oficina="";
+	<!--Borrar las búsquedas anteriores-->
+	if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
+	if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
+	if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
+	if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
+	if (lugar !==""){lugar.remove()};
+	<!--Generar la capa con el resultado de la búsqueda-->
+	capa_buscar=L.geoJSON(parcelas,{filter:Filtrar_Buscar, style: PersonalizarBusquedas, onEachFeature}).addTo(mapa);
+	<!--No se encontró lo que se busca por coincidencia con el Sector o la especialidad de éste; así que se pasa a buscar por coincidencia con persona o sus especialidades-->
+	if (Object.keys(capa_buscar._layers).length ==0) {capa_buscar=L.geoJSON(personal,{filter:Filtrar_Buscar1,style: PersonalizarBusquedas, onEachFeature}).addTo(mapa),
+	capa_buscar1=L.geoJSON(parcelas,{filter:Filtrar_Buscar2, style:PersonalizarBusquedas, onEachFeature}).addTo(mapa);
+	capa_buscar.remove();
+	};
+	mapa.flyToBounds(capa_buscar.getBounds(),18);
+	oficina="";
+	coincidencia="";
+	sector="";
+	if (Object.keys(capa_buscar).length !==0 || Object.keys(capa_buscar1).length !==0) {document.getElementById("quitartodo").style.display="inline"};
+};
+
+<!--Funcion para resetear todo-->
+function ResetearTodo() {
+	capa_parcelas.remove();
+	if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
+	if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
+	if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
+	if (lugar !==""){lugar.remove()};
+	if (otro_criterio.value=="Responsable") {
+		document.getElementById("responsable").style.display="none";
+		document.getElementById("sel_responsable").style.display="none"}
+	if (otro_criterio.value=="Clon") {
+		document.getElementById("clon").style.display="none";
+		document.getElementById("sel_clon").style.display="none";}
+	if (otro_criterio.value=="Superficie") {
+		document.getElementById("superficie").style.display="none";
+		document.getElementById("sel_superficie").style.display="none";}
+	if (otro_criterio.value=="Riego") {
+		document.getElementById("riego").style.display="none";
+		document.getElementById("sel_riego").style.display="none";}
+	if (otro_criterio.value=="Plantacion") {
+		document.getElementById("plantacion").style.display="none";
+		document.getElementById("sel_plantacion").style.display="none";}
+	if (otro_criterio.value=="Conduccion") {
+		document.getElementById("conduccion").style.display="none";
+		document.getElementById("sel_conduccion").style.display="none";}
+	if (otro_criterio.value=="Cobertura") {
+		document.getElementById("cobertura").style.display="none";
+		document.getElementById("sel_cobertura").style.display="none";}
+	if (otro_criterio.value=="Especie") {
+		document.getElementById("especie").style.display="none";
+		document.getElementById("sel_especie").style.display="none";}
+	tot_parc=0;
+	sup_total=0;
+	prom_prod=0;
+	anios_prod=0;
+	criterio="";
+	otro_criterio.value="";
+	sel_clon.value="";
+	sel_responsable.value="";
+	sel_especie.value="";
+	sel_cobertura.value="";
+	sel_plantacion.value="";
+	sel_riego.value="";
+	sel_superficie.value="";
+	sel_conduccion.value="";
+	cobertura_vid.value="";
+	encontrar_a.value="";
+	document.getElementById("resumen").innerText=("");
+	document.getElementById("quitartodo").style.display="none";
+	document.getElementById("mostrartodo").style.display="inline";
+	mapa.flyTo(coordenadas, zum);
+};
+
+<!-- Funcion para mostrar todas las parcelas-->
+function MostrarTodo() {
+	ResetearTodo();
+	capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
+	document.getElementById("quitartodo").style.display="inline";
+	document.getElementById("mostrartodo").style.display="none";
+	document.getElementById("resumen").innerText=("Datos Estadísticos\n\nCriterio de filtro: Todo"+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"+"\nPromedio producción anual: "+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha");
+};
+
+<!--Evento que captura dos puntos para medir la distancia entre ellos-->
+mapa.on('click', function(e) {if (medir_lineal=="si") {
+    if (!firstLatLng) {
+		firstLatLng = e.latlng;
+        puntoA=new L.marker(firstLatLng).addTo(mapa).bindPopup('Punto A<br/>' + e.latlng).openPopup();
+    } else {
+		secondLatLng = e.latlng;
+        puntoB=new L.marker(secondLatLng).addTo(mapa).bindPopup('Punto B<br/>' + e.latlng).openPopup();
+    }
+
+    if (firstLatLng && secondLatLng) {
+		<!--Dibujo una línea entre los dos puntos-->
+		lineadistancia=new L.polyline([firstLatLng, secondLatLng], {
+        color: 'red'
+		}).addTo(mapa);
+		setTimeout(MedirDistancia, 300);
+    }
+}});
+
+<!--Función para habilitar la medición de longitudes-->
+function Medir_Longitud() {
+	medir_lineal="si";
+};
+
+<!--Funcion para medir distancias entre dos puntos-->
+function MedirDistancia() {
+	var distancem = mapa.distance(firstLatLng ,secondLatLng).toFixed(2);
+	var distancekm=(distancem/1000).toFixed(2);
+	firstLatLng="";
+	secondLatLng="";
+	alert("La distancia aproximada es de "+distancem+" metros ó "+distancekm+" km.-");
+	puntoA.remove();
+	puntoB.remove();
+	lineadistancia.remove();
+	medir_lineal="no";
+};
+
+<!--Función para activar el seguimiento en tiempo real y hacer zoom en él-->
+function activar_seguimiento(seguimiento) {
+	sondeo_posicion=0;
+	seguimiento="si";
+	if((! navigator.geolocation || ! navigator.onLine) && seguimiento=="si") {
+		alert("Oho...!!! Parece que no tenés activado del GPS y/o no tenés conexión a internet...!!!.-");
+	} else {
+		ubicacion_real=setInterval(() => {
+		navigator.geolocation.getCurrentPosition(GetPosition,
+			onError, {maximumAge: 0,timeout: 100,enableHighAccuracy:true})
+			}, 500);
+		if (borrar_ubicacion_real !=="") {
+			clearInterval(borrar_ubicacion_real);
+		};
+		document.getElementById("gps").src="./image/slide_on.jpg";
+		document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento(seguimiento)";//innerHTML="<p style='cursor: pointer; color:#0000ff; font:Arial' onclick='return Desactivar_Seguimiento()'><u>Desactivar Ubicacion</u></p>";
+	};
+};
+
+<!--Función para detener el seguimiento en tiempo real-->
+function desactivar_seguimiento(seguimiento) {
+	clearInterval(ubicacion_real);
+	seguimiento="no";
+	mapa.setView([-33.004058, -68.861730]);
+	mapa.setZoom(16);
+	document.getElementById("gps").src="./image/slide_off.jpg";
+	document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";//innerHTML="<p style='cursor: pointer; color:#0000ff; font:Arial' onclick='return Activar_Seguimiento()'><u>Activar Ubicacion</u></p>";
+	borrar_ubicacion_real=setInterval(() => {
+		if(marcador) {
+			mapa.removeLayer(marcador)
+		}
+		if(circulo) {
+			mapa.removeLayer(circulo)
+		}
+	}, 1000);
+	mapa.flyTo(["-33.00598405638592", "-68.85600484779212"],16);
+};
+
+<!--Función para capturar la ubicación actual-->
+function GetPosition(position){
+	var lat = position.coords.latitude;
+	var lon = position.coords.longitude;
+	var accuracy = position.coords.accuracy;
+	if(marcador) {
+		mapa.removeLayer(marcador)
+	};
+	if(circulo) {
+		mapa.removeLayer(circulo)
+	};
+	var icono = L.icon({
+		iconUrl: './image/posicion.png',
+		iconSize: [18, 21],
+	});
+	marcador = L.marker([lat, lon],{icon:icono});
+	circulo = L.circle([lat, lon], {radius: accuracy});
+	var featureGroup = L.featureGroup([marcador, circulo]).addTo(mapa);
+	if (seguimiento=="si") {
+		sondeo_posicion=sondeo_posicion+1
+		if (sondeo_posicion==1) {
+			mapa.flyToBounds(featureGroup.getBounds());
+			mapa.setView([lat,lon])};
+	};
+};
+
+<!--Funcion para mostrar imagen estadísticas en ventana modal-->
+function Funcion_Modal(imagen, titulo, leyenda, ancho, alto) {
+    var left = (screen.weight / 2)-(ancho/2);
+    var top = (screen.height / 2)-(alto/2);
+	document.getElementById("titulo").innerText=titulo;
+	document.getElementById("titulo").style.color = "blue";
+	document.getElementById("titulo").style.font="italic bold 22px arial,serif";
+	document.getElementById("imagenmodal").src="./image/"+imagen+".jpg";
+	document.getElementById("subtitulo").innerText="Parcela Nº: "+imagen+". Responsable: "+leyenda;
+	document.getElementById("modal_estadisticas").showModal();
+};
+
+<!--Funcion para verificar estado de conectividad-->
+function VerificarConexion() {
+  if (navigator.onLine) {
+    conexion="si";
+  } else {
+    conexion="no";
+  }
+};
+
+<!--Función para armar el arreglo de sectores-->
+function ListaSectores(feature, layer) {
+	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Descripcio !="Deposito" && feature.properties.Descripcio !=null) {
+		listabusqueda.push(feature.properties.Descripcio);
+	};
+	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad !=null) {
+		listabusqueda.push(feature.properties.Actividad);
+	};
+	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad1 !=null) {
+		listabusqueda.push(feature.properties.Actividad1);
+	};
+	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad2 !=null) {
+		listabusqueda.push(feature.properties.Actividad2);
+	};
+	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad3 !=null) {
+		listabusqueda.push(feature.properties.Actividad3);
+	};
+};
+
+<!--Función para armar el arreglo de personas y especialidades-->
+function ListaPersonas(feature, layer) {
+	if (feature.properties.Persona !=null) {
+		listabusqueda.push(feature.properties.Persona);
+	};
+	if (feature.properties.Especial !=null) {
+		listabusqueda.push(feature.properties.Especial);
+	};
+	if (feature.properties.Especial1 !=null) {
+		listabusqueda.push(feature.properties.Especial1);
+	};
+	if (feature.properties.Especial2 !=null) {
+		listabusqueda.push(feature.properties.Especial2);
+	};
+	if (feature.properties.Ofi_Lab !=null) {
+		listabusqueda.push(feature.properties.Ofi_Lab);
+	};
+};
+
+<!--Función para cargar el listado de sectores, personas y actividades y asignarlo al listbox correspondiente-->
+function ArmarListaBusqueda(listabusqueda) {
+	var select = document.getElementById('encontrar_a');
+	var i;
+	for (i = 0; i < listabusquedafiltrada.length; i++) {
+		var opt = listabusquedafiltrada[i];
+		var el = document.createElement("option");
+		el.textContent = opt;
+		el.value = opt;
+		select.appendChild(el);
+	};
+};
+
+<!--Función para cargar el listbox-->
+function CargarListbox() {
+	geojson = L.geoJson(parcelas, {onEachFeature: ListaSectores}).addTo(mapa);
+	geojson.remove();
+	geojson1 = L.geoJson(personal, {onEachFeature: ListaPersonas}).addTo(mapa);
+	geojson1.remove();
+	listabusqueda.sort();
+	listabusquedafiltrada = listabusqueda.filter((elemento, index) => {
+    return listabusqueda.indexOf(elemento) === index;
+	});
+	ArmarListaBusqueda(listabusqueda)
+};
+
+function CopiarAlPortapapeles() {
+	var aux = document.createElement("input");
+	aux.setAttribute("value",  innerHTML="cmauriciogodoy@gmail.com");
+	document.body.appendChild(aux);
+	aux.select();
+	document.execCommand("copy");
+	document.body.removeChild(aux);
+};
+
+function CopiarAlPortapapeles1 () {
+	document.getElementById("Apaisado").innerHTML=("<h3>"+"Por parámetros de configuración de tu dispositivo, es probable que no sea posible hacer un envío semi-automático del mail. En ese caso, abre tu aplicación de correo electrónico y pega el mail que ha sido copiado al portapapeles.-"+"</h3>");
+	document.getElementById("modal_inicial").showModal();
+    let a = document.createElement('a');
+    let link = document.createTextNode("This is link");
+    a.appendChild(link);
+    a.href = "mailto:cmauriciogodoy@gmail.com?subject=SITIO WEB DEL INTA&body=Estimado Mauricio: Deseo hacerte el siguiente aporte como sugerencia (o informe de error) del sitio web del INTA. ........(Explicá con el mayor detalle posible tu comentario).-";
+	a.id="a";
+    document.body.appendChild(a);
+	document.getElementById('a').click();
+	document.body.removeChild(a);
+};
+
+CargarListbox();
+
+<!--Captura de eventos de ventana modal de estadisticas-->
+const btncerrarmodalestadisticas=document.querySelector("#btn-cerrar-modal-estadisticas");
+const modalestadisticas=document.querySelector("#modal_estadisticas");
+btncerrarmodalestadisticas.addEventListener("click",()=>{modalestadisticas.close();});
+
+<!-- Control de la escala que se irá actualizando conforme se haga zoom -->
+new L.control.scale({imperial:false}).addTo(mapa);
+document.getElementById("responsable").style.display = "none";
+document.getElementById("clon").style.display = "none";
+document.getElementById("superficie").style.display = "none";
+document.getElementById("riego").style.display = "none";
+document.getElementById("cobertura").style.display = "none";
+document.getElementById("plantacion").style.display = "none";
+document.getElementById("conduccion").style.display = "none";
+document.getElementById("especie").style.display = "none";
+document.getElementById("mostrartodo").style.display = "none";
+document.getElementById("quitartodo").style.display = "inline";
+VerificarConexion();
+capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
+if (conexion=="no") {
+	document.getElementById("Conectividad").style.display="inline";
+} else {
+	document.getElementById("Conectividad").style.display="none";
+};
+
+if (! navigator.userAgent.match(/Windows/i)) {
+    document.getElementById("modal_inicial").showModal()
+} else {
+	if (conexion=="no") {document.getElementById("Conectividad").style.display="inline"; document.getElementById("Apaisado").style.display="none";document.getElementById("modal_inicial").showModal();}
+};
+
+const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
+const modalinicial=document.querySelector("#modal_inicial");
+btncerrarmodalinicial.addEventListener("click",()=>{modalinicial.close();});
 </script>
+<script src="assets/dist/js/bootstrap.bundle.min.js"></script>
+</body>
 </html>
