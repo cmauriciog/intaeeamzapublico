@@ -141,7 +141,12 @@
 
 <!--Barra con el título y logo-->
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
+	<!--Deshabilitar en versión pública-->
 	<a style="font-size:15px; color:white">VISOR DE PARCELAS CON CULTIVOS Y CONSTRUCCIONES DE LA EEA INTA MENDOZA</a>
+	<!--Deshabilitar hasta aquí-->
+	<!--Habilitar para versión pública-->
+	<!--<a style="font-size:15px; color:white">LOCALIZADOR DE PERSONAS, ESPECIALIDADES Y SERVICIOS EN LA EEA INTA MENDOZA</a>-->
+	<!--Habilitar hasta aquí-->
 	<select id="encontrar_a" name="encontraralgo" data-placeholder="¿Necesitás ubicar una persona o un lugar?. Buscalo acá..." class="form-control chosenbusqueda" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="EncontrarA(value)">
 		<option value=""></option>
 	</select>
@@ -155,6 +160,7 @@
 		<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
 			<div id="barrabotones" class="position-sticky pt-3 sidebar-sticky"">
 				<p></p>
+				<!--Deshabilitar en versión pública-->
 				<p style="font-size:12px; color:blue">¿Necesitás filtrar por variedad de vid?. Hacelo desde aquí...</p>
 				<div id="opciones_cob" style="font-size:12px">
 					<select id="cobertura_vid" onchange="CoberturasAbuscar(value)">
@@ -281,6 +287,7 @@
 				</div>
 				<button id="mostrartodo" type="button" style="background-color:green" onclick="MostrarTodo()">Mostrar todas las parcelas</button>
 				<p><br></p>
+				<!--Deshabilitar hasta aquí-->
 				<button id="quitartodo" type="button" style="background-color:red" onclick="ResetearTodo()">Quitar todas las parcelas del mapa</button>
 				<div id="contenedor_resumen" style="background-color:gray">
 					<label id="resumen" style="font-size:12px"><br></label>
@@ -289,8 +296,10 @@
 				<p style="font-size:12px">1ª) Desactivá las capas que pudieran haber en la zona a medir [Botón Rojo Superior]</p>
 				<a style="font-size:12px; color:blue" href="javascript:Medir_Longitud()">2ª) Hacé click AQUI</a>
 				<p style="font-size:12px">3ª) Hacé un click en cada uno de los dos puntos a medir...Y LISTO...!!!</p>
+				<!--Deshabilitar para versión pública-->
 				<p><img src="image/cultivos.jpg" width="20" height="20">Parcelas con cultivos</img></p>
 				<p><img src="image/construcciones.jpg" width="20" height="20">Parcelas con construcciones</img></p>
+				<!--Deshabilitar hasta aquí-->
 				<!--<a style="font-size:12px; color:blue" href="mailto:cmauriciogodoy@gmail.com?subject=Asunto del correo&body=Cuerpo del mensaje">Hacer un aporte o reportar un error</a> <!--onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()"-->
 				<a style="font-size:12px; color:blue" onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()">Hacer un aporte o reportar un error</a>
 			</div>
