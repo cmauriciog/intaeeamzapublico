@@ -141,11 +141,11 @@
 
 <!--Barra con el título y logo-->
 <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
-	<!--Deshabilitar en versión pública-->
+	<!--Deshabilitar en versión pública
 	<a style="font-size:15px; color:white">VISOR DE PARCELAS CON CULTIVOS Y CONSTRUCCIONES DE LA EEA INTA MENDOZA</a>
-	<!--Deshabilitar hasta aquí-->
+	-->
 	<!--Habilitar para versión pública-->
-	<!--<a style="font-size:15px; color:white">LOCALIZADOR DE PERSONAS, ESPECIALIDADES Y SERVICIOS EN LA EEA INTA MENDOZA</a>-->
+	<a style="font-size:15px; color:white">LOCALIZADOR DE PERSONAS, ESPECIALIDADES Y SERVICIOS DE LA EEA INTA MENDOZA</a>
 	<!--Habilitar hasta aquí-->
 	<select id="encontrar_a" name="encontraralgo" data-placeholder="¿Necesitás ubicar una persona o un lugar?. Buscalo acá..." class="form-control chosenbusqueda" value="<%= typeof Casas != 'undefined' ? Casas : '' %>" onchange="EncontrarA(value)">
 		<option value=""></option>
@@ -160,7 +160,7 @@
 		<nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
 			<div id="barrabotones" class="position-sticky pt-3 sidebar-sticky"">
 				<p></p>
-				<!--Deshabilitar en versión pública-->
+				<!--Deshabilitar en versión pública
 				<p style="font-size:12px; color:blue">¿Necesitás filtrar por variedad de vid?. Hacelo desde aquí...</p>
 				<div id="opciones_cob" style="font-size:12px">
 					<select id="cobertura_vid" onchange="CoberturasAbuscar(value)">
@@ -287,7 +287,7 @@
 				</div>
 				<button id="mostrartodo" type="button" style="background-color:green" onclick="MostrarTodo()">Mostrar todas las parcelas</button>
 				<p><br></p>
-				<!--Deshabilitar hasta aquí-->
+				-->
 				<button id="quitartodo" type="button" style="background-color:red" onclick="ResetearTodo()">Quitar todas las parcelas del mapa</button>
 				<div id="contenedor_resumen" style="background-color:gray">
 					<label id="resumen" style="font-size:12px"><br></label>
@@ -296,13 +296,12 @@
 				<p style="font-size:12px">1ª) Desactivá las capas que pudieran haber en la zona a medir [Botón Rojo Superior]</p>
 				<a style="font-size:12px; color:blue" href="javascript:Medir_Longitud()">2ª) Hacé click AQUI</a>
 				<p style="font-size:12px">3ª) Hacé un click en cada uno de los dos puntos a medir...Y LISTO...!!!</p>
-				<!--Deshabilitar para versión pública-->
+				<!--Deshabilitar para versión pública
 				<p><img src="image/cultivos.jpg" width="20" height="20">Parcelas con cultivos</img></p>
 				<p><img src="image/construcciones.jpg" width="20" height="20">Parcelas con construcciones</img></p>
-				<!--Deshabilitar hasta aquí-->
+				-->
 				<!--<a style="font-size:12px; color:blue" href="mailto:cmauriciogodoy@gmail.com?subject=Asunto del correo&body=Cuerpo del mensaje">Hacer un aporte o reportar un error</a> <!--onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()"-->
-				<a style="font-size:12px; color:blue" onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()">Hacer un aporte o reportar un error</a>
-			</div>
+				<a style="font-size:12px; color:blue" onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()">Hacer un aporte o reportar un error</a>			</div>
 		</nav>
 
 		<!--Dimensionar el tamaño de la pantalla que ocupará el mapa -->
@@ -405,6 +404,10 @@ var lugar="";
 var ubicacion_real="";
 var borrar_ubicacion_real="";
 var sondeo_posicion="";
+var version="completa";
+<!--Habilitar para versión pública-->
+var version="publica";
+<!--Habilitar hasta aquí-->
 
 <!--Funcion para colorear el fondo según el tipo de coberura (cultivos/edificios)-->
 function ColorFondo(d) {
@@ -722,8 +725,10 @@ function EncontrarA(encontrar) {
 	sector="";
 	oficina="";
 	<!--Borrar las búsquedas anteriores-->
+	if (version=="completa") {
 	if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 	if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
+	};
 	if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
 	if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
 	if (lugar !==""){lugar.remove()};
@@ -743,55 +748,62 @@ function EncontrarA(encontrar) {
 
 <!--Funcion para resetear todo-->
 function ResetearTodo() {
-	capa_parcelas.remove();
-	if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
-	if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
-	if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
-	if (lugar !==""){lugar.remove()};
-	if (otro_criterio.value=="Responsable") {
-		document.getElementById("responsable").style.display="none";
-		document.getElementById("sel_responsable").style.display="none"}
-	if (otro_criterio.value=="Clon") {
-		document.getElementById("clon").style.display="none";
-		document.getElementById("sel_clon").style.display="none";}
-	if (otro_criterio.value=="Superficie") {
-		document.getElementById("superficie").style.display="none";
-		document.getElementById("sel_superficie").style.display="none";}
-	if (otro_criterio.value=="Riego") {
-		document.getElementById("riego").style.display="none";
-		document.getElementById("sel_riego").style.display="none";}
-	if (otro_criterio.value=="Plantacion") {
-		document.getElementById("plantacion").style.display="none";
-		document.getElementById("sel_plantacion").style.display="none";}
-	if (otro_criterio.value=="Conduccion") {
-		document.getElementById("conduccion").style.display="none";
-		document.getElementById("sel_conduccion").style.display="none";}
-	if (otro_criterio.value=="Cobertura") {
-		document.getElementById("cobertura").style.display="none";
-		document.getElementById("sel_cobertura").style.display="none";}
-	if (otro_criterio.value=="Especie") {
-		document.getElementById("especie").style.display="none";
-		document.getElementById("sel_especie").style.display="none";}
-	tot_parc=0;
-	sup_total=0;
-	prom_prod=0;
-	anios_prod=0;
-	criterio="";
-	otro_criterio.value="";
-	sel_clon.value="";
-	sel_responsable.value="";
-	sel_especie.value="";
-	sel_cobertura.value="";
-	sel_plantacion.value="";
-	sel_riego.value="";
-	sel_superficie.value="";
-	sel_conduccion.value="";
-	cobertura_vid.value="";
-	encontrar_a.value="";
-	document.getElementById("resumen").innerText=("");
-	document.getElementById("quitartodo").style.display="none";
-	document.getElementById("mostrartodo").style.display="inline";
-	mapa.flyTo(coordenadas, zum);
+	if (version=="completa") {
+		if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
+		if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
+		if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
+		if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
+		if (lugar !==""){lugar.remove()};
+		if (otro_criterio.value=="Responsable") {
+			document.getElementById("responsable").style.display="none";
+			document.getElementById("sel_responsable").style.display="none"}
+		if (otro_criterio.value=="Clon") {
+			document.getElementById("clon").style.display="none";
+			document.getElementById("sel_clon").style.display="none";}
+		if (otro_criterio.value=="Superficie") {
+			document.getElementById("superficie").style.display="none";
+			document.getElementById("sel_superficie").style.display="none";}
+		if (otro_criterio.value=="Riego") {
+			document.getElementById("riego").style.display="none";
+			document.getElementById("sel_riego").style.display="none";}
+		if (otro_criterio.value=="Plantacion") {
+			document.getElementById("plantacion").style.display="none";
+			document.getElementById("sel_plantacion").style.display="none";}
+		if (otro_criterio.value=="Conduccion") {
+			document.getElementById("conduccion").style.display="none";
+			document.getElementById("sel_conduccion").style.display="none";}
+		if (otro_criterio.value=="Cobertura") {
+			document.getElementById("cobertura").style.display="none";
+			document.getElementById("sel_cobertura").style.display="none";}
+		if (otro_criterio.value=="Especie") {
+			document.getElementById("especie").style.display="none";
+			document.getElementById("sel_especie").style.display="none";}
+		tot_parc=0;
+		sup_total=0;
+		prom_prod=0;
+		anios_prod=0;
+		criterio="";
+		otro_criterio.value="";
+		sel_clon.value="";
+		sel_responsable.value="";
+		sel_especie.value="";
+		sel_cobertura.value="";
+		sel_plantacion.value="";
+		sel_riego.value="";
+		sel_superficie.value="";
+		sel_conduccion.value="";
+		cobertura_vid.value="";
+		encontrar_a.value="";
+		document.getElementById("resumen").innerText=("");
+		document.getElementById("quitartodo").style.display="none";
+		document.getElementById("mostrartodo").style.display="inline";
+		mapa.flyTo(coordenadas, zum);
+	};
+	if (version=="publica") {
+		if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
+		if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
+		if (lugar !==""){lugar.remove()};
+	};
 };
 
 <!-- Funcion para mostrar todas las parcelas-->
@@ -1020,6 +1032,8 @@ btncerrarmodalestadisticas.addEventListener("click",()=>{modalestadisticas.close
 
 <!-- Control de la escala que se irá actualizando conforme se haga zoom -->
 new L.control.scale({imperial:false}).addTo(mapa);
+<!--Deshabilitar versión pública-->
+if (version=="completa") {
 document.getElementById("responsable").style.display = "none";
 document.getElementById("clon").style.display = "none";
 document.getElementById("superficie").style.display = "none";
@@ -1029,9 +1043,10 @@ document.getElementById("plantacion").style.display = "none";
 document.getElementById("conduccion").style.display = "none";
 document.getElementById("especie").style.display = "none";
 document.getElementById("mostrartodo").style.display = "none";
+capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
+};
 document.getElementById("quitartodo").style.display = "inline";
 VerificarConexion();
-capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
 if (conexion=="no") {
 	document.getElementById("Conectividad").style.display="inline";
 } else {
