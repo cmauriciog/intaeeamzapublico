@@ -50,7 +50,7 @@
    <script src="geojson/personal.geojson" type="text/javascript"></script>
    
 	<!--Icono para la pestaña del navegador-->
-	 <link rel="shortcut icon" href="./image/icono.ico" type="image/x-icon"/>
+	 <link rel="shortcut icon" href="./image/inta.ico" type="image/x-icon"/>
 	 
 <!--Clases para personalizar algunos elementos-->
 <meta name="theme-color" content="#712cf9">
@@ -116,6 +116,7 @@
 	background-color: #e6550d;
 	cursor: pointer;
 	}
+	<link rel="shortcut icon" href="./image/inta.ico" type="image/x-icon"/>
 	</style>
 </head>
 <body>
@@ -288,15 +289,24 @@
 				<button id="mostrartodo" type="button" style="background-color:green" onclick="MostrarTodo()">Mostrar todas las parcelas</button>
 				<p><br></p>
 				-->
+				<!--Habilitar para la versión pública-->
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+				<!--Deshabilitar para la versión pública-->
 				<p style="font-size: 12px; color:blue">Unidades dependientes</p><p></p>
-				<select id="agencias" onchange="IrAERs(value)">
+				<select style="font-size: 12px" id="agencias" onchange="IrAERs(value)">
 					<option value="" ></option>
 					<option value="Guaymallen">Agencia Extensión Guaymallén</option>
 					<option value="Lavalle">Agencia Extensión Lavalle</option>
 					<option value="Lujan">Agencia Extensión Luján de Cuyo</option>
 					<option value="Maipu">Agencia Extensión Maipú</option>
+					<option value="Uspallata">Oficina Información Técnica Uspallata</option>
 				</select>
-				<button id="volvereea" type="button" style="background-color:blue" onclick="VolverEEA()">Volver al predio de la EEA Mendoza</button>
+				<button id="volvereea" type="button" style="background-color:red" onclick="VolverEEA()">Volver al predio de la EEA Mendoza</button>
 				<button id="quitartodo" type="button" style="background-color:red" onclick="ResetearTodo()">Quitar todas las parcelas del mapa</button>
 				<div id="contenedor_resumen" style="background-color:gray">
 					<label id="resumen" style="font-size:12px"><br></label>
@@ -1087,6 +1097,18 @@ function IrAERs(agencia) {
 			.openPopup();
 		document.getElementById("volvereea").style.display = "inline";
 	};
+	if (agencia=="Uspallata") {
+		var formatoPopup = {
+			'maxWidth': '400',
+			'className' : 'popups'};
+		let coord="-32.59050058989425, -69.34690529948934".split(",");
+		mapa.flyTo(coord, 18);
+		let contenidoPopup="<b><h4>Oficina de Información Técnica Uspallata"+"</h4></b><br/><u>Dirección</u>: Rutas 7 y 52, Uspallata."+"<br/>Terminal de Omnibus de Uspallata."+"<br/><u>Teléfono</u>: 2954-398215."+"<br/><u>Mail</u>: lang.maria@inta.gob.ar";
+		aer=L.marker(coord).addTo(mapa)
+			.bindPopup(contenidoPopup, formatoPopup)
+			.openPopup();
+		document.getElementById("volvereea").style.display = "inline";
+	};
 };
 
 function VolverEEA () {
@@ -1119,6 +1141,7 @@ document.getElementById("mostrartodo").style.display = "none";
 capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
 };
 document.getElementById("quitartodo").style.display = "inline";
+document.getElementById("quitartodo").style.display = "none";
 document.getElementById("volvereea").style.display = "none";
 VerificarConexion();
 if (conexion=="no") {
