@@ -295,6 +295,8 @@
 				</br>
 				</br>
 				<!--Deshabilitar para la versión pública-->
+				<button id="quitartodo" type="button" style="background-color:red" onclick="ResetearTodo()">Quitar todas las parcelas del mapa</button>
+				<p><br></p>
 				<p style="font-size: 12px; color:blue">Unidades dependientes</p><p></p>
 				<select style="font-size: 12px" id="agencias" onchange="IrAERs(value)">
 					<option value="" ></option>
@@ -305,7 +307,6 @@
 					<option value="Uspallata">Oficina Información Técnica Uspallata</option>
 				</select>
 				<button id="volvereea" type="button" style="background-color:red" onclick="VolverEEA()">Volver al predio de la EEA Mendoza</button>
-				<button id="quitartodo" type="button" style="background-color:red" onclick="ResetearTodo()">Quitar todas las parcelas del mapa</button>
 				<div id="contenedor_resumen" style="background-color:gray">
 					<label id="resumen" style="font-size:12px"><br></label>
 				</div>
@@ -883,7 +884,7 @@ function activar_seguimiento(seguimiento) {
 	} else {
 		ubicacion_real=setInterval(() => {
 		navigator.geolocation.getCurrentPosition(GetPosition,
-			onError, {maximumAge: 0,timeout: 100,enableHighAccuracy:true})
+			ErrorGeolocalizacion, {maximumAge: 0,timeout: 100,enableHighAccuracy:true})
 			}, 500);
 		if (borrar_ubicacion_real !=="") {
 			clearInterval(borrar_ubicacion_real);
@@ -937,6 +938,16 @@ function GetPosition(position){
 			mapa.setView([lat,lon])};
 	};
 };
+
+<!--Función de error de geolocalización-->
+function ErrorGeolocalizacion(err) {
+    <!--if (err.code == err.TIMEOUT) 
+        <!--alert("Se ha superado el tiempo de espera");
+    if (err.code == err.PERMISSION_DENIED)     
+        alert("El usuario no permitió informar su posición");
+    if (err.code == err.POSITION_UNAVAILABLE)                 
+        alert("El dispositivo no pudo recuperar la posición actual");
+    };
 
 <!--Funcion para mostrar imagen estadísticas en ventana modal-->
 function Funcion_Modal(imagen, titulo, leyenda, ancho, alto) {
@@ -1139,7 +1150,7 @@ document.getElementById("mostrartodo").style.display = "none";
 capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
 };
 document.getElementById("quitartodo").style.display = "inline";
-document.getElementById("quitartodo").style.display = "none";
+if (version=="publica") {document.getElementById("quitartodo").style.display = "none"};
 document.getElementById("volvereea").style.display = "none";
 VerificarConexion();
 if (conexion=="no") {
