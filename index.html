@@ -768,6 +768,8 @@ function EncontrarA(encontrar) {
 <!--Funcion para resetear todo-->
 function ResetearTodo() {
 	document.getElementById("volvereea").style.display = "none";
+	document.getElementById("quitartodo").style.display = "none";
+	document.getElementById("agencias").selectedIndex = 0;
 	if (version=="completa") {
 		if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 		if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
@@ -1063,7 +1065,7 @@ function IrAERs(agencia) {
 			'maxWidth': '400',
 			'className' : 'popups'};
 		let coord="-32.88053993173516, -68.77169734266394".split(",");
-		mapa.flyTo(coord, 18);
+		mapa.flyTo(coord, 16);
 		let contenidoPopup="<b><h4>Agencia de Extensión Guaymallén"+"</h4></b><br/><u>Dirección</u>: Mathus Hoyos s/n, Bermejo, Guaymallén."+"<br/>Predio de la Escuela Técnica Miguel Amado Pouget"+"<br/><u>Teléfono</u>: 11-6562-6368."+"<br/><u>Mail</u>: bakos.pedro@inta.gob.ar";
 		aer=L.marker(coord).addTo(mapa)
 			.bindPopup(contenidoPopup, formatoPopup)
@@ -1075,7 +1077,7 @@ function IrAERs(agencia) {
 			'maxWidth': '400',
 			'className' : 'popups'};
 		let coord="-32.72140116246021, -68.59081481151209".split(",");
-		mapa.flyTo(coord, 18);
+		mapa.flyTo(coord, 16);
 		let contenidoPopup="<b><h4>Agencia de Extensión Lavalle"+"</h4></b><br/><u>Dirección</u>: Belgrano y Las Heras, Lavalle."+"<br/><u>Teléfono</u>: 11-6864-5337."+"<br/><u>Mail</u>: valentin.mariana@inta.gob.ar";
 		aer=L.marker(coord).addTo(mapa)
 			.bindPopup(contenidoPopup, formatoPopup)
@@ -1087,7 +1089,7 @@ function IrAERs(agencia) {
 			'maxWidth': '400',
 			'className' : 'popups'};
 		let coord="-33.004316166957665, -68.86629766891129".split(",");
-		mapa.flyTo(coord, 18);
+		mapa.flyTo(coord, 16);
 		let contenidoPopup="<b><h4>Agencia de Extensión Luján de Cuyo"+"</h4></b><br/><u>Dirección</u>: San Martín 3853, Mayor Drummond, Luján de Cuyo."+"<br/><u>Teléfono</u>: 11-6056-6027."+"<br/><u>Mail</u>: espindola.rodrigo@inta.gob.ar";
 		aer=L.marker(coord).addTo(mapa)
 			.bindPopup(contenidoPopup, formatoPopup)
@@ -1099,7 +1101,7 @@ function IrAERs(agencia) {
 			'maxWidth': '400',
 			'className' : 'popups'};
 		let coord="-32.98581159851684, -68.78770732344232".split(",");
-		mapa.flyTo(coord, 18);
+		mapa.flyTo(coord, 16);
 		let contenidoPopup="<b><h4>Agencia de Extensión Maipú"+"</h4></b><br/><u>Dirección</u>: Pablo Pescara 79, Maipú."+"<br/><u>Teléfono</u>: 11-6864-3738."+"<br/><u>Mail</u>: villar.elisa@inta.gob.ar";
 		aer=L.marker(coord).addTo(mapa)
 			.bindPopup(contenidoPopup, formatoPopup)
@@ -1111,7 +1113,7 @@ function IrAERs(agencia) {
 			'maxWidth': '400',
 			'className' : 'popups'};
 		let coord="-32.59050058989425, -69.34690529948934".split(",");
-		mapa.flyTo(coord, 18);
+		mapa.flyTo(coord, 16);
 		let contenidoPopup="<b><h4>Oficina de Información Técnica Uspallata"+"</h4></b><br/><u>Dirección</u>: Rutas 7 y 52, Uspallata."+"<br/>Terminal de Omnibus de Uspallata."+"<br/><u>Teléfono</u>: 2954-398215."+"<br/><u>Mail</u>: lang.maria@inta.gob.ar";
 		aer=L.marker(coord).addTo(mapa)
 			.bindPopup(contenidoPopup, formatoPopup)
@@ -1121,10 +1123,10 @@ function IrAERs(agencia) {
 };
 
 function VolverEEA () {
-	if (aer !="") {aer.remove()};
+	if (aer !="") {aer.remove(),document.getElementById("agencias").selectedIndex = 0};
 	let coord="-33.00598405638592, -68.85600484779212".split(",");
 	document.getElementById("volvereea").style.display = "none";
-	mapa.flyTo(coord,18);
+	mapa.flyTo(coord, 16);
 };
 
 CargarListbox();
