@@ -166,14 +166,14 @@
 						<option value="" ></option>
 						<option value="Ancelotta" >Ancelotta (tinta para vino)</option>
 						<option value="Barbera Dasty" >Barbera D'Asty (tinta para vino)</option>
-						<option value="Cabernet">Cabernet (tinta para vino)</option>
+						<option value="Bonarda" >Bonarda (tinta para vino)</option>
+						<option value="Cabernet Sauvignon">Cabernet Sauvignon (tinta para vino)</option>
 						<option value="Chardonnay" >Chardonnay (blanca para vino)</option>
 						<option value="Chenin" >Chenin (blanca para vino)</option>
 						<option value="Malbec" >Malbec (tinta para vino)</option>
 						<option value="Merlot" >Merlot (tinta para vino)</option>
 						<option value="Pinot" >Pinot (tinta para vino)</option>
 						<option value="Riesling" >Riesling (blanca para vino)</option>
-						<option value="Sauvignon" >Sauvignon (blanca para vino)</option>
 						<option value="Semillon" >Semillón (blanca para vino)</option>
 						<option value="Syrah" >Syrah (tinta para vino)</option>
 						<option value="Torrontes" >Torrontés (blanca para vino)</option>
@@ -286,15 +286,15 @@
 				</div>
 				<button id="mostrartodo" type="button" style="background-color:green" onclick="MostrarTodo()">Mostrar todas las parcelas</button>
 				<p><br></p>
-				-->
-				<!--Habilitar para la versión pública-->
+				Deshabilitar hasta aquí-->
+				<!--Habilitar para la versión pública
 				</br>
 				</br>
 				</br>
 				</br>
 				</br>
 				</br>
-				<!--Deshabilitar para la versión pública-->
+				Deshabilitar para la versión pública-->
 				<button id="quitartodo" type="button" style="background-color:red" onclick="ResetearTodo()">Quitar todas las parcelas del mapa</button>
 				<p><br></p>
 				<p style="font-size: 12px; color:blue">Unidades dependientes</p><p></p>
@@ -317,15 +317,14 @@
 				<!--Deshabilitar para versión pública
 				<p><img src="image/cultivos.jpg" width="20" height="20">Parcelas con cultivos</img></p>
 				<p><img src="image/construcciones.jpg" width="20" height="20">Parcelas con construcciones</img></p>
-				-->
+				<!--Deshabilitar hasta aquí-->
 				<a style="font-size:12px; color:blue" onclick="CopiarAlPortapapeles(); CopiarAlPortapapeles1()">Hacer un aporte o reportar un error</a>
 			</div>
 		</nav>
 
 		<!--Dimensionar el tamaño de la pantalla que ocupará el mapa -->
 		<main class="col-md-9 ms-sm-auto col-lg-10">
-			<div id="mapa" style="width:100%;height:560px;">
-			</div>
+			<div id="mapa" style="width:100%;height:560px;"></div>
 		</main>
 	</div>
 </div>
@@ -657,11 +656,16 @@ function BuscarOtro(valor) {
 
 <!--Funcion para filtrar parcelas con vid-->
 function Filtrar_Vid(feature) {
+	//criterio="";
+	//capa_parcelas.remove();
+	//var cadenabusqueda=cobertura_vid.value;
+	//var criterio = new RegExp(cadenabusqueda, "gi");
+	//if (cobertura_vid.value !="") {if (feature.properties.Variedad==cobertura_vid.value) return true; document.getElementById("resumen").innerText=("Datos Estadísticos\nCriterio de filtro: Vid\nVariedad "+cobertura_vid.value+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"+"\nPromedio producción anual: "+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha")};
 	criterio="";
 	capa_parcelas.remove();
-	var cadenabusqueda=cobertura_vid.value;
-	var criterio = new RegExp(cadenabusqueda, "gi");
-	if (cobertura_vid.value !="") {if (feature.properties.Variedad==cobertura_vid.value) return true; document.getElementById("resumen").innerText=("Datos Estadísticos\nCriterio de filtro: Vid\nVariedad "+cobertura_vid.value+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"+"\nPromedio producción anual: "+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha")};
+	var busqueda=cobertura_vid.value;
+	var criterio = new RegExp(busqueda, "i");
+	if (cobertura_vid.value !="") {if (criterio.test(feature.properties.Variedad)) return true; document.getElementById("resumen").innerText=("Datos Estadísticos\nCriterio de filtro: Vid\nVariedad "+cobertura_vid.value+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"+"\nPromedio producción anual: "+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha")};
 	};
 
 <!--Funcion para filtrado general-->	
