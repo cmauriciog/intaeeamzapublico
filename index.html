@@ -608,7 +608,8 @@
 			<div style="text-align: center">
 				<button id="btn-indicaciones-modal-flash" style="height:30px; width:90px; background-color:blue;border-color:white;color:white;" onclick="TrazarRuta()">Sí, por favor</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 				<button id="btn-cerrar-modal-flash" style="height:30px; width:90px; background-color:red;border-color:white;color:white;">Ok. Cerrar</button>
-			</div>			
+			</div>
+			<span style="text-align: center">Me cierro en: <span id="contador"> </span> segundos</span>
 		</p>
 	</div>
 </body>
@@ -726,7 +727,7 @@
 	var origen=[];
 	var coord=[];
 	var estoyaqui="";
-	var routeLayer=null;
+	var ruta="";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
 	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan"];
@@ -1353,14 +1354,15 @@
 
 	<!--Función para Trazar Ruta Sugerida con OSRM-->
 	function TrazarRuta() {
-		L.Routing.control({
+		console.log("Origen: ",origen);
+		ruta=L.Routing.control({
 			waypoints: [origen, coord],
 			router: L.Routing.osrmv1({
 				serviceUrl: 'https://router.project-osrm.org/route/v1',
 				language: 'es',
 			}),
 			showAlternatives: true,
-			routeWhileDragging: false,
+			routeWhileDragging: true,
 			draggableWaypoints: false
 		}).addTo(mapa);
 	};
@@ -1375,6 +1377,9 @@
 		};
 		estoyaqui = navigator.geolocation.watchPosition(
 			(pos) => {
+				origen.length = 0;
+				origen.push(pos.coords.latitude+', '+pos.coords.longitude);
+				console.log("Origen: ",origen);
 				const lat = pos.coords.latitude;
 				const lng = pos.coords.longitude;
 				var icono = L.icon({
@@ -1399,7 +1404,7 @@
 						.openPopup();
 					marcador.setLatLng([lat, lng]);
 				};
-				mapa.setView([lat, lng], 17); // Centra el mapa en la nueva posición
+				//mapa.setView([lat, lng], 17); // Centra el mapa en la nueva posición
 			},
 			(err) => {
 				alert("Error: " + err.message);
@@ -1888,6 +1893,15 @@
 	//Bloque Modal Flash
 	function ModalFlash(tiempo) {
 		document.getElementById("MiModalFlash").style.visibility='visible';
+		let intervalo;
+		let timeout;
+		let restante = tiempo/1000;
+		document.getElementById('contador').textContent = restante;
+		intervalo = setInterval(() => {
+			restante--;
+			document.getElementById('contador').textContent = restante;
+			if (restante <= 0) clearInterval(intervalo);
+			}, 1000);
 		setTimeout(() => {
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
