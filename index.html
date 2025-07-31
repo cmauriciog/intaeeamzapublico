@@ -356,6 +356,16 @@
 	<!--Icono para la pestaña del navegador-->
 	<link rel="shortcut icon" href="./images/inta.ico" type="image/x-icon"/>
 </head>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-75M9L5DJP5"></script>
+<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-75M9L5DJP5');
+</script>
+
 <!-- Barra de título -->
 <div class="fila">
 	<div class="col-texto" style="font-size:15px; color:blue;"><strong>MAPA WEB DEL INTA EEA MENDOZA</strong></div>
@@ -2073,13 +2083,6 @@
         }
         imagen.style.transform = `rotate(${angulo}deg)`;
     };
-	
-	<!-- Google tag (gtag.js) -->
-	async src="https://www.googletagmanager.com/gtag/js?id=G-75M9L5DJP5";
-	window.dataLayer = window.dataLayer || [];
-	function gtag(){dataLayer.push(arguments);}
-	gtag('js', new Date());
-	gtag('config', 'G-75M9L5DJP5');
 	
 	// Evento que detecta cambios de orientación
     window.addEventListener("orientationchange", actualizarGiro);
