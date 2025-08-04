@@ -11,6 +11,7 @@
 	<link href="modals.css" rel="stylesheet">
 	<script src="geojson/ensayos.geojson" type="text/javascript"></script>
 	<script src="geojson/personal.geojson" type="text/javascript"></script>
+	<script src="geojson/inta.geojson" type="text/javascript"></script>
 	<script src="usuario.txt" type="text/javascript"></script>
 	<script src="contrasenia.txt" type="text/javascript"></script>
 	<!-- JS -->
@@ -370,8 +371,6 @@
 	<div class="col-input">
 		<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..."/>
 		<div id="sugerenciasbusqueda" class="sugerencias"></div>
-		<span>Visitas Recibidas</span>
-		<div id="sfc6266ksrf2deu2lflnj5ymxxthdzu7wmb"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=6266ksrf2deu2lflnj5ymxxthdzu7wmb&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contador pagina web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=6266ksrf2deu2lflnj5ymxxthdzu7wmb" border="0" title="contador pagina web" alt="contador pagina web"></a></noscript>
 	</div>
 	<div class="col-imagen">
 		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:lightblue; color:blue;width:80px"><strong>Mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="./images/slide_off.jpg" width="50" height="30"></img></a></div>
@@ -704,33 +703,33 @@
 <script>
 	<!--Mapas o capas bases-->
 	var ign = new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
-		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="blanck">IGN</a> &copy; Desarrollado por: Mauricio Godoy',
+		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="blanck">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>',
 		}
 	);
 
 	var igngris=new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
-		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="blanck">IGN</a> &copy; Desarrollado por: Mauricio Godoy',
+		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="blanck">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>',
 		}
 	);
 
 	var osm = new L.tileLayer('http://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy; Desarrollado por: Mauricio Godoy',
+		attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="blanck">OSM</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>',
 		}
 	);
 	var googlesatelite = new L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-		attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="blanck">Google Satelital</a> &copy; Desarrollado por: Mauricio Godoy',
+		attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="blanck">Google Satelital</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>',
 		}
 	);
 	var googlecallejero=new L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-		attribution: 'Teselas <a href="https://www.google.com/maps/d/viewer?mid=1pFMZyH1aut3nTDdgkw2U9c3jtxY&hl=en_US&ll=-40.429460336394065%2C-63.6166725&z=4/" target="blanck">Google Maps</a> &copy; Desarrollado por: Mauricio Godoy',
+		attribution: 'Teselas <a href="https://www.google.com/maps/d/viewer?mid=1pFMZyH1aut3nTDdgkw2U9c3jtxY&hl=en_US&ll=-40.429460336394065%2C-63.6166725&z=4/" target="blanck">Google Maps</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>',
 		}
 	);
 	var oscuro = new L.tileLayer('http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-		attribution: 'Teselas <a href="https://carto.com/about-carto/" target="blanck">Carto</a> &copy; Desarrollado por: Mauricio Godoy',
+		attribution: 'Teselas <a href="https://carto.com/about-carto/" target="blanck">Carto</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>',
 		}
 	);
 	var openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-		attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA)'
+		attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA); <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>'
 		});
 
 	<!--Selector de las capas base-->
@@ -809,14 +808,31 @@
 	var orientarme="no";
 	var avisollegada="";
 	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [18, 21],});
+	var icono_inta= L.icon({iconUrl: './images/inta.jpg',iconSize: [30, 30],});
 	var distancia="";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
 	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan"];
+	var grupoeeamza = L.featureGroup().addTo(mapa);
+	
+	//Añado el predio de la EEA Mendoza
+	var predioeeamza=L.geoJSON(inta,{style: PerimetroEEAMza}).addTo(grupoeeamza);
+	var marcadoreeamzaoeste = L.marker([-33.00451232201417, -68.8614969142567], {icon: icono_inta}).addTo(grupoeeamza);
+	var marcadoreeamzaeste = L.marker([-33.006887629673, -68.85250615069111], {icon: icono_inta}).addTo(grupoeeamza);
 	
 	<!--Añadir la barra lateral-->
 	var barralateral = L.control.sidebar('barralateral').addTo(mapa);
-		
+	
+	//Estilizar el perímetro de la EEA Mza
+	function PerimetroEEAMza(feature) {
+      return {
+        color: "red",
+        weight: 3,
+        fillColor: "green",
+        fillOpacity: 0.4
+      };
+    };
+	
 	<!--Funcion para colorear el fondo según el tipo de coberura (cultivos/edificios)-->
 	function ColorFondo(d) {
 		return d == 'Cultivo' ? '#0aa621':
@@ -1031,6 +1047,7 @@
 		if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
 		if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
 		if (lugar !==""){lugar.remove()};
+		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		capa_filtrada=L.geoJSON(parcelas,{filter:Filtrar_Vid, style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
 		document.getElementById("quitartodo").style.visibility='visible';
 		document.getElementById("mostrartodo").style.visibility='visible';
@@ -1063,6 +1080,7 @@
 
 	<!--Funcion para filtrar parcelas con vid-->
 	function Filtrar_Vid(feature) {
+		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		barralateral.close();
 		criterio="";
 		if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
@@ -1083,6 +1101,7 @@
 	<!--Funcion para filtrado general-->	
 	function Filtrar_Gral(feature) {
 		//capa_parcelas.remove();
+		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		if (criterio=="Clon" && sel_clon.value !=""){if (feature.properties.Clon==sel_clon.value) return true; resumen=otro_criterio.value+" "+sel_clon.value};
 		if (criterio=="Cobertura" && sel_cobertura.value !=""){if (feature.properties.Cobertura==sel_cobertura.value) return true; resumen=otro_criterio.value+" "+sel_cobertura.value};
 		if (criterio=="Conduccion" && sel_conduccion.value !=""){if (feature.properties.Conduccion==sel_conduccion.value) return true; resumen=otro_criterio.value+" "+sel_conduccion.value};
@@ -1133,6 +1152,7 @@
 
 	<!--Funcion para buscar sector/actividad-->
 	function Filtrar_Buscar(feature) {
+		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		criterio="";
 		if (feature.properties.Descripcio==inputbusqueda.value) {return true,coincidencia="sector",sector=feature.properties.Descripcio};
 		if (feature.properties.Actividad==inputbusqueda.value || feature.properties.Actividad1==inputbusqueda.value || feature.properties.Actividad2==inputbusqueda.value
@@ -1600,11 +1620,11 @@
 		'es probable que no sea posible hacer un envío semi-automático del mail.<br><br>Si al cerrar este mensaje no se envía, abrí tu aplicación de correo electrónico y pegá la dirección de mail que ha sido'+
 		'copiada en el portapapeles.-</span>';
 		tiempomodalflash=15000;
-		mail="Si";
+		mail="si";
 		navigator.clipboard.writeText("cmauriciogodoy@gmail");
 		ModalFlash(tiempomodalflash);
 	};
-	
+
 	function EnviarMail () {
 		let a = document.createElement('a');
 		let link = document.createTextNode("This is link");
@@ -2022,7 +2042,7 @@
 		temporizadormodalflash=setTimeout(() => {
 			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 			document.getElementById("MiModalFlash").style.visibility='hidden';
-			if (mail=="Si") {EnviarMail()};
+			if (mail=="si") {EnviarMail()};
 		}, tiempo);
 	};
 	
@@ -2086,13 +2106,16 @@
 	const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
 	btncerrarmodalflash.addEventListener("click",()=>{
 		document.getElementById("MiModalFlash").style.visibility='hidden';
+		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
 		orientarme="no";
 		avisollegada="no";
+		if (mail=="si") {EnviarMail()};
 		clearTimeout(temporizadormodalflash);
 		tiempomodalflash=5000;
 	});
 	const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
 	btnindicacionesmodalflash.addEventListener("click",()=>{
+		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
 		orientarme="si";
 		avisollegada="si";
 		clearTimeout(temporizadormodalflash);
