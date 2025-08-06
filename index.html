@@ -644,9 +644,9 @@
 					<input type="text" id="username" name="username" placeholder="Tu usuario de INTA (sin @inta.gob.ar)..." value="godoy.claudio">
 					<p class="lorem" id="titulocontrasenia">Contraseña:</p>
 					<input type="password" id="password" name="password" placeholder="Tu contraseña para este sitio..." value="INTAEEAMza">
-					<input type="submit" id="botonmostrarocultar" value="Mostrar/Ocultar" onclick="contrasenia();">
+					<input type="submit" id="botonmostrarocultar" value="Mostrar/Ocultar" onclick="Contrasenia();">
 					<br><br>
-					<input type="submit" style="background-color:#acf89f" id="botoningresar" value="Ingresar" onclick="loguearse();">
+					<input type="submit" style="background-color:#acf89f" id="botoningresar" value="Ingresar" onclick="Loguearse();">
 				</div>
 				<div id="log_si">
 					<br></br>
@@ -810,6 +810,7 @@
 	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [18, 21],});
 	var icono_inta= L.icon({iconUrl: './images/inta.jpg',iconSize: [30, 30],});
 	var distancia="";
+	var actualizarruta="si";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
 	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan"];
@@ -1209,6 +1210,7 @@
 
 	<!--Funcion para resetear todo-->
 	function ResetearTodo() {
+		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		document.getElementById("volvereea").style.visibility='hidden';
 		if (version=="completa") {
 			if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
@@ -1524,12 +1526,15 @@
 
 	<!--Función para Trazar Ruta Sugerida con OSRM-->
 	function TrazarRuta() {
-		//orientarme="si";
 		avisollegada="si";
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
-		if (distancia>1100) {
+		if (distancia<=1100 && lugar) {
+			ActualizarUbicacion();
+		};
+		if (distancia>1100 && actualizarruta=="si") {
+			actualizarruta="no";
 			if (ruta) {ruta.remove()};
 			if (! lugar) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
 			ruta=L.Routing.control({
@@ -1545,8 +1550,11 @@
 			const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
 			mapa.fitBounds(centrar, {padding: [50, 50]}); // Padding opcional
 		};
-		if (distancia<=1100 && lugar) {
-			ActualizarUbicacion();
+		if (actualizarruta=="no") {
+			setTimeout(() => {
+				actualizarruta = "si";
+				alert("Voy a actualizar la ruta porque el valor de actualizarruta pasó a ser ", actualizarruta);
+			}, 5 * 60 * 1000); // 5 minutos en milisegundos
 		};
 	};
 
@@ -1709,6 +1717,7 @@
 		let coord="-33.00598405638592, -68.85600484779212".split(",");
 		document.getElementById("volvereea").style.visibility='hidden';
 		mapa.flyTo(coord,16);
+		grupoeeamza.addTo(mapa);
 	};
 
 	<!-- Control de la escala que se irá actualizando conforme se haga zoom -->
@@ -1843,15 +1852,18 @@
 		modal.style.width = size.width ? `${size.width}px` : "300px";
 		modal.style.height = size.height ? `${size.height}px` : "300px";
 	};
+	
 	function CerrarModal() {
 		modal.style.visibility='hidden';
 	};
+	
 	function MinimizarModalEstadistico() {
 		minimized = !minimized;
 		document.getElementById("cuerpomodalestadistico").style.display = minimized ? "none" : "block";
 		resizer.style.display = minimized ? "none" : "block";
 		modal.style.height = minimized ? "auto" : "200px";
 	};
+	
 	// Mover modal (PC)
 	modalestadisticocabecera.addEventListener("mousedown", e => {
 		isDragging = true;
@@ -1859,34 +1871,40 @@
 		offsetY = e.clientY - modal.offsetTop;
 		document.body.style.userSelect = "none";
 	});
+	
 	document.addEventListener("mousemove", e => {
 		if (isDragging) {
 			modal.style.left = `${e.clientX - offsetX}px`;
 			modal.style.top = `${e.clientY - offsetY}px`;
-			savePosition();
+			SavePosition();
 		};
 	});
+	
 	document.addEventListener("mouseup", () => {
 		isDragging = false;
 		document.body.style.userSelect = "auto";
 	});
+	
 	modalestadisticocuerpo.addEventListener("mousedown", e => {
 		isDragging = true;
 		offsetX = e.clientX - modal.offsetLeft;
 		offsetY = e.clientY - modal.offsetTop;
 		document.body.style.userSelect = "none";
 	});
+	
 	document.addEventListener("mousemove", e => {
 		if (isDragging) {
 			modal.style.left = `${e.clientX - offsetX}px`;
 			modal.style.top = `${e.clientY - offsetY}px`;
-			savePosition();
+			SavePosition();
 		};
 	});
+	
 	document.addEventListener("mouseup", () => {
 		isDragging = false;
 		document.body.style.userSelect = "auto";
 	});
+	
 	// Mover modal (touch)
 	modalestadisticocabecera.addEventListener("touchstart", e => {
 		isDragging = true;
@@ -1894,14 +1912,16 @@
 		offsetX = touch.clientX - modal.offsetLeft;
 		offsetY = touch.clientY - modal.offsetTop;
 	}, { passive: false });
+	
 	document.addEventListener("touchmove", e => {
 		if (isDragging) {
 			const touch = e.touches[0];
 			modal.style.left = `${touch.clientX - offsetX}px`;
 			modal.style.top = `${touch.clientY - offsetY}px`;
-			savePosition();
+			SavePosition();
 		};
 	}, { passive: false });
+	
 	document.addEventListener("touchend", () => { isDragging = false; });
 	modalestadisticocuerpo.addEventListener("touchstart", e => {
 		isDragging = true;
@@ -1909,14 +1929,16 @@
 		offsetX = touch.clientX - modal.offsetLeft;
 		offsetY = touch.clientY - modal.offsetTop;
 	}, { passive: false });
+	
 	document.addEventListener("touchmove", e => {
 		if (isDragging) {
 			const touch = e.touches[0];
 			modal.style.left = `${touch.clientX - offsetX}px`;
 			modal.style.top = `${touch.clientY - offsetY}px`;
-			savePosition();
+			SavePosition();
 		};
 	}, { passive: false });
+	
 	document.addEventListener("touchend", () => { isDragging = false; });
 	
 	// Redimensionar (PC)
@@ -1928,14 +1950,17 @@
 		startY = e.clientY;
 		e.preventDefault();
 	});
+	
 	document.addEventListener("mousemove", e => {
 		if (isResizing) {
 			modal.style.width = `${startWidth + (e.clientX - startX)}px`;
 			modal.style.height = `${startHeight + (e.clientY - startY)}px`;
-			saveSize();
+			SaveSize();
 		};
 	});
+	
 	document.addEventListener("mouseup", () => { isResizing = false; });
+	
 	// Redimensionar (touch)
 	resizeHandle.addEventListener("touchstart", e => {
 		isResizing = true;
@@ -1946,22 +1971,26 @@
 		startY = touch.clientY;
 		e.preventDefault();
 	}, { passive: false });
+	
 	document.addEventListener("touchmove", e => {
 		if (isResizing) {
 			const touch = e.touches[0];
 			modal.style.width = `${startWidth + (touch.clientX - startX)}px`;
 			modal.style.height = `${startHeight + (touch.clientY - startY)}px`;
-			saveSize();
+			SaveSize();
 	};
 	}, { passive: false });
+	
 	document.addEventListener("touchend", () => { isResizing = false; });
-	function savePosition() {
+	
+	function SavePosition() {
 		localStorage.setItem("modalPosition", JSON.stringify({
 			left: parseInt(modal.style.left),
 			top: parseInt(modal.style.top)
 		}));
 	};
-	function saveSize() {
+	
+	function SaveSize() {
 		localStorage.setItem("modalSize", JSON.stringify({
 			width: parseInt(modal.style.width),
 			height: parseInt(modal.style.height)
@@ -1969,7 +1998,7 @@
 	};
 	
 	//Función para loguearse
-	function loguearse() {
+	function Loguearse() {
 		const valor = document.getElementById("username").value.trim().toLowerCase();
 		const contra=document.getElementById("password").value.trim();
 		if (usuarios.includes(valor) && contrasenias==contra) {
@@ -2002,7 +2031,7 @@
     };
 	
 	//Función para mostrar/ocultar contraseña
-	function contrasenia () {
+	function Contrasenia () {
 		var estado=document.getElementById("password").type;
 		var valor=document.getElementById("password").value;
 		if (estado=="password") {document.getElementById("password").type="text";}
@@ -2083,7 +2112,7 @@
 	};
 	
 	//Función para girar el norte si está activado el modo giro de pantalla en el celular
-	function actualizarGiro() {
+	function ActualizarGiro() {
 	    botonnorte.style.visibility="visible";
         let angulo = 0;
         // window.orientation está deprecado en algunos navegadores, por eso usamos matchMedia también
@@ -2100,7 +2129,7 @@
     };
 	
 	// Evento que detecta cambios de orientación
-    window.addEventListener("orientationchange", actualizarGiro);
+    window.addEventListener("orientationchange", ActualizarGiro);
 	
 	//Capturar evento sobre botones
 	const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
