@@ -1534,12 +1534,25 @@
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
 		if (distancia<=1100 && lugar) {
+			if (ruta) {ruta.remove()};
 			clearInterval(actualizarruta);
 			alert("Detuve la actualización del trazado de ruta sugerida porque estás a menos de 1.100 metros de la EEA.-");
 			ActualizarUbicacion();
 		};
 		if (distancia>1100) {
 			if (! lugar) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
+			ruta=L.Routing.control({
+				waypoints: [coordenadas_ubicacion_real, centroide],
+				router: L.Routing.osrmv1({
+					serviceUrl: 'https://router.project-osrm.org/route/v1',
+					language: 'es',
+				}),
+				showAlternatives: true,
+				routeWhileDragging: true,
+				draggableWaypoints: false
+			}).addTo(mapa);
+			const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
+			mapa.fitBounds(centrar, {padding: [50, 50]}); // Padding opcional
 			actualizarruta=setInterval(()=>{
 				if (ruta) {ruta.remove()};
 				ruta=L.Routing.control({
