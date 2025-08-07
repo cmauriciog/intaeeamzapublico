@@ -810,7 +810,7 @@
 	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [18, 21],});
 	var icono_inta= L.icon({iconUrl: './images/inta.jpg',iconSize: [30, 30],});
 	var distancia="";
-	var actualizarruta="si";
+	//var actualizarruta="si";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
 	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan"];
@@ -1479,6 +1479,7 @@
 	// Función para detener geolocalización
 	function DetenerActualizarUbicacion() {
 		orientarme="no";
+		clearInterval(actualizarruta);
 		document.getElementById("dondestoy").style.visibility='hidden';
 		if (ruta) {ruta.remove()};
 		coordenadas_ubicacion_real="";
@@ -1531,31 +1532,39 @@
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
 		if (distancia<=1100 && lugar) {
+			//setTimeout(()=>{
+			clearInterval(actualizarruta);
+			alert("Detuve la actualización del trazado de ruta sugerida porque estás a menos de 1.100 metros de la EEA o porque apagaste el GPS.-");
+			//},;
 			ActualizarUbicacion();
 		};
-		if (distancia>1100 && actualizarruta=="si") {
-			actualizarruta="no";
+		if (distancia>1100) {
+			//actualizarruta="no";
 			if (ruta) {ruta.remove()};
 			if (! lugar) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
-			ruta=L.Routing.control({
-				waypoints: [coordenadas_ubicacion_real, centroide],
-				router: L.Routing.osrmv1({
-					serviceUrl: 'https://router.project-osrm.org/route/v1',
-					language: 'es',
-				}),
-				showAlternatives: true,
-				routeWhileDragging: true,
-				draggableWaypoints: false
-			}).addTo(mapa);
-			const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
-			mapa.fitBounds(centrar, {padding: [50, 50]}); // Padding opcional
+			let actualizarruta=setInterval(()=>{
+				ruta=L.Routing.control({
+					waypoints: [coordenadas_ubicacion_real, centroide],
+					router: L.Routing.osrmv1({
+						serviceUrl: 'https://router.project-osrm.org/route/v1',
+						language: 'es',
+					}),
+					showAlternatives: true,
+					routeWhileDragging: true,
+					draggableWaypoints: false
+				}).addTo(mapa);
+				const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
+				mapa.fitBounds(centrar, {padding: [50, 50]}); // Padding opcional
+				console.log("Estoy actualizando la ruta porque ya ha pasado el tiempo estipulado");
+			},60000);
 		};
-		if (actualizarruta=="no") {
-			setTimeout(() => {
-				actualizarruta = "si";
-				alert("Voy a actualizar la ruta porque el valor de actualizarruta pasó a ser ", actualizarruta);
-			}, 5 * 60 * 1000); // 5 minutos en milisegundos
-		};
+		
+		//if (actualizarruta=="no") {
+		//	setTimeout(() => {
+		//		actualizarruta = "si";
+		//		alert("Voy a actualizar la ruta porque el valor de actualizarruta pasó a ser "+actualizarruta);
+		//	}, 5 * 60 * 1000); // 5 minutos en milisegundos
+		//};
 	};
 
 	<!--Funcion para mostrar imagen estadísticas en ventana modal-->
