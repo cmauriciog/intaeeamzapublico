@@ -1480,6 +1480,7 @@
 	function DetenerActualizarUbicacion() {
 		orientarme="no";
 		clearInterval(actualizarruta);
+		alert("Detuve la actualización del trazado de ruta sugerida porque apagaste el GPS.-");
 		document.getElementById("dondestoy").style.visibility='hidden';
 		if (ruta) {ruta.remove()};
 		coordenadas_ubicacion_real="";
@@ -1523,6 +1524,7 @@
 		coordenadas_ubicacion_real="";
 		centroide = L.latLng(-33.00374957231557, -68.85766475808848);
 		ruta.remove();
+		CentrarMiUbicacion();
 	};
 
 	<!--Función para Trazar Ruta Sugerida con OSRM-->
@@ -1532,17 +1534,14 @@
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
 		if (distancia<=1100 && lugar) {
-			//setTimeout(()=>{
 			clearInterval(actualizarruta);
-			alert("Detuve la actualización del trazado de ruta sugerida porque estás a menos de 1.100 metros de la EEA o porque apagaste el GPS.-");
-			//},;
+			alert("Detuve la actualización del trazado de ruta sugerida porque estás a menos de 1.100 metros de la EEA.-");
 			ActualizarUbicacion();
 		};
 		if (distancia>1100) {
-			//actualizarruta="no";
-			if (ruta) {ruta.remove()};
 			if (! lugar) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
 			actualizarruta=setInterval(()=>{
+				if (ruta) {ruta.remove()};
 				ruta=L.Routing.control({
 					waypoints: [coordenadas_ubicacion_real, centroide],
 					router: L.Routing.osrmv1({
@@ -1556,15 +1555,8 @@
 				const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
 				mapa.fitBounds(centrar, {padding: [50, 50]}); // Padding opcional
 				console.log("Estoy actualizando la ruta porque ya ha pasado el tiempo estipulado");
-			},60000);
+			},300000);
 		};
-		
-		//if (actualizarruta=="no") {
-		//	setTimeout(() => {
-		//		actualizarruta = "si";
-		//		alert("Voy a actualizar la ruta porque el valor de actualizarruta pasó a ser "+actualizarruta);
-		//	}, 5 * 60 * 1000); // 5 minutos en milisegundos
-		//};
 	};
 
 	<!--Funcion para mostrar imagen estadísticas en ventana modal-->
