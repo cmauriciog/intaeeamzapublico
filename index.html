@@ -810,7 +810,7 @@
 	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [18, 21],});
 	var icono_inta= L.icon({iconUrl: './images/inta.jpg',iconSize: [30, 30],});
 	var distancia="";
-	//var actualizarruta="si";
+	var actualizarruta="si";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
 	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan"];
@@ -1542,7 +1542,7 @@
 			//actualizarruta="no";
 			if (ruta) {ruta.remove()};
 			if (! lugar) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
-			let actualizarruta=setInterval(()=>{
+			actualizarruta=setInterval(()=>{
 				ruta=L.Routing.control({
 					waypoints: [coordenadas_ubicacion_real, centroide],
 					router: L.Routing.osrmv1({
