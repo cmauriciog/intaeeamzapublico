@@ -606,12 +606,12 @@
 			<div class="sidebar-pane" id="ayuda">
                 <h1 class="sidebar-header">Sección de información de ayuda<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
-				<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
+				<!--<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
 				<br></br>
-				<p>Escribe .</p>
+				<p>Escribe .</p>-->
 				<br></br>
 				<div id="ayuda_usuario">
-					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar la casa de un publicador</br>(En caso que estés registrado como usuario)</p>
+					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar una parcela bajo ensayo</br>(En caso que estés registrado como usuario)</p>
 					<br></br>
 					<p>Escribe .</p>
 				</div>
@@ -1182,6 +1182,7 @@
 		coincidencia="";
 		sector="";
 		oficina="";
+		actualizarruta="si";
 		<!--Borrar las búsquedas anteriores-->
 		if (version=="completa") {
 			if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
@@ -1393,7 +1394,7 @@
 	function ActualizarUbicacion(e) {
 		if (coordenadas_ubicacion_real) {
 			mapa.removeLayer(marca_ubicacion_real);
-			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa).bindPopup("Vas por aquí");
+			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa).bindPopup("Vas por aquí").openPopup();
 			coordenadas_ubicacion_real=e.latlng;
 		};
 		if (!coordenadas_ubicacion_real) {
@@ -1402,8 +1403,10 @@
 			mapa.setView(coordenadas_ubicacion_real, 17);
 		};
 		if (!lugar) {centroide = L.latLng(-33.00500036548466, -68.86185680052853)};
-		if (lugar) {distancia=DistanciaEnTiempoReal()};
-		if (distancia>1100 && orientarme=="no" && poligono) {
+		//if (lugar) {distancia=DistanciaEnTiempoReal()};
+		distancia=DistanciaEnTiempoReal();
+		//if (distancia>1100 && orientarme=="no" && poligono) {
+		if (distancia>1100 && orientarme=="no") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
 			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
@@ -1411,7 +1414,8 @@
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 		};
-		if (distancia<=1100 && distancia>7 && orientarme=="no" && poligono) {
+		//if (distancia<=1100 && distancia>7 && orientarme=="no" && poligono) {
+		if (distancia<=1100 && distancia>7 && orientarme=="no") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo mostrarte en tiempo real por dónde vas '+
 			'y el destino con vista de ambos puntos en el mapa.-<br></span>';
@@ -1455,31 +1459,37 @@
 	
 	function DistanciaEnTiempoReal() {
 		const point = turf.point([coordenadas_ubicacion_real.lng, coordenadas_ubicacion_real.lat]);
-		const lineSegments = [];
-		const coords = poligono[0];
-		for (let i = 0; i < coords.length - 1; i++) {
-			lineSegments.push(turf.lineString([coords[i], coords[i + 1]]));
-		};
-		let minDistance = Infinity;
-		let nearestPoint = null;
-		let nearestSegment = null;
-		lineSegments.forEach(segment => {
-			const snapped = turf.nearestPointOnLine(segment, point);
-			const dist = turf.distance(point, snapped, {units: 'meters'});
-			if (dist < minDistance) {
-				minDistance = dist;
-				nearestPoint = snapped;
-				nearestSegment = segment;
+		if (lugar) {
+			const lineSegments = [];
+			const coords = poligono[0];
+			for (let i = 0; i < coords.length - 1; i++) {
+				lineSegments.push(turf.lineString([coords[i], coords[i + 1]]));
 			};
-		});
-		const snappedCoords = [nearestPoint.geometry.coordinates[1], nearestPoint.geometry.coordinates[0]];
-		return minDistance;
+			let minDistance = Infinity;
+			let nearestPoint = null;
+			let nearestSegment = null;
+			lineSegments.forEach(segment => {
+				const snapped = turf.nearestPointOnLine(segment, point);
+				const dist = turf.distance(point, snapped, {units: 'meters'});
+				if (dist < minDistance) {
+					minDistance = dist;
+					nearestPoint = snapped;
+					nearestSegment = segment;
+				};
+			});
+			const snappedCoords = [nearestPoint.geometry.coordinates[1], nearestPoint.geometry.coordinates[0]];
+			return minDistance;
+		};
+		if (!lugar && centroide) {
+			return (centroide.distanceTo(coordenadas_ubicacion_real));
+		};
 	};
 	
 	// Función para detener geolocalización
 	function DetenerActualizarUbicacion() {
 		orientarme="no";
 		clearInterval(actualizarruta);
+		actualizarruta="si";
 		alert("Detuve la actualización del trazado de ruta sugerida porque apagaste el GPS.-");
 		document.getElementById("dondestoy").style.visibility='hidden';
 		if (ruta) {ruta.remove()};
@@ -1552,7 +1562,7 @@
 				draggableWaypoints: false
 			}).addTo(mapa);
 			const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
-			mapa.fitBounds(centrar, {padding: [50, 50]}); // Padding opcional
+			if (actualizarruta=="si") {mapa.fitBounds(centrar, {padding: [50, 50]})};
 			actualizarruta=setInterval(()=>{
 				if (ruta) {ruta.remove()};
 				ruta=L.Routing.control({
