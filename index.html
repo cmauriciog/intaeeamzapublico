@@ -353,6 +353,25 @@
 		.botoncentrado img:hover {
 			transform: scale(1.5);
 		}
+		/* Definimos la animación de cambio de color al trazar la ruta*/
+        @keyframes color-animation {
+            0% { stroke: #ff0000; } /* Rojo */
+            25% { stroke: #ff7f00; } /* Naranja */
+            50% { stroke: #FF8DA1; } /* Rosado */
+            75% { stroke: #FF69B4; } /* Fucsia */
+            /*100% { stroke: #ff0000; } *//* Vuelve a Rojo */
+        }
+        /* Clase CSS que aplica las animaciones a la ruta */
+        .animated-route {
+            stroke-dasharray: 8000;
+            stroke-dashoffset: 8000;
+            animation: dash 10s linear forwards, color-animation 5s infinite;
+        }
+        @keyframes dash {
+            to {
+                stroke-dashoffset: 0;
+            }
+        }
     </style>
 	<!--Icono para la pestaña del navegador-->
 	<link rel="shortcut icon" href="./images/inta.ico" type="image/x-icon"/>
@@ -804,6 +823,7 @@
 	var poligono="";
 	var estoyaqui="";
 	var ruta="";
+	var rutaanimada="";
 	var senialgps="";
 	var orientarme="no";
 	var avisollegada="";
@@ -1427,7 +1447,7 @@
 			cajadistancia.style.visibility="visible";
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!.-"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!.-"};
-			if (distancia<1100 && ruta) {ruta.remove()};
+			if (distancia<1100 && ruta) {ruta.remove();rutaanimada.remove()};
 			cajadistancia.textContent = msg;
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
@@ -1492,7 +1512,7 @@
 		actualizarruta="si";
 		alert("Detuve la actualización del trazado de ruta sugerida porque apagaste el GPS.-");
 		document.getElementById("dondestoy").style.visibility='hidden';
-		if (ruta) {ruta.remove()};
+		if (ruta) {ruta.remove();rutaanimada.remove()};
 		coordenadas_ubicacion_real="";
 		distancia="";
 		mapa.stopLocate();
@@ -1534,6 +1554,7 @@
 		coordenadas_ubicacion_real="";
 		centroide = L.latLng(-33.00374957231557, -68.85766475808848);
 		ruta.remove();
+		rutaanimada.remove();
 		CentrarMiUbicacion();
 	};
 
@@ -1544,7 +1565,7 @@
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
 		if (distancia<=1100 && lugar) {
-			if (ruta) {ruta.remove()};
+			if (ruta) {ruta.remove();rutaanimada.remove()};
 			clearInterval(actualizarruta);
 			alert("Detuve la actualización del trazado de ruta sugerida porque estás a menos de 1.100 metros de la EEA.-");
 			ActualizarUbicacion();
@@ -1559,25 +1580,102 @@
 				}),
 				showAlternatives: true,
 				routeWhileDragging: true,
-				draggableWaypoints: false
+				draggableWaypoints: false,
+				collapsible: true,
+				waypointMode: 'snap',
+				lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]},
+				altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]},
+				createMarker: function(i, wp) {
+					return L.marker(wp.latLng, {
+						draggable: false,
+						icon: L.icon({
+							iconUrl: './images/posicion.png',
+							iconSize: [0, 0]
+						})
+					});
+				}
 			}).addTo(mapa);
-			const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
-			if (actualizarruta=="si") {mapa.fitBounds(centrar, {padding: [50, 50]})};
+			//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
+			if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]})};
+			
+			
+			
+			const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`;
+			//Solicito la ruta y la dibujo con animación
+			fetch(osrmUrl)
+				.then(response => response.json())
+				.then(data => {
+					if (data.routes && data.routes.length > 0) {
+						const route = data.routes[0].geometry;
+						// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
+						const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
+						// Creamos la polilínea con la clase CSS para la animación
+						rutaanimada = L.polyline(latlngs, {
+							color: '#ff0000',
+							weight: 7,
+							opacity: 0.8,
+							className: 'animated-route'
+						}).addTo(mapa);
+					} else {
+                       alert('No se pudo encontrar una ruta para sugerirte.-');
+                    }
+				})
+				.catch(error => {
+					console.error('Error al obtener la ruta:', error);
+					alert('Ocurrió un error al conectar con el servicio de OSRM.');
+				});
+			
+			
+			
 			actualizarruta=setInterval(()=>{
-				if (ruta) {ruta.remove()};
+				if (ruta) {ruta.remove();rutaanimada.remove()};
 				ruta=L.Routing.control({
-					waypoints: [coordenadas_ubicacion_real, centroide],
-					router: L.Routing.osrmv1({
-						serviceUrl: 'https://router.project-osrm.org/route/v1',
-						language: 'es',
-					}),
-					showAlternatives: true,
-					routeWhileDragging: true,
-					draggableWaypoints: false
+				waypoints: [coordenadas_ubicacion_real, centroide],
+				router: L.Routing.osrmv1({
+					serviceUrl: 'https://router.project-osrm.org/route/v1',
+					language: 'es',
+				}),
+				showAlternatives: true,
+				routeWhileDragging: true,
+				draggableWaypoints: false,
+				collapsible: true,
+				waypointMode: 'snap',
+				lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]},
+				altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]},
+				createMarker: function(i, wp) {
+					return L.marker(wp.latLng, {
+						draggable: false,
+						icon: L.icon({
+							iconUrl: './images/posicion.png',
+							iconSize: [0, 0]
+						})
+					});
+				}
 				}).addTo(mapa);
-				const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);
-				mapa.fitBounds(centrar, {padding: [50, 50]}); // Padding opcional
-				console.log("Estoy actualizando la ruta porque ya ha pasado el tiempo estipulado");
+				const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`;
+				//Solicito la ruta y la dibujo con animación
+				fetch(osrmUrl)
+					.then(response => response.json())
+					.then(data => {
+						if (data.routes && data.routes.length > 0) {
+							const route = data.routes[0].geometry;
+							// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
+							const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
+							// Creamos la polilínea con la clase CSS para la animación
+							rutaanimada = L.polyline(latlngs, {
+								color: '#ff0000',
+								weight: 7,
+								opacity: 0.8,
+								className: 'animated-route'
+							}).addTo(mapa);
+						} else {
+						   alert('No se pudo encontrar una ruta para sugerirte.-');
+						}
+					})
+					.catch(error => {
+						console.error('Error al obtener la ruta:', error);
+						alert('Ocurrió un error al conectar con el servicio de OSRM.');
+					});
 			},300000);
 		};
 	};
