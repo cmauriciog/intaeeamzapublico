@@ -622,8 +622,8 @@
 				<br></br>
 				<div id="ayuda_mapita">
 					<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>¿Sos visitante y querés ubicar algo o alguien?</br>En esta sección podrás buscar por nombre de edificio, servicio, especialidad o persona.</br>Si activás tu GPS, podrás llegar mejor al lugar que buscás.</p>
-					<br></br>
 					<p class="lorem">En caso que seas parte del personal de la unidad y hayás logueado, también podrás acceder a la información de las parcelas bajo ensayo.</p>
+					<br></br>
 				</div>
 				<div id="ayuda_unidades">
 					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>¿Querés saber dónde está y cómo llegar a una Agencia de Extensión o Experimental de Mendoza ó San Juan?</br>En esta sección podrás buscarlas por nombre.</br>Si activás tu GPS, podrás obtener una o dos rutas sugeridas para llegar.</p>
@@ -832,7 +832,7 @@
 	var iraaer="";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
-	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan"];
+	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan","Experimental La Consulta","Experimental Junín","Experimental Rama Caída"];
 	var grupoeeamza = L.featureGroup().addTo(mapa);
 	
 	//Añado el predio de la EEA Mendoza
@@ -1837,10 +1837,57 @@
 				.openPopup();
 			document.getElementById("volvereea").style.visibility='visible';
 		};
-		
-		if (agencia=="La Consulta") {
-			
-			//-33.70853283892101, -69.07446194262695
+		if (agencia=="Experimental San Juan") {
+			var formatoPopup = {
+				'maxWidth': '400',
+				'className' : 'popups'};
+			let coord="-31.653709919609067, -68.58741520721456".split(",");
+			centroide=L.latLng(-31.653709919609067, -68.58741520721456);
+			mapa.flyTo(coord, 16);
+			let contenidoPopup="<b><h4>Estación Experimental San Juan"+"</h4></b><br/><u>Dirección</u>: Calle 11 y Vidart, Villa Aberastain."+"<br/><u>Teléfono</u>: ."+"<br/><u>Mail</u>: @inta.gob.ar";
+			aer=L.marker(coord).addTo(mapa)
+				.bindPopup(contenidoPopup, formatoPopup)
+				.openPopup();
+			document.getElementById("volvereea").style.visibility='visible';
+		};
+		if (agencia=="Experimental Junín") {
+			var formatoPopup = {
+				'maxWidth': '400',
+				'className' : 'popups'};
+			let coord="-33.114191328346095, -68.48699997987025".split(",");
+			centroide=L.latLng(-33.114191328346095, -68.48699997987025);
+			mapa.flyTo(coord, 16);
+			let contenidoPopup="<b><h4>Estación Experimental Junín"+"</h4></b><br/><u>Dirección</u>: Carril Isidoro Busquets s/n°, La Colonia, Junín."+"<br/><u>Teléfono</u>: ."+"<br/><u>Mail</u>: @inta.gob.ar";
+			aer=L.marker(coord).addTo(mapa)
+				.bindPopup(contenidoPopup, formatoPopup)
+				.openPopup();
+			document.getElementById("volvereea").style.visibility='visible';
+		};
+		if (agencia=="Experimental La Consulta") {
+			var formatoPopup = {
+				'maxWidth': '400',
+				'className' : 'popups'};
+			let coord="-33.70853283892101, -69.07446194262695".split(",");
+			centroide=L.latLng(-33.70853283892101, -69.07446194262695);
+			mapa.flyTo(coord, 16);
+			let contenidoPopup="<b><h4>Estación Experimental La Consulta"+"</h4></b><br/><u>Dirección</u>: Ex Ruta 40, Km 96, La Consulta, San Carlos."+"<br/><u>Teléfono</u>: ."+"<br/><u>Mail</u>: @inta.gob.ar";
+			aer=L.marker(coord).addTo(mapa)
+				.bindPopup(contenidoPopup, formatoPopup)
+				.openPopup();
+			document.getElementById("volvereea").style.visibility='visible';
+		};
+		if (agencia=="Experimental Rama Caída") {
+			var formatoPopup = {
+				'maxWidth': '400',
+				'className' : 'popups'};
+			let coord="-34.66696115781422, -68.3925578892319".split(",");
+			centroide=L.latLng(-34.66696115781422, -68.3925578892319);
+			mapa.flyTo(coord, 16);
+			let contenidoPopup="<b><h4>Estación Experimental Rama Caída"+"</h4></b><br/><u>Dirección</u>: El Vivero s/nº, San Rafael."+"<br/><u>Teléfono</u>: ."+"<br/><u>Mail</u>: @inta.gob.ar";
+			aer=L.marker(coord).addTo(mapa)
+				.bindPopup(contenidoPopup, formatoPopup)
+				.openPopup();
+			document.getElementById("volvereea").style.visibility='visible';
 		};
 		iraaer="si";
 		mail="";
