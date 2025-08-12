@@ -359,13 +359,13 @@
             25% { stroke: #ff7f00; } /* Naranja */
             50% { stroke: #FF8DA1; } /* Rosado */
             75% { stroke: #FF69B4; } /* Fucsia */
-            /*100% { stroke: #ff0000; } *//* Vuelve a Rojo */
+            100% { stroke: #FF69B4; }
         }
         /* Clase CSS que aplica las animaciones a la ruta */
         .animated-route {
             stroke-dasharray: 8000;
             stroke-dashoffset: 8000;
-            animation: dash 10s linear forwards, color-animation 5s infinite;
+            animation: dash 10s linear forwards, color-animation 10s infinite;
         }
         @keyframes dash {
             to {
@@ -441,14 +441,12 @@
 				<br></br>
                 <p class="lorem"><i class="fa-solid fa-envelope" style="color: #3f08f2;"></i>Te posibilitará enviar un mail de consulta/sugerencia</p>
 				<br></br>
-				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
+				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Acceso para usuarios registrados</p>
 				<br></br>
 				<br></br>
 				<br></br>
 				<br></br>
 				<br></br>
-				<!--<p class="lorem"><i class="fa-solid fa-circle-exclamation" style="color: #3f08f2;"></i>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
-				<p class="lorem">Por favor, comunicate con alguno de los ancianos.-</p>-->
             </div>
             <div class="sidebar-pane" id="mapita">
                 <h1 class="sidebar-header">Buscar...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
@@ -458,7 +456,7 @@
 				<div id="sugerenciasbusquedabis"></div>
 				<br></br>
 				<br></br>
-				<p id="parrafoterritorio" style="color:blue">Escribí el nombre del lugar, el servicio, la persona o la especialidad que necesitás ubicar..</p>
+				<p id="parrafoterritorio" style="color:blue">Escribí el nombre del lugar, el servicio, la persona o la especialidad que necesitás ubicar...</p>
 				<br></br>
 				<br></br>
 				<p style="font-size:12px; color:blue" id="titulo_vid">¿Necesitás filtrar por variedad de vid?. Hacelo desde aquí...</p>
@@ -486,7 +484,7 @@
 						<option value="Variedades de mesa" >Colección de variedades p/mesa</option>
 					</select>
 				</div>
-				<p style="font-size:12px; color:blue" id="titulo_otro_criterio"></br>¿Querés hacer la búsqueda con otro criterio?. Hacelo desde aquí...</p>
+				<p style="font-size:12px; color:blue" id="titulo_otro_criterio"></br>¿Querés hacer la búsqueda con otro criterio diferente a Vid?. Hacelo desde aquí...</p>
 				<div id="opciones_otr" style="font-size:12px">
 					<select id="otro_criterio" onchange="CriterioAbuscar(value)">
 						<option value="" ></option>
@@ -595,7 +593,7 @@
 				</div>
             </div>
 			<div class="sidebar-pane" id="unidades">				
-				<h1 class="sidebar-header">Buscar una Agencia o Experimental...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+				<h1 class="sidebar-header">Buscar en Mendoza y San Juan...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
 				<p id="titulobuscarflia" class="lorem">Escribí o seleccioná la AER ó EEA...</p>
 				<input type="text" id="buscarunidad" class="animated-input" placeholder="AER o EEA..." autocomplete="off">
@@ -605,15 +603,11 @@
 				<button id="volvereea" type="button" style="background-color:red" onclick="VolverEEA()">Volver al predio de la EEA Mendoza</button>
 				<br></br>
 				<br></br>
-				<p id="parrafofamilia" style="color:blue">Escribe algún dato que conozcas de la unidad que deseás ubicar y te centrará el mapa sobre ella.</p>
+				<p id="parrafofamilia" style="color:blue">Escribí algún dato que conozcás de la unidad que deseás ubicar y te centrará el mapa sobre ella.</p>
 				<br></br>
-				<!--<p>
-					<input id="mostrarflias" type="submit" style="background-color:#acf89f" value="Ver todas las familias" onclick="VerTodasFlias();"></input>
-					<input id="ocultarflias" type="submit" style="background-color:#f48d8d" value="Quitar familias del mapa" onclick="QuitarTodasFlias();"></input>
-				</p>-->
             </div>
 			<div class="sidebar-pane" id="herramientas">
-                <h1 class="sidebar-header">Sección de herramientas<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <h1 class="sidebar-header">Sección de herramientas...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
 				<p>Las herramientas disponibles son...</p>
 				<br></br>
@@ -623,16 +617,22 @@
 				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><i class="fa-solid fa-location-crosshairs" style="color: green";></i></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">Centrar en mi ubicación actual</a></p>
             </div>
 			<div class="sidebar-pane" id="ayuda">
-                <h1 class="sidebar-header">Sección de información de ayuda<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <h1 class="sidebar-header">Sección de información de ayuda...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
-				<!--<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>Te ayudará a encontrar un territorio</p>
 				<br></br>
-				<p>Escribe .</p>-->
-				<br></br>
-				<div id="ayuda_usuario">
-					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar una parcela bajo ensayo</br>(En caso que estés registrado como usuario)</p>
+				<div id="ayuda_mapita">
+					<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>¿Sos visitante y querés ubicar algo o alguien?</br>En esta sección podrás buscar por nombre de edificio, servicio, especialidad o persona.</br>Si activás tu GPS, podrás llegar mejor al lugar que buscás.</p>
 					<br></br>
-					<p>Escribe .</p>
+					<p class="lorem">En caso que seas parte del personal de la unidad y hayás logueado, también podrás acceder a la información de las parcelas bajo ensayo.</p>
+				</div>
+				<div id="ayuda_unidades">
+					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>¿Querés saber dónde está y cómo llegar a una Agencia de Extensión o Experimental de Mendoza ó San Juan?</br>En esta sección podrás buscarlas por nombre.</br>Si activás tu GPS, podrás obtener una o dos rutas sugeridas para llegar.</p>
+					<br></br>
+				</div>
+				
+				<div id="ayuda_usuario">
+					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar una parcela bajo ensayo y te mostrará sus datos</br>(En caso que estés registrado como usuario)</p>
+					<br></br>
 				</div>
 				<br></br>
 				<span>Tu visita es la número <div id="sfcp9ylgya5agjfp41fnsgeqzwcqr7wlucu"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contador de visitas web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu" border="0" title="contador de visitas web" alt="contador de visitas web"></a></noscript></span>
@@ -642,15 +642,13 @@
 				<br></br>
 				<br></br>
 				<br></br>
-				<!--<p class="lorem"><i class="fa-solid fa-circle-exclamation" style="color: #3f08f2;"></i>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
-				<p class="lorem">Por favor, comunicate con alguno de los ancianos.-</p>-->
             </div>
 			<div class="sidebar-pane" id="contacto">
-                <h1 class="sidebar-header">Sección de contacto con el desarrollador<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
+                <h1 class="sidebar-header">Sección de contacto con el desarrollador...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
-				<p>¿Encontraste algún problema o tenés alguna sugerencia para mejorar este sitio?</p>
+				<p>¿Encontraste algún problema, tenés alguna sugerencia para mejorar este sitio o querés solicitar acceso como usuario registrado?</p>
 				<br></br>
-				<p>Por favor, comunicate con su desarrollador.....-</p>
+				<p>Por favor, comunicate con su desarrollador haciendo click en el icono de abajo.....-</p>
 				<br></br>
 				<br></br>
 				<p><a href="javascript:PrepararMail()"><i class="fa-solid fa-envelope" style="color: #3f08f2;"></i></a></p>
@@ -831,6 +829,7 @@
 	var icono_inta= L.icon({iconUrl: './images/inta.jpg',iconSize: [30, 30],});
 	var distancia="";
 	var actualizarruta="si";
+	var iraaer="";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
 	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan"];
@@ -957,18 +956,14 @@
 			var contenidoPopup="Cobertura: "+feature.properties.Cobertura+"   "+"<img src="+logo+" width='35' height='35' /img>"+"<br/>Descripción: "+feature.properties.Descripcio+
 				"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"};
 		layer.bindPopup(contenidoPopup, formatoPopup);
-		//document.getElementById("resumen").style.display="inline";
 		mapa.flyTo(coordenadas, zum)}
 		else {if (feature.properties.Descripcio==sector) {
 			coord_sector=(feature.geometry.coordinates[0][1]+", "+feature.geometry.coordinates[0][0]).split(",");
 			centroide=layer.getBounds().getCenter();
 			coord=[];
-			//poligono=[];
 			coord.push(centroide.lat,centroide.lng);
 			mapa.flyTo(coord, 16);
 			poligono=feature.geometry.coordinates[0];
-			//poligono = poligono.flat();
-			//poligono.forEach(arr => arr.reverse());
 			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
 			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre."};
 			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
@@ -1121,7 +1116,6 @@
 
 	<!--Funcion para filtrado general-->	
 	function Filtrar_Gral(feature) {
-		//capa_parcelas.remove();
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		if (criterio=="Clon" && sel_clon.value !=""){if (feature.properties.Clon==sel_clon.value) return true; resumen=otro_criterio.value+" "+sel_clon.value};
 		if (criterio=="Cobertura" && sel_cobertura.value !=""){if (feature.properties.Cobertura==sel_cobertura.value) return true; resumen=otro_criterio.value+" "+sel_cobertura.value};
@@ -1402,7 +1396,6 @@
 		};
 		
 		if (conexion==="si") {
-			<!--Bloque Nuevo-->
 			document.getElementById("botoncentrado").style.visibility='visible';
 			mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 			mapa.on('locationfound', ActualizarUbicacion);
@@ -1422,10 +1415,8 @@
 			coordenadas_ubicacion_real=e.latlng;
 			mapa.setView(coordenadas_ubicacion_real, 17);
 		};
-		if (!lugar) {centroide = L.latLng(-33.00500036548466, -68.86185680052853)};
-		//if (lugar) {distancia=DistanciaEnTiempoReal()};
+		if (!lugar && ! centroide) {centroide = L.latLng(-33.00500036548466, -68.86185680052853)};
 		distancia=DistanciaEnTiempoReal();
-		//if (distancia>1100 && orientarme=="no" && poligono) {
 		if (distancia>1100 && orientarme=="no") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
@@ -1560,7 +1551,12 @@
 
 	<!--Función para Trazar Ruta Sugerida con OSRM-->
 	function TrazarRuta() {
+		VerificarConexion();
+		if (conexion==="si") {
+			VerificarGPS();
+		};
 		avisollegada="si";
+		if (ruta) {ruta.remove();rutaanimada.remove()};
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
@@ -1571,7 +1567,7 @@
 			ActualizarUbicacion();
 		};
 		if (distancia>1100) {
-			if (! lugar) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
+			if (! lugar && ! centroide) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
 			ruta=L.Routing.control({
 				waypoints: [coordenadas_ubicacion_real, centroide],
 				router: L.Routing.osrmv1({
@@ -1750,22 +1746,26 @@
 		'es probable que no sea posible hacer un envío semi-automático del mail.<br><br>Si al cerrar este mensaje no se envía, abrí tu aplicación de correo electrónico y pegá la dirección de mail que ha sido'+
 		'copiada en el portapapeles.-</span>';
 		tiempomodalflash=15000;
+		iraaer="";
 		mail="si";
 		navigator.clipboard.writeText("cmauriciogodoy@gmail");
 		ModalFlash(tiempomodalflash);
 	};
 
 	function EnviarMail () {
-		let a = document.createElement('a');
-		let link = document.createTextNode("This is link");
-		a.appendChild(link);
-		a.href = "mailto:cmauriciogodoy@gmail.com?subject=SITIO WEB DEL INTA&body=Estimado Mauricio: Deseo hacerte el siguiente aporte como sugerencia (o informe de error) del sitio web del INTA. ........"+
-			"(Explicá con el mayor detalle posible tu comentario).-";
-		a.id="a";
-		document.body.appendChild(a);
-		document.getElementById('a').click();
-		document.body.removeChild(a);
-		mail="";
+		mail=""
+		VerificarConexion();
+		if (conexion=="si") {
+			let a = document.createElement('a');
+			let link = document.createTextNode("This is link");
+			a.appendChild(link);
+			a.href = "mailto:cmauriciogodoy@gmail.com?subject=SITIO WEB DEL INTA&body=Estimado Mauricio: Deseo hacerte el siguiente aporte como sugerencia (o informe de error) del sitio web del INTA. ........"+
+				"(Explicá con el mayor detalle posible tu comentario).-";
+			a.id="a";
+			document.body.appendChild(a);
+			document.getElementById('a').click();
+			document.body.removeChild(a);
+		};
 	};
 
 	function IrUnidad(agencia) {
@@ -1775,6 +1775,7 @@
 				'maxWidth': '400',
 				'className' : 'popups'};
 			let coord="-32.88053993173516, -68.77169734266394".split(",");
+			centroide=L.latLng(-32.88053993173516, -68.77169734266394);
 			mapa.flyTo(coord, 16);
 			let contenidoPopup="<b><h4>Agencia de Extensión Guaymallén"+"</h4></b><br/><u>Dirección</u>: Mathus Hoyos s/n, Bermejo, Guaymallén."+
 				"<br/>Predio de la Escuela Técnica Miguel Amado Pouget"+"<br/><u>Teléfono</u>: 11-6562-6368."+"<br/><u>Mail</u>: bakos.pedro@inta.gob.ar";
@@ -1788,6 +1789,7 @@
 				'maxWidth': '400',
 				'className' : 'popups'};
 			let coord="-32.72140116246021, -68.59081481151209".split(",");
+			centroide=L.latLng(-32.72140116246021, -68.59081481151209);
 			mapa.flyTo(coord, 16);
 			let contenidoPopup="<b><h4>Agencia de Extensión Lavalle"+"</h4></b><br/><u>Dirección</u>: Belgrano y Las Heras, Lavalle."+"<br/><u>Teléfono</u>: 11-6864-5337."+
 				"<br/><u>Mail</u>: valentin.mariana@inta.gob.ar";
@@ -1801,6 +1803,7 @@
 				'maxWidth': '400',
 				'className' : 'popups'};
 			let coord="-33.004316166957665, -68.86629766891129".split(",");
+			centroide=L.latLng(-33.004316166957665, -68.86629766891129);
 			mapa.flyTo(coord, 16);
 			let contenidoPopup="<b><h4>Agencia de Extensión Luján de Cuyo"+"</h4></b><br/><u>Dirección</u>: San Martín 3853, Mayor Drummond, Luján de Cuyo."+"<br/><u>Teléfono</u>: 11-6056-6027."+"<br/><u>Mail</u>: espindola.rodrigo@inta.gob.ar";
 			aer=L.marker(coord).addTo(mapa)
@@ -1813,6 +1816,7 @@
 				'maxWidth': '400',
 				'className' : 'popups'};
 			let coord="-32.98581159851684, -68.78770732344232".split(",");
+			centroide=L.latLng(-32.98581159851684, -68.78770732344232);
 			mapa.flyTo(coord, 16);
 			let contenidoPopup="<b><h4>Agencia de Extensión Maipú"+"</h4></b><br/><u>Dirección</u>: Pablo Pescara 79, Maipú."+"<br/><u>Teléfono</u>: 11-6864-3738."+"<br/><u>Mail</u>: villar.elisa@inta.gob.ar";
 			aer=L.marker(coord).addTo(mapa)
@@ -1825,12 +1829,23 @@
 				'maxWidth': '400',
 				'className' : 'popups'};
 			let coord="-32.59050058989425, -69.34690529948934".split(",");
+			centroide=L.latLng(-32.59050058989425, -69.34690529948934);
 			mapa.flyTo(coord, 16);
 			let contenidoPopup="<b><h4>Oficina de Información Técnica Uspallata"+"</h4></b><br/><u>Dirección</u>: Rutas 7 y 52, Uspallata."+"<br/>Terminal de Omnibus de Uspallata."+"<br/><u>Teléfono</u>: 2954-398215."+"<br/><u>Mail</u>: lang.maria@inta.gob.ar";
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
 			document.getElementById("volvereea").style.visibility='visible';
+		};
+		iraaer="si";
+		mail="";
+		if (!coordenadas_ubicacion_real=="") {
+			titulomodalflash.innerText="TRAZAR RUTA";
+			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
+			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
+			document.getElementById("btn-indicaciones-modal-flash").style.visibility='visible';
+			tiempomodalflash=5000;
+			ModalFlash(tiempomodalflash);
 		};
 	};
 
@@ -2261,15 +2276,16 @@
 		orientarme="no";
 		avisollegada="no";
 		if (mail=="si") {EnviarMail()};
+		if (iraaer=="si") {TrazarRuta()};
 		clearTimeout(temporizadormodalflash);
 		tiempomodalflash=5000;
 	});
 	const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
 	btnindicacionesmodalflash.addEventListener("click",()=>{
 		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
-		orientarme="si";
-		avisollegada="si";
 		clearTimeout(temporizadormodalflash);
+		if (iraaer=="") {orientarme="si";avisollegada="si"};
+		if (iraaer=="si") {TrazarRuta()};
 	});
 	const cajadistancia = document.getElementById("distancia");
 	const btncerrarmodalgrafico=document.querySelector("#btn-cerrar-modal-grafico");
