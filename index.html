@@ -29,7 +29,7 @@
 	<!-- Repositorios en línea y locales -->
 	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
-	<link rel="stylesheet" href="libs/leaflet-measure-path.css"/>
+	<!--<link rel="stylesheet" href="libs/leaflet-measure-path.css"/>-->
 	<link rel="stylesheet" href="./css/leaflet-sidebar.css"/>
 	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 	<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
@@ -38,8 +38,8 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
 	<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
 	<script src="libs/editable.js" ></script>
-	<script src="libs/measure.js"></script>
-	<script src="leaflet.MeasurePolygon.js"></script>
+	<!--<script src="libs/measure.js"></script>
+	<script src="leaflet.MeasurePolygon.js"></script>-->
 	<script src="./js/leaflet-sidebar.js"></script>
 	<script src="https://kit.fontawesome.com/68fa6cffda.js" crossorigin="anonymous"></script>
 	<script src="js/jquery-3.4.1.min.js" ></script>
@@ -353,6 +353,54 @@
 		.botoncentrado img:hover {
 			transform: scale(1.5);
 		}
+		
+		.botonmediciones {
+			position: absolute;
+			top: 135px;
+			right: 12px;
+			/*background: red;*/
+			border: none;
+			cursor: pointer;
+			padding: 0;
+			z-index:1030;
+		}
+		.botonmediciones img {
+			width: 40px;
+			height: 40px;
+			border-radius: 10px;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+			transition: transform 0.2s;
+		}
+		.botonmediciones img:hover {
+			transform: scale(1.5);
+		}
+		
+		.infomediciones {
+			position: absolute;
+			top: 10px;
+			left: 50px;
+			z-index: 1000;
+			background: white;
+			padding: 8px 10px;
+			border-radius: 6px;
+			box-shadow: 0 1px 4px rgba(0,0,0,0.3);
+			font-family: sans-serif;
+			min-width: 200px;
+		}
+		.btn {
+			margin-top:8px;
+			display:inline-block;
+			padding:6px 8px;
+			background:#2b7;
+			color:white;
+			border-radius:4px;
+			cursor:pointer;
+			text-align: center;
+		}
+		.btn.alt {
+			background:#555;
+		}
+		
 		/* Definimos la animación de cambio de color al trazar la ruta*/
         @keyframes color-animation {
             0% { stroke: #ff0000; } /* Rojo */
@@ -675,12 +723,22 @@
 	<div id="mapa">
 		<div id="distancia">Buscando ubicacion...</div>
 		<!-- Botones con imagenes -->
+		<button class="botonmediciones" id="botonmediciones">
+			<img src="./images/mediciones.jpg" alt="Mediciones en el Mapa" id="imagenmediciones">
+		</button>
 		<button class="botonnorte" id="botonnorte">
 			<img src="./images/norte.jpg" alt="Norte del Mapa">
 		</button>
 		<button class="botoncentrado" id="botoncentrado" onclick="CentrarMiUbicacion()">
 			<img src="./images/posicion.png" alt="Centrar en Mi Ubicación">
 		</button>
+		<div class="infomediciones" id="contenedorMediciones">
+			<div id="modoActual"><strong>Modo:</strong> Distancia</div>
+			<div id="resultado1">Distancia total: —</div>
+			<div id="resultado2"></div>
+			<div class="btn" id="cambiarMedicion">Cambiar a Superficie</div>
+			<div class="btn alt" id="limpiarMedicion" onclick="ResetearMediciones()">Limpiar</div>
+		</div>
 	</div>
 	<div class="modalflash" id="MiModalFlash">
 		<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL VISOR WEB DEL INTA EEA MENDOZA...!!!</div>
@@ -772,8 +830,9 @@
 	L.control.layers(CapasBase).addTo(mapa);
 
 	<!--Crear la herramienta de medición de área-->
-	let measurePolygonControl = L.control.measurePolygon();
-	measurePolygonControl.addTo(mapa);
+	//let measurePolygonControl = L.control.measurePolygon();
+	//measurePolygonControl.addTo(mapa);
+	
 	L.control.zoom({
 		position:'topright'}).addTo(mapa);
 	<!--Añadir el mini-mapa al lienzo-->
@@ -789,7 +848,8 @@
 	var anios_prod=0;
 	var coordenadas="-33.00598405638592, -68.85600484779212".split(",");
 	var zum=16;
-	var medir_lineal="no";
+	//var medir_lineal="no";
+	var capturaActiva= false;
 	var firstLatLng, secondLatLng;
 	var conexion="";
 	var circulo="";
@@ -817,6 +877,13 @@
 	var geoposicion="";
 	var origen=[];
 	var coord=[];
+	var markers=[];
+	var perimetro=null;
+	var superficie=null;
+	var puntos = [];
+	var distanciaTotal = 0;
+	var modo = "distancia";
+	var cant_mediciones=0;
 	var centroide="";
 	var poligono="";
 	var estoyaqui="";
@@ -832,7 +899,7 @@
 	var iraaer="";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
-	var aers=["Agencia de Extensión Lavalle","Agencia de Extensión Guaymallén","Agencia de Extensión Maipú","Agencia de Extensión Luján de Cuyo","Oficina de Información Uspallata","Experimental San Juan","Experimental La Consulta","Experimental Junín","Experimental Rama Caída"];
+	var aers=["Agencia de Extensión Guaymallén","Agencia de Extensión Junín","Agencia de Extensión Lavalle","Agencia de Extensión La Consulta","Agencia de Extensión Luján de Cuyo","Agencia de Extensión Maipú","Oficina de Información Uspallata","Experimental Junín","Experimental La Consulta","Experimental Rama Caída","Experimental San Juan"];
 	var grupoeeamza = L.featureGroup().addTo(mapa);
 	
 	//Añado el predio de la EEA Mendoza
@@ -1269,41 +1336,41 @@
 	};
 
 	<!--Evento que captura dos puntos para medir la distancia entre ellos-->
-	mapa.on('click', function(e) {if (medir_lineal=="si") {
-		if (!firstLatLng) {
-			firstLatLng = e.latlng;
-			puntoA=new L.marker(firstLatLng).addTo(mapa).bindPopup('Punto A<br/>' + e.latlng).openPopup();
-		} else {
-			secondLatLng = e.latlng;
-			puntoB=new L.marker(secondLatLng).addTo(mapa).bindPopup('Punto B<br/>' + e.latlng).openPopup();
-		}
+	//mapa.on('click', function(e) {if (medir_lineal=="si") {
+	//	if (!firstLatLng) {
+	//		firstLatLng = e.latlng;
+	//		puntoA=new L.marker(firstLatLng).addTo(mapa).bindPopup('Punto A<br/>' + e.latlng).openPopup();
+	//	} else {
+	//		secondLatLng = e.latlng;
+	//		puntoB=new L.marker(secondLatLng).addTo(mapa).bindPopup('Punto B<br/>' + e.latlng).openPopup();
+	//	}
 
-		if (firstLatLng && secondLatLng) {
-			<!--Dibujo una línea entre los dos puntos-->
-			lineadistancia=new L.polyline([firstLatLng, secondLatLng], {
-			color: 'red'
-			}).addTo(mapa);
-			setTimeout(MedirDistancia, 300);
-		}
-	}});
+	//	if (firstLatLng && secondLatLng) {
+	//		<!--Dibujo una línea entre los dos puntos-->
+	//		lineadistancia=new L.polyline([firstLatLng, secondLatLng], {
+	//		color: 'red'
+	//		}).addTo(mapa);
+	//		setTimeout(MedirDistancia, 300);
+	//	}
+	//}});
 
 	<!--Función para habilitar la medición de longitudes-->
-	function Medir_Longitud() {
-		medir_lineal="si";
-	};
+	//function Medir_Longitud() {
+	//	medir_lineal="si";
+	//};
 
 	<!--Funcion para medir distancias entre dos puntos-->
-	function MedirDistancia() {
-		var distancem = mapa.distance(firstLatLng ,secondLatLng).toFixed(2);
-		var distancekm=(distancem/1000).toFixed(2);
-		firstLatLng="";
-		secondLatLng="";
-		alert("La distancia aproximada es de "+distancem+" metros ó "+distancekm+" km.-");
-		puntoA.remove();
-		puntoB.remove();
-		lineadistancia.remove();
-		medir_lineal="no";
-	};
+	//function MedirDistancia() {
+	//	var distancem = mapa.distance(firstLatLng ,secondLatLng).toFixed(2);
+	//	var distancekm=(distancem/1000).toFixed(2);
+	//	firstLatLng="";
+	//	secondLatLng="";
+	//	alert("La distancia aproximada es de "+distancem+" metros ó "+distancekm+" km.-");
+	//	puntoA.remove();
+	//	puntoB.remove();
+	//	lineadistancia.remove();
+	//	medir_lineal="no";
+	//};
 
 	<!--Verificar Sistema Operativo-->
 	function VerificarSistemaOperativo() {
@@ -1863,7 +1930,33 @@
 				.openPopup();
 			document.getElementById("volvereea").style.visibility='visible';
 		};
+		if (agencia=="Agencia de Extensión Junín") {
+			var formatoPopup = {
+				'maxWidth': '400',
+				'className' : 'popups'};
+			let coord="-33.114191328346095, -68.48699997987025".split(",");
+			centroide=L.latLng(-33.114191328346095, -68.48699997987025);
+			mapa.flyTo(coord, 16);
+			let contenidoPopup="<b><h4>Estación Experimental Junín"+"</h4></b><br/><u>Dirección</u>: Carril Isidoro Busquets s/n°, La Colonia, Junín."+"<br/><u>Teléfono</u>: ."+"<br/><u>Mail</u>: @inta.gob.ar";
+			aer=L.marker(coord).addTo(mapa)
+				.bindPopup(contenidoPopup, formatoPopup)
+				.openPopup();
+			document.getElementById("volvereea").style.visibility='visible';
+		};
 		if (agencia=="Experimental La Consulta") {
+			var formatoPopup = {
+				'maxWidth': '400',
+				'className' : 'popups'};
+			let coord="-33.70853283892101, -69.07446194262695".split(",");
+			centroide=L.latLng(-33.70853283892101, -69.07446194262695);
+			mapa.flyTo(coord, 16);
+			let contenidoPopup="<b><h4>Estación Experimental La Consulta"+"</h4></b><br/><u>Dirección</u>: Ex Ruta 40, Km 96, La Consulta, San Carlos."+"<br/><u>Teléfono</u>: ."+"<br/><u>Mail</u>: @inta.gob.ar";
+			aer=L.marker(coord).addTo(mapa)
+				.bindPopup(contenidoPopup, formatoPopup)
+				.openPopup();
+			document.getElementById("volvereea").style.visibility='visible';
+		};
+		if (agencia=="Agencia de Extensión La Consulta") {
 			var formatoPopup = {
 				'maxWidth': '400',
 				'className' : 'popups'};
@@ -2317,8 +2410,98 @@
         imagen.style.transform = `rotate(${angulo}deg)`;
     };
 	
+	//Bloque para las mediciones
+	function AgregarPunto(e) {
+	const latlng = e.latlng;
+		if (cant_mediciones>0) {		
+			markers.push(
+				L.marker(latlng)
+					.addTo(mapa)
+			);
+			console.log(cant_mediciones);
+		};
+		cant_mediciones=cant_mediciones+1;
+		if (cant_mediciones>1) {
+			if (modo === "distancia") {
+				puntos.push(latlng);
+				if (puntos.length > 1) {
+					const i = puntos.length - 1;
+					distanciaTotal += L.latLng(puntos[i-1]).distanceTo(L.latLng(puntos[i]));
+				};
+				if (perimetro) mapa.removeLayer(perimetro);
+				perimetro = L.polyline(puntos, { color: 'red', weight: 4 }).addTo(mapa);
+				resultado1.innerHTML = `Distancia total: ${FormatearDistancia(distanciaTotal)}`;
+				resultado2.innerHTML = "";
+			}
+			else if (modo === "superficie") {
+				puntos.push([latlng.lng, latlng.lat]);
+				if (superficie) mapa.removeLayer(superficie);
+				if (puntos.length >= 3) {
+					const coordsCerrados = [...puntos, puntos[0]];
+					superficie = L.polygon(coordsCerrados.map(p => [p[1], p[0]]), { color: 'blue', weight: 2, fillOpacity: 0.3 }).addTo(mapa);
+					const turfPoly = turf.polygon([coordsCerrados]);
+					const areaM2 = turf.area(turfPoly);
+					const perimetroM = turf.length(turf.lineString(coordsCerrados), { units: 'meters' });
+					resultado1.innerHTML = `Superficie: ${FormatearArea(areaM2)}`;
+					resultado2.innerHTML = `Perímetro: ${FormatearDistancia(perimetroM)}`;
+				} else {
+					resultado1.innerHTML = "Superficie: —";
+					resultado2.innerHTML = "Perímetro: —";
+				}
+			};
+		};
+	};
+	
+	function FormatearDistancia(m) {
+		return m >= 1000 ? (m / 1000).toFixed(3) + ' km' : Math.round(m) + ' m';
+	};
+	
+	function FormatearArea(m2) {
+		return m2 >= 1_000_000 ? (m2 / 1_000_000).toFixed(3) + ' km²' : m2.toFixed(2) + ' m²';
+	};
+
+	cambiarMedicion.addEventListener('click', () => {
+	modo = modo === "distancia" ? "superficie" : "distancia";
+	modoActual.innerHTML = `<strong>Modo:</strong> ${modo.charAt(0).toUpperCase() + modo.slice(1)}`;
+	cambiarMedicion.innerText = modo === "distancia" ? "Cambiar a Superficie" : "Cambiar a Distancia";
+	ResetearMediciones();
+	});
+	
+	//Función para resetear el contador del medidor de distancias/superficies
+	function ResetearMediciones() {
+		puntos = [];
+		distanciaTotal = 0;
+		if (markers) {
+			markers.forEach(m => mapa.removeLayer(m));
+			markers = [];
+		};
+		if (perimetro) {mapa.removeLayer(perimetro); perimetro = null;}
+		if (superficie) {mapa.removeLayer(superficie); superficie = null;}
+		resultado1.innerHTML = modo === "distancia" ? "Distancia total: —" : "Superficie: —";
+		resultado2.innerHTML = "";
+	};
+	
 	// Evento que detecta cambios de orientación
     window.addEventListener("orientationchange", ActualizarGiro);
+	
+	// Botón para alternar captura de mediciones
+	document.getElementById("botonmediciones").addEventListener("click", function() {
+		document.getElementById("contenedorMediciones").style.visibility='visible';
+		capturaActiva = !capturaActiva;
+		const icono=document.getElementById("imagenmediciones");
+		if (capturaActiva) {
+			mapa.on('click', AgregarPunto);
+			icono.src = "./images/nomediciones.jpg";
+			document.getElementById("contenedorMediciones").style.visibility='visible';
+		} else {
+			mapa.off('click', AgregarPunto);
+			icono.src="./images/mediciones.jpg";
+			document.getElementById("contenedorMediciones").style.visibility='hidden';
+			alert("Vamos a cero.-");
+			cant_mediciones=0;
+			ResetearMediciones();
+		};
+	});
 	
 	//Capturar evento sobre botones
 	const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
@@ -2354,6 +2537,7 @@
 	document.getElementById("botoncentrado").style.visibility='hidden';
 	document.getElementById("dondestoy").style.visibility='hidden';
 	document.getElementById("botonnorte").style.visibility='hidden';
+	document.getElementById("contenedorMediciones").style.visibility='hidden';
 	VerificarConexion();
 	VerificarVersion();
 	CargarListbox();
