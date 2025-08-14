@@ -2412,13 +2412,12 @@
 	
 	//Bloque para las mediciones
 	function AgregarPunto(e) {
-	const latlng = e.latlng;
+		const latlng = e.latlng;
 		if (cant_mediciones>0) {		
 			markers.push(
 				L.marker(latlng)
 					.addTo(mapa)
 			);
-			console.log(cant_mediciones);
 		};
 		cant_mediciones=cant_mediciones+1;
 		if (cant_mediciones>1) {
@@ -2469,6 +2468,7 @@
 	
 	//Función para resetear el contador del medidor de distancias/superficies
 	function ResetearMediciones() {
+		cant_mediciones=0;
 		puntos = [];
 		distanciaTotal = 0;
 		if (markers) {
@@ -2497,8 +2497,6 @@
 			mapa.off('click', AgregarPunto);
 			icono.src="./images/mediciones.jpg";
 			document.getElementById("contenedorMediciones").style.visibility='hidden';
-			alert("Vamos a cero.-");
-			cant_mediciones=0;
 			ResetearMediciones();
 		};
 	});
