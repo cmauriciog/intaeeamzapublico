@@ -356,9 +356,8 @@
 		
 		.botonmediciones {
 			position: absolute;
-			top: 135px;
+			top: 139px;
 			right: 12px;
-			/*background: red;*/
 			border: none;
 			cursor: pointer;
 			padding: 0;
@@ -724,19 +723,19 @@
 		<div id="distancia">Buscando ubicacion...</div>
 		<!-- Botones con imagenes -->
 		<button class="botonmediciones" id="botonmediciones">
-			<img src="./images/mediciones.jpg" alt="Mediciones en el Mapa" id="imagenmediciones">
+			<img src="./images/mediciones.jpg" alt="Mediciones en el Mapa" id="imagenmediciones" title="Realizar cálculo de perímetro y superficie de un área o medir distancia entre dos o más puntos">
 		</button>
 		<button class="botonnorte" id="botonnorte">
-			<img src="./images/norte.jpg" alt="Norte del Mapa">
+			<img src="./images/norte.jpg" alt="Norte del Mapa" title="Norte terrestre">
 		</button>
-		<button class="botoncentrado" id="botoncentrado" onclick="CentrarMiUbicacion()">
+		<button class="botoncentrado" id="botoncentrado" onclick="CentrarMiUbicacion()" title="Centrar en mi ubicación real">
 			<img src="./images/posicion.png" alt="Centrar en Mi Ubicación">
 		</button>
 		<div class="infomediciones" id="contenedorMediciones">
-			<div id="modoActual"><strong>Modo:</strong> Distancia</div>
-			<div id="resultado1">Distancia total: —</div>
-			<div id="resultado2"></div>
-			<div class="btn" id="cambiarMedicion">Cambiar a Superficie</div>
+			<div id="modoActual"><strong>Modo:</strong> Superficie</div>
+			<div id="resultado1">Superficie total: —</div>
+			<div id="resultado2">Distancia total: -</div>
+			<div class="btn" id="cambiarMedicion">Cambiar a Distancia</div>
 			<div class="btn alt" id="limpiarMedicion" onclick="ResetearMediciones()">Limpiar</div>
 		</div>
 	</div>
@@ -882,7 +881,7 @@
 	var superficie=null;
 	var puntos = [];
 	var distanciaTotal = 0;
-	var modo = "distancia";
+	var modo = "superficie";
 	var cant_mediciones=0;
 	var centroide="";
 	var poligono="";
@@ -1474,6 +1473,7 @@
 	function ActualizarUbicacion(e) {
 		if (coordenadas_ubicacion_real) {
 			mapa.removeLayer(marca_ubicacion_real);
+			mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa).bindPopup("Vas por aquí").openPopup();
 			coordenadas_ubicacion_real=e.latlng;
 		};
@@ -1492,7 +1492,6 @@
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 		};
-		//if (distancia<=1100 && distancia>7 && orientarme=="no" && poligono) {
 		if (distancia<=1100 && distancia>7 && orientarme=="no") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo mostrarte en tiempo real por dónde vas '+
@@ -1503,8 +1502,8 @@
 		};
 		if (distancia > 7 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
-			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!.-"};
-			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!.-"};
+			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
+			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
 			if (distancia<1100 && ruta) {ruta.remove();rutaanimada.remove()};
 			cajadistancia.textContent = msg;
 			cajadistancia.style.background = "#d4edda";
@@ -1630,7 +1629,6 @@
 		if (distancia<=1100 && lugar) {
 			if (ruta) {ruta.remove();rutaanimada.remove()};
 			clearInterval(actualizarruta);
-			alert("Detuve la actualización del trazado de ruta sugerida porque estás a menos de 1.100 metros de la EEA.-");
 			ActualizarUbicacion();
 		};
 		if (distancia>1100) {
@@ -1659,10 +1657,7 @@
 				}
 			}).addTo(mapa);
 			//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
-			if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]})};
-			
-			
-			
+			if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});alert("Hago centro en toda la ruta");};
 			const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`;
 			//Solicito la ruta y la dibujo con animación
 			fetch(osrmUrl)
@@ -2452,18 +2447,18 @@
 	};
 	
 	function FormatearDistancia(m) {
-		return m >= 1000 ? (m / 1000).toFixed(3) + ' km' : Math.round(m) + ' m';
+		return m >= 1000 ? (m / 1000).toFixed(3) + ' m' : Math.round(m) + ' m';
 	};
 	
 	function FormatearArea(m2) {
-		return m2 >= 1_000_000 ? (m2 / 1_000_000).toFixed(3) + ' km²' : m2.toFixed(2) + ' m²';
+		return m2 >= 1_000_000 ? (m2 / 1_000_000).toFixed(2) + ' km² ó ' + (m2/10000).toFixed(2)+ ' ha' : (Math.round(m2.toFixed(2)).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")) + ' m² ó ' + (m2/10000).toFixed(2)+ ' ha';
 	};
 
 	cambiarMedicion.addEventListener('click', () => {
-	modo = modo === "distancia" ? "superficie" : "distancia";
-	modoActual.innerHTML = `<strong>Modo:</strong> ${modo.charAt(0).toUpperCase() + modo.slice(1)}`;
-	cambiarMedicion.innerText = modo === "distancia" ? "Cambiar a Superficie" : "Cambiar a Distancia";
-	ResetearMediciones();
+		modo = modo === "superficie" ? "distancia" : "superficie";
+		modoActual.innerHTML = `<strong>Modo:</strong> ${modo.charAt(0).toUpperCase() + modo.slice(1)}`;
+		cambiarMedicion.innerText = modo === "distancia" ? "Cambiar a Superficie" : "Cambiar a Distancia";
+		ResetearMediciones();
 	});
 	
 	//Función para resetear el contador del medidor de distancias/superficies
@@ -2477,7 +2472,7 @@
 		};
 		if (perimetro) {mapa.removeLayer(perimetro); perimetro = null;}
 		if (superficie) {mapa.removeLayer(superficie); superficie = null;}
-		resultado1.innerHTML = modo === "distancia" ? "Distancia total: —" : "Superficie: —";
+		resultado1.innerHTML = modo === "superficie" ? "Distancia total: —" : "Superficie: —";
 		resultado2.innerHTML = "";
 	};
 	
