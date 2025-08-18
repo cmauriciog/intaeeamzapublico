@@ -656,19 +656,20 @@
 			<div class="sidebar-pane" id="herramientas">
                 <h1 class="sidebar-header">Sección de herramientas...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
-				<p>Las herramientas disponibles son...</p>
+				<p class="lorem">Las herramientas disponibles son...</p>
 				<br></br>
 				<br></br>
-				<p id="gpson"><a href="javascript:desactivar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: red;"></i></a>  <a href="javascript:desactivar_seguimiento(seguimiento)" style="color: blue;">Desactivar mi ubicación actual</a></p>
-				<p id="gpsoff"><a href="javascript:activar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: green;"></i></a>  <a href="javascript:activar_seguimiento(seguimiento)" style="color: blue;">Mi ubicación actual</a></p>
-				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><i class="fa-solid fa-location-crosshairs" style="color: green";></i></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">Centrar en mi ubicación actual</a></p>
+				<p id="gpson"><a href="javascript:desactivar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: red;"></i></a>  <a href="javascript:desactivar_seguimiento(seguimiento)" style="color: blue;">  Desactivar mi ubicación actual</a></p>
+				<p id="gpsoff"><a href="javascript:activar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: green;"></i></a>  <a href="javascript:activar_seguimiento(seguimiento)" style="color: blue;">  Mi ubicación actual</a></p>
+				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><i class="fa-solid fa-location-crosshairs" style="color: green";></i></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">  Centrar en mi ubicación actual</a></p>
+				<p id="medir"><a href="#"><i class="fa-solid fa-ruler-horizontal" style="color: green";></i></a><a href="#" style="color: blue;">  Medir distancias ó perímetros y superficie</a></p>
             </div>
 			<div class="sidebar-pane" id="ayuda">
                 <h1 class="sidebar-header">Sección de información de ayuda...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 				<br></br>
 				<br></br>
 				<div id="ayuda_mapita">
-					<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i>¿Sos visitante y querés ubicar algo o alguien?</br>En esta sección podrás buscar por nombre de edificio, servicio, especialidad o persona.</br>Si activás tu GPS, podrás llegar mejor al lugar que buscás.</p>
+					<p class="lorem"><i class="fa fa-map-location-dot" style="color: #3f08f2;"></i> ¿Sos visitante y querés ubicar algo o alguien?</br>En esta sección podrás buscar por nombre de edificio, servicio, especialidad o persona.</br>Si activás tu GPS, podrás llegar mejor al lugar que buscás.</p>
 					<p class="lorem">En caso que seas parte del personal de la unidad y hayás logueado, también podrás acceder a la información de las parcelas bajo ensayo.</p>
 					<br></br>
 				</div>
@@ -678,15 +679,17 @@
 				</div>
 				
 				<div id="ayuda_usuario">
-					<p class="lorem"><i class="fa-solid fa-house" style="color: #3f08f2;"></i>Te ayudará a encontrar una parcela bajo ensayo y te mostrará sus datos</br>(En caso que estés registrado como usuario)</p>
+					<p class="lorem"><i class="fa-solid fa-circle-info" style="color: #3f08f2;"></i> En esta sección hallarás herramientas últiles, tales como activar tu ubicación en tiempo real y medir una distancia o el perímetro y la superficie de una zona que vos indiqués.</br></p>
 					<br></br>
+					<p class="lorem"><i class="fa-solid fa-envelope" style="color: #3f08f2;"></i> Ponete en contacto con el desarrollador para hacerle saber de un error o una sugerencia de mejora.</br></p>
+					<br></br>
+					<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i> ¿Sos parte del personal de la unidad?<br></br>Logueate y accedé a la información de cada parcela bajo ensayo.</p>
 				</div>
 				<br></br>
+				<br></br>
+				<br></br>
+				<br></br>
 				<span>Tu visita es la número <div id="sfcp9ylgya5agjfp41fnsgeqzwcqr7wlucu"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contador de visitas web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu" border="0" title="contador de visitas web" alt="contador de visitas web"></a></noscript></span>
-				<p class="lorem"><i class="fa fa-user" style="color: #3f08f2;"></i>Sección para usuarios registrados</p>
-				<br></br>
-				<br></br>
-				<br></br>
 				<br></br>
 				<br></br>
             </div>
@@ -695,10 +698,7 @@
 				<br></br>
 				<p>¿Encontraste algún problema, tenés alguna sugerencia para mejorar este sitio o querés solicitar acceso como usuario registrado?</p>
 				<br></br>
-				<p>Por favor, comunicate con su desarrollador haciendo click en el icono de abajo.....-</p>
-				<br></br>
-				<br></br>
-				<p><a href="javascript:PrepararMail()"><i class="fa-solid fa-envelope" style="color: #3f08f2;"></i></a></p>
+				<p><a href="javascript:PrepararMail()"><i class="fa-solid fa-envelope" style="color: #3f08f2;"></i></a><a href="javascript:PrepararMail()" style="color: blue;">  Por favor, comunicate con su desarrollador haciendo click aquí...-</a></p>
             </div>
 			
 			<div class="sidebar-pane" id="logueo">
@@ -847,7 +847,6 @@
 	var anios_prod=0;
 	var coordenadas="-33.00598405638592, -68.85600484779212".split(",");
 	var zum=16;
-	//var medir_lineal="no";
 	var capturaActiva= false;
 	var firstLatLng, secondLatLng;
 	var conexion="";
@@ -1334,43 +1333,6 @@
 		document.getElementById("mostrartodo").style.visibility='hidden';
 	};
 
-	<!--Evento que captura dos puntos para medir la distancia entre ellos-->
-	//mapa.on('click', function(e) {if (medir_lineal=="si") {
-	//	if (!firstLatLng) {
-	//		firstLatLng = e.latlng;
-	//		puntoA=new L.marker(firstLatLng).addTo(mapa).bindPopup('Punto A<br/>' + e.latlng).openPopup();
-	//	} else {
-	//		secondLatLng = e.latlng;
-	//		puntoB=new L.marker(secondLatLng).addTo(mapa).bindPopup('Punto B<br/>' + e.latlng).openPopup();
-	//	}
-
-	//	if (firstLatLng && secondLatLng) {
-	//		<!--Dibujo una línea entre los dos puntos-->
-	//		lineadistancia=new L.polyline([firstLatLng, secondLatLng], {
-	//		color: 'red'
-	//		}).addTo(mapa);
-	//		setTimeout(MedirDistancia, 300);
-	//	}
-	//}});
-
-	<!--Función para habilitar la medición de longitudes-->
-	//function Medir_Longitud() {
-	//	medir_lineal="si";
-	//};
-
-	<!--Funcion para medir distancias entre dos puntos-->
-	//function MedirDistancia() {
-	//	var distancem = mapa.distance(firstLatLng ,secondLatLng).toFixed(2);
-	//	var distancekm=(distancem/1000).toFixed(2);
-	//	firstLatLng="";
-	//	secondLatLng="";
-	//	alert("La distancia aproximada es de "+distancem+" metros ó "+distancekm+" km.-");
-	//	puntoA.remove();
-	//	puntoB.remove();
-	//	lineadistancia.remove();
-	//	medir_lineal="no";
-	//};
-
 	<!--Verificar Sistema Operativo-->
 	function VerificarSistemaOperativo() {
 		const userAgent = navigator.userAgent || navigator.vendor || window.opera;
@@ -1435,7 +1397,7 @@
 				titulomodalflash.innerText="SIN GPS";
 				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Oho...!!!.</b><br><br><span style="color:black">'+msg+'...!!!.-<br>'+
 				'Debido a: '+msg1+'.-</span>';
-				tiempomodalflash=3000;
+				tiempomodalflash=5000;
 				ModalFlash(tiempomodalflash);
 			},
 			{
@@ -1567,7 +1529,10 @@
 		orientarme="no";
 		clearInterval(actualizarruta);
 		actualizarruta="si";
-		alert("Detuve la actualización del trazado de ruta sugerida porque apagaste el GPS.-");
+		titulomodalflash.innerText="SEGUIMIENTO DETENIDO";
+		cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Se cancelará la actualización del trazado de ruta.</b><br><br><span style="color:black">porque apagaste el GPS.-</span>';
+		tiempomodalflash=5000;
+		ModalFlash(tiempomodalflash);
 		document.getElementById("dondestoy").style.visibility='hidden';
 		if (ruta) {ruta.remove();rutaanimada.remove()};
 		coordenadas_ubicacion_real="";
@@ -1675,16 +1640,19 @@
 							className: 'animated-route'
 						}).addTo(mapa);
 					} else {
-                       alert('No se pudo encontrar una ruta para sugerirte.-');
-                    }
+						titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
+						cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
+						tiempomodalflash=5000;
+						ModalFlash(tiempomodalflash);
+					}
 				})
 				.catch(error => {
-					console.error('Error al obtener la ruta:', error);
-					alert('Ocurrió un error al conectar con el servicio de OSRM.');
+					titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
+					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
+					tiempomodalflash=5000;
+					ModalFlash(tiempomodalflash);
 				});
-			
-			
-			
+				
 			actualizarruta=setInterval(()=>{
 				if (ruta) {ruta.remove();rutaanimada.remove()};
 				ruta=L.Routing.control({
@@ -1727,12 +1695,17 @@
 								className: 'animated-route'
 							}).addTo(mapa);
 						} else {
-						   alert('No se pudo encontrar una ruta para sugerirte.-');
+							titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
+							cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
+							tiempomodalflash=5000;
+							ModalFlash(tiempomodalflash);
 						}
 					})
 					.catch(error => {
-						console.error('Error al obtener la ruta:', error);
-						alert('Ocurrió un error al conectar con el servicio de OSRM.');
+						titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
+						cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
+						tiempomodalflash=5000;
+						ModalFlash(tiempomodalflash);
 					});
 			},300000);
 		};
@@ -2297,7 +2270,7 @@
 			mapa.addLayer(googlesatelite);
 			ModalFlash(tiempomodalflash);
 		} else {
-			tiempomodalflash=3000;
+			tiempomodalflash=5000;
 			titulomodalflash.innerText="INICIO DE SESION";
 			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>No has podido validarte correctamente.</b><br><br><span style="color:black">Sólo tendrás acceso a la información<br>básica de la EEA Mendoza.</span>';
 			version="publica";
@@ -2326,7 +2299,7 @@
 		barralateral.close();
 		cuerpomodalflash.innerHTML = '<span style="display: block; text-align: center; width: 100%; color:red;"><br><b>Has cerrado sesión correctamente.</b><br><br><span style="color:black">Sólo tendrás acceso a la información<br>básica de la EEA Mendoza.</span>';
 		version="publica";
-		tiempomodalflash=3000;
+		tiempomodalflash=5000;
 		VerificarVersion();
 		mapa.removeLayer(googlesatelite);
 		mapa.addLayer(osm);
@@ -2481,6 +2454,25 @@
 	
 	// Botón para alternar captura de mediciones
 	document.getElementById("botonmediciones").addEventListener("click", function() {
+		document.getElementById("contenedorMediciones").style.visibility='visible';
+		capturaActiva = !capturaActiva;
+		const icono=document.getElementById("imagenmediciones");
+		if (capturaActiva) {
+			mapa.on('click', AgregarPunto);
+			icono.src = "./images/nomediciones.jpg";
+			document.getElementById("contenedorMediciones").style.visibility='visible';
+		} else {
+			mapa.off('click', AgregarPunto);
+			icono.src="./images/mediciones.jpg";
+			document.getElementById("contenedorMediciones").style.visibility='hidden';
+			ResetearMediciones();
+		};
+	});
+	
+	// Botón para alternar captura de mediciones desde barra lateral
+	document.getElementById("medir").addEventListener("click", function() {
+		barralateral.close();
+		cant_mediciones=1;
 		document.getElementById("contenedorMediciones").style.visibility='visible';
 		capturaActiva = !capturaActiva;
 		const icono=document.getElementById("imagenmediciones");
