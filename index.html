@@ -1435,12 +1435,15 @@
 	function ActualizarUbicacion(e) {
 		if (coordenadas_ubicacion_real) {
 			mapa.removeLayer(marca_ubicacion_real);
-			mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
-			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa).bindPopup("Vas por aquí").openPopup();
+			//mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
+			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
+				.bindPopup("Vas por aquí");
 			coordenadas_ubicacion_real=e.latlng;
 		};
 		if (!coordenadas_ubicacion_real) {
-			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa).bindPopup("Estás por aquí").openPopup();
+			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
+				.bindPopup("Estás por aquí")
+				.openPopup();
 			coordenadas_ubicacion_real=e.latlng;
 			mapa.setView(coordenadas_ubicacion_real, 17);
 		};
