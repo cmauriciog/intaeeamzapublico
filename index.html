@@ -890,7 +890,7 @@
 	var senialgps="";
 	var orientarme="no";
 	var avisollegada="";
-	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [18, 21],});
+	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [30, 35],});
 	var icono_inta= L.icon({iconUrl: './images/inta.jpg',iconSize: [30, 30],});
 	var distancia="";
 	var actualizarruta="si";
@@ -1435,7 +1435,6 @@
 	function ActualizarUbicacion(e) {
 		if (coordenadas_ubicacion_real) {
 			mapa.removeLayer(marca_ubicacion_real);
-			//mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
 				.bindPopup("Vas por aquí");
 			coordenadas_ubicacion_real=e.latlng;
@@ -1625,7 +1624,7 @@
 				}
 			}).addTo(mapa);
 			//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
-			if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});alert("Hago centro en toda la ruta");};
+			if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});};
 			const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`;
 			//Solicito la ruta y la dibujo con animación
 			fetch(osrmUrl)
