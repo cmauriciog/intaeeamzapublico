@@ -742,19 +742,21 @@
 	<div class="modalflash" id="MiModalFlash">
 		<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL VISOR WEB DEL INTA EEA MENDOZA...!!!</div>
 		<p class="modalflash-cuerpo" id="cuerpomodalflash"><img src="./images/presentacion.jpg" style="display: block; margin: auto; height:80px" id="imagenmodalflash"/><br><strong>Si sos un visitante, este mapa en línea te permitirá:</strong>
-			<br>* Ubicar un servicio, persona o lugar
-			<br>* Encontrar alguna otra unidad del INTA en la zona con ruta recomendada
-			<br>* Acceder a algunas herramientas geográficas como medir distancias, superficies, etc.
+			<br>* Ubicar una persona, servicio, especialidad o lugar
+			<br>* Encontrar alguna otra unidad del INTA en la zona con una o dos rutas recomendadas
+			<br> (Estas dos herramientas con la opción de hacerlo a partir de tu ubicación en tiempo real)
+			<br>
+			<br>* Acceder a algunas herramientas geográficas como medir distancias, perímetros y superficies, etc.
 			<br><br><strong>Si trabajás en INTA, además podrás:</strong>
-			<br>* Realizar consultas sobre las parcelas y las construcciones de la Experimental.
-			<br><br><strong>En la barra lateral podrás encontrar las herramientas disponibles y una sección de ayuda.-</strong>
+			<br>* Realizar consultas sobre las parcelas y las construcciones de la Experimental Mendoza.
+			<br><br><strong>En la barra lateral podrás encontrar secciones con las herramientas disponibles y un apartado de ayuda para orientarte a encontrarlas y saber su función.-</strong>
 			<br>
 			<span>Tu visita es la número <div id="sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=1lrbs17cjmcd59jjpdfyd6agbta7b2qy&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contadores para web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=1lrbs17cjmcd59jjpdfyd6agbta7b2qy" border="0" title="contadores para web" alt="contadores para web"></a></noscript></span>
 			<div style="text-align: center">
 				<button id="btn-indicaciones-modal-flash" style="height:30px; width:90px; background-color:blue;border-color:white;color:white;" onclick="TrazarRuta()">Sí, por favor</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 				<button id="btn-cerrar-modal-flash" style="height:30px; width:90px; background-color:red;border-color:white;color:white;">Cerrar</button>
 			</div>
-			<span style="text-align: center">Me cierro en: <span id="contador"> </span> segundos</span>
+			<span style="font-weight: bold; color:red; text-align: center;">Me cierro en: <span id="contador"> </span> segundos</span>
 		</p>
 	</div>
 </body>
@@ -869,7 +871,7 @@
 	var aer="";
 	var mail="";
 	var version="publica";
-	var tiempomodalflash=10000;
+	var tiempomodalflash=20000;
 	var temporizadormodalflash="";
 	var sistema_operativo="";
 	var geoposicion="";
@@ -890,6 +892,7 @@
 	var senialgps="";
 	var orientarme="no";
 	var avisollegada="";
+	var msgencontrado="";
 	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [35, 40],});
 	var icono_inta= L.icon({iconUrl: './images/inta.jpg',iconSize: [30, 30],});
 	var distancia="";
@@ -1030,17 +1033,17 @@
 			mapa.flyTo(coord, 16);
 			poligono=feature.geometry.coordinates[0];
 			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre."};
+			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre.";msgencontrado="Este sector se llama"+inputbusqueda.value;};
 			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"};
+			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"se trabaja con "+inputbusqueda.value;};
 			if (coincidencia =="persona" && oficina=="") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"};
+			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado"+sector+"encontrarás a "+inputbusqueda.value;};
 			if (coincidencia =="persona" && oficina !=="") {var contenidoPopup="<p>Si estás buscando a:</p>"
 			+"<h4><strong><p style='color:blue'>"+inputbusqueda.value+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"
-			+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>"};
+			+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>";msgencontrado="En este sector llamado"+sector+"encontrarás a"+inputbusqueda.value+"preguntá por la oficina de"+oficina;};
 			if (coincidencia=="especialidad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
 			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"+
-			"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>"};
+			"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>";msgencontrado="En este sector llamado"+sector+"encontrarás a"+inputbusqueda.value+"te recomiendo preguntar por"+persona;};
 			lugar=L.marker(coord).addTo(mapa)
 						.bindPopup(contenidoPopup, formatoPopup)
 						.openPopup()};
@@ -1261,6 +1264,7 @@
 		coincidencia="";
 		sector="";
 		oficina="";
+		msgencontrado="";
 		actualizarruta="si";
 		<!--Borrar las búsquedas anteriores-->
 		if (version=="completa") {
@@ -1417,7 +1421,7 @@
 		document.getElementById("gpson").style.visibility='visible';
 		document.getElementById("gpsoff").style.visibility='hidden';
 		document.getElementById("dondestoy").style.visibility='visible';
-		document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento(seguimiento)";//innerHTML="<p style='cursor: pointer; color:#0000ff; font:Arial' onclick='return Desactivar_Seguimiento()'><u>Desactivar Ubicacion</u></p>";
+		document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento(seguimiento)";
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
@@ -1448,6 +1452,7 @@
 		};
 		if (!lugar && ! centroide) {centroide = L.latLng(-33.00500036548466, -68.86185680052853)};
 		distancia=DistanciaEnTiempoReal();
+		console.log(distancia,orientarme);
 		if (distancia>1100 && orientarme=="no") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
@@ -1473,6 +1478,13 @@
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
 		};
+		if (distancia <= 150 && distancia >7 && orientarme=="si") {
+			cajadistancia.style.visibility="visible";
+			cajadistancia.textContent = "Estás a "+distancia+" metros de tu destino";
+			cajadistancia.style.background = "#d4edda";
+			cajadistancia.style.color = "#155724";
+			if (avisollegada==="si") {AlertaLlegada("Estás a "+distancia+" metros de tu destino")};
+		};
 		if (distancia <= 7 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
 			cajadistancia.textContent = "¡Has llegado a tu destino!";
@@ -1491,9 +1503,9 @@
 	
 	//Anuncio en voz alta de cercanía/llegada a destino
 	function AlertaLlegada(msg) {
-		const utterance = new SpeechSynthesisUtterance(msg);
+		const utterance = new SpeechSynthesisUtterance(msg+msgencontrado);
 		speechSynthesis.speak(utterance);
-		avisollegada="no";
+		if (distancia<=7) {avisollegada="no"};
 		orientarme="no";
 		clearTimeout(temporizadormodalflash);
 	};
@@ -1571,7 +1583,7 @@
 		document.getElementById("botoncentrado").style.visibility='hidden';
 		cajadistancia.style.visibility="hidden";
 		document.getElementById("dondestoy").style.visibility='hidden';
-		document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";//innerHTML="<p style='cursor: pointer; color:#0000ff; font:Arial' onclick='return Activar_Seguimiento()'><u>Activar Ubicacion</u></p>";
+		document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";
 		DetenerActualizarUbicacion();
 		mapa.removeLayer(marca_ubicacion_real);
 		marca_ubicacion_real="";
@@ -1782,7 +1794,7 @@
 		cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>En un momento, enviarás el mail al desarrollador.</b><br><br><span style="color:black">Por parámetros de configuración de tu dispositivo,'+
 		'es probable que no sea posible hacer un envío semi-automático del mail.<br><br>Si al cerrar este mensaje no se envía, abrí tu aplicación de correo electrónico y pegá la dirección de mail que ha sido'+
 		'copiada en el portapapeles.-</span>';
-		tiempomodalflash=15000;
+		tiempomodalflash=12000;
 		iraaer="";
 		mail="si";
 		navigator.clipboard.writeText("cmauriciogodoy@gmail");
