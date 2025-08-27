@@ -705,9 +705,9 @@
                 <div id="log_no">
 					<h1 class="sidebar-header">Por favor, ingrese sus datos...<span class="sidebar-close"><i class="fa fa-caret-left"></i></span></h1>
 					<p class="lorem" id="titulousuario">Usuario:</p>
-					<input type="text" id="username" name="username" placeholder="Tu usuario de INTA (sin @inta.gob.ar)..." value="godoy.claudio">
+					<input type="text" id="username" name="username" placeholder="Tu usuario de INTA (sin @inta.gob.ar)..." value="">
 					<p class="lorem" id="titulocontrasenia">Contraseña:</p>
-					<input type="password" id="password" name="password" placeholder="Tu contraseña para este sitio..." value="INTAEEAMza">
+					<input type="password" id="password" name="password" placeholder="Tu contraseña para este sitio..." value="">
 					<input type="submit" id="botonmostrarocultar" value="Mostrar/Ocultar" onclick="Contrasenia();">
 					<br><br>
 					<input type="submit" style="background-color:#acf89f" id="botoningresar" value="Ingresar" onclick="Loguearse();">
@@ -829,10 +829,6 @@
 	});
 
 	L.control.layers(CapasBase).addTo(mapa);
-
-	<!--Crear la herramienta de medición de área-->
-	//let measurePolygonControl = L.control.measurePolygon();
-	//measurePolygonControl.addTo(mapa);
 	
 	L.control.zoom({
 		position:'topright'}).addTo(mapa);
@@ -1032,7 +1028,6 @@
 			coord.push(centroide.lat,centroide.lng);
 			mapa.flyTo(coord, 16);
 			poligono=feature.geometry.coordinates[0];
-			console.log(feature.geometry.coordinates[0]);
 			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
 			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre.";msgencontrado="Este sector se llama"+inputbusqueda.value;};
 			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
@@ -1472,27 +1467,27 @@
 		};
 		if (distancia > 7 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
-			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino! (En línea recta).-"};
-			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-"};
+			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
+			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
 			if (distancia<1100 && ruta) {ruta.remove();rutaanimada.remove()};
-			cajadistancia.textContent = msg;
+			cajadistancia.textContent = msg+" (En línea recta).-";
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
 		};
-		if (distancia <= 150 && distancia >7 && orientarme=="si") {
-			cajadistancia.style.visibility="visible";
-			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino! (En línea recta).-";
-			cajadistancia.textContent = msg+avisollegada;
-			cajadistancia.style.background = "#d4edda";
-			cajadistancia.style.color = "#155724";
-			if (avisollegada==="si") {AlertaLlegada(msg)};
-		};
+		//if (distancia <= 150 && distancia >7 && orientarme=="si") {
+		//	cajadistancia.style.visibility="visible";
+		//	msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!";
+		//	cajadistancia.textContent = msg+" (En línea recta).-";
+		//	cajadistancia.style.background = "#d4edda";
+		//	cajadistancia.style.color = "#155724";
+		//	if (avisollegada==="si") {AlertaLlegada(msg)};
+		//};
 		if (distancia <= 7 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
-			cajadistancia.textContent = "¡Has llegado a tu destino!",msgencontrado;
+			cajadistancia.textContent = "¡Has llegado a tu destino!"+msgencontrado;
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
-			if (avisollegada==="si") {AlertaLlegada("Has llegado a tu destino",msgencontrado)};
+			if (avisollegada==="si") {AlertaLlegada("Has llegado a tu destino"+msgencontrado)};
 		};
 	};
 
