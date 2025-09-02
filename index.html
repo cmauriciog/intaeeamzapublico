@@ -192,8 +192,8 @@
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			width: 35vw;
-			height: 40vh;
+			width: 50%;/*60vw;*/
+			height: 50%;/*50vh;*/
 			background-color: yellow;
 			border-radius: 10px;
 			box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -222,7 +222,7 @@
 		@media (max-width: 600px) {
 			.modalflash {
 			width: 80vw;
-			height: 50vh;
+			height: 60vh;
 			}
 		}
 		
@@ -1029,17 +1029,17 @@
 			mapa.flyTo(coord, 16);
 			poligono=feature.geometry.coordinates[0];
 			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre.";msgencontrado="Este sector se llama"+inputbusqueda.value;};
+			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre.";msgencontrado="Este sector se llama "+inputbusqueda.value;};
 			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
 			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"se trabaja con "+inputbusqueda.value;};
 			if (coincidencia =="persona" && oficina=="") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado"+sector+"encontrarás a "+inputbusqueda.value;};
+			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value;};
 			if (coincidencia =="persona" && oficina !=="") {var contenidoPopup="<p>Si estás buscando a:</p>"
 			+"<h4><strong><p style='color:blue'>"+inputbusqueda.value+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"
-			+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>";msgencontrado="En este sector llamado"+sector+"encontrarás a"+inputbusqueda.value+"preguntá por la oficina de"+oficina;};
+			+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value+"preguntá por la oficina de "+oficina;};
 			if (coincidencia=="especialidad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
 			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"+
-			"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>";msgencontrado="En este sector llamado"+sector+"encontrarás a"+inputbusqueda.value+"te recomiendo preguntar por"+persona;};
+			"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value+"te recomiendo preguntar por "+persona;};
 			lugar=L.marker(coord).addTo(mapa)
 						.bindPopup(contenidoPopup, formatoPopup)
 						.openPopup()};
@@ -1474,20 +1474,22 @@
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
 		};
-		//if (distancia <= 150 && distancia >7 && orientarme=="si") {
-		//	cajadistancia.style.visibility="visible";
-		//	msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!";
-		//	cajadistancia.textContent = msg+" (En línea recta).-";
-		//	cajadistancia.style.background = "#d4edda";
-		//	cajadistancia.style.color = "#155724";
-		//	if (avisollegada==="si") {AlertaLlegada(msg)};
-		//};
-		if (distancia <= 7 && orientarme=="si") {
+		if (distancia >100 && distancia <= 150 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
-			cajadistancia.textContent = "¡Has llegado a tu destino!"+msgencontrado;
+			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!. (En línea recta)";
+			cajadistancia.textContent = msg;
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
-			if (avisollegada==="si") {AlertaLlegada("Has llegado a tu destino"+msgencontrado)};
+			msg="Avanza despacio y con atención. ¡Estás a pocos metros del destino!";
+			if (orientarme==="si" && avisollegada==="si") {AlertaLlegada(msg)};
+		};
+		if (distancia>7 && distancia<100) {avisollegada="si"};
+		if (distancia <= 7 && orientarme=="si") {
+			cajadistancia.style.visibility="visible";
+			cajadistancia.textContent = "¡Has llegado a tu destino! "+msgencontrado;
+			cajadistancia.style.background = "#d4edda";
+			cajadistancia.style.color = "#155724";
+			if (avisollegada==="si") {AlertaLlegada("Has llegado a tu destino "+msgencontrado)};
 		};
 	};
 
@@ -1499,12 +1501,11 @@
 	};
 	
 	//Anuncio en voz alta de cercanía/llegada a destino
-	function AlertaLlegada(msg) {
-		//if (distancia>7) {const utterance = new SpeechSynthesisUtterance(msg)};
-		const utterance = new SpeechSynthesisUtterance(msg);
+	function AlertaLlegada(leerdistancia) {
+		const utterance = new SpeechSynthesisUtterance(leerdistancia);
 		speechSynthesis.speak(utterance);
-		if (distancia<=7) {avisollegada="no"};
-		orientarme="no";
+		if (distancia>7) {avisollegada="no"};
+		if (distancia<=7) {avisollegada="no";orientarme="no"};
 		clearTimeout(temporizadormodalflash);
 	};
 	
