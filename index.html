@@ -1474,7 +1474,7 @@
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
 		};
-		if (distancia >100 && distancia <= 150 && orientarme=="si") {
+		if (distancia >50 && distancia <= 70 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
 			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!. (En línea recta)";
 			cajadistancia.textContent = msg;
