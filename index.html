@@ -1448,7 +1448,6 @@
 		};
 		if (!lugar && ! centroide) {centroide = L.latLng(-33.00500036548466, -68.86185680052853)};
 		distancia=DistanciaEnTiempoReal();
-		console.log(distancia,orientarme);
 		if (distancia>1100 && orientarme=="no") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
@@ -1474,7 +1473,7 @@
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
 		};
-		if (distancia >50 && distancia <= 70 && orientarme=="si") {
+		if (distancia >100 && distancia <= 105 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
 			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!. (En línea recta)";
 			cajadistancia.textContent = msg;
@@ -2388,7 +2387,7 @@
         } else if (window.orientation === 180) {
             angulo = 180; // Invertido
         }
-        imagen.style.transform = `rotate(${angulo}deg)`;
+        botonnorte.style.transform = `rotate(${angulo}deg)`;
     };
 	
 	//Bloque para las mediciones
