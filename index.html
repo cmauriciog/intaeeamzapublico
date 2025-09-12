@@ -402,17 +402,15 @@
 		
 		/* Definimos la animación de cambio de color al trazar la ruta*/
         @keyframes color-animation {
-            0% { stroke: #ff0000; } /* Rojo */
-            25% { stroke: #ff7f00; } /* Naranja */
-            50% { stroke: #FF8DA1; } /* Rosado */
-            75% { stroke: #FF69B4; } /* Fucsia */
-            100% { stroke: #FF69B4; }
+			0% {stroke: #ffffff;} 
+            35% {stroke: #ff0000;} 
+            70% {stroke: #000000;}
         }
         /* Clase CSS que aplica las animaciones a la ruta */
         .animated-route {
             stroke-dasharray: 8000;
             stroke-dashoffset: 8000;
-            animation: dash 10s linear forwards, color-animation 10s infinite;
+            animation: dash 15s linear forwards, color-animation 15s infinite;
         }
         @keyframes dash {
             to {
@@ -1049,7 +1047,8 @@
 
 	<!--Funcion para filtrar con criterio distinto a vid. Es insensible al uso de mayúsculas/minúsculas y busca con criterio tipo "*...*" -->
 	function CriterioAbuscar(valor) {
-		encontrar_a.value="";
+		encontrar_a.value = "";
+		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		cobertura_vid.value="";
 		criterio=valor;
 		document.getElementById("responsable").style.visibility='hidden';
@@ -1108,7 +1107,8 @@
 
 	<!--Funcion para filtrar con otro criterio distinto a vid-->
 	function CoberturasAbuscar(valor) {
-		encontrar_a.value="";
+		encontrar_a.value = "";
+		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		sup_total=0;
 		tot_parc=0;
 		prom_prod=0;
@@ -1135,7 +1135,8 @@
 
 	<!--Funcion para filtrar parcelas con valores distintos a vid-->
 	function BuscarOtro(valor) {
-		encontrar_a.value="";
+		encontrar_a.value = "";
+		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		sup_total=0;
 		tot_parc=0;
 		prom_prod=0;
@@ -1371,13 +1372,13 @@
 		<!--Sin GPS-->
 		if (!navigator.geolocation) {
 			titulomodalflash.innerText="SIN GPS";
-			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Oho...!!!.</b><br><br><span style="color:black">Parece que tu navegador o dispositivo no funciona con GPS...!!!.-<br>'+
+			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Oho...!!!.</b><br><br><span style="color:black">Parece que tu navegador o dispositivo no está funcionando con GPS...!!!.-<br>'+
 			'Por lo tanto, no podrás ver tu ubicación en tiempo real.</span>';
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 			senialgps="no";
 		};
-		navigator.geolocation.getCurrentPosition(
+		if (!sistema_operativo==="Windows" && !sistema_operativo==="MacOS" && !sistema_operativo==="Linux") {navigator.geolocation.getCurrentPosition(
 			<!--GPS Perfecto-->
 			(pos) => {
 				senialgps="si";
@@ -1405,7 +1406,7 @@
 				timeout: 5000,
 				maximumAge: 0
 			}
-		);
+		)};
 	};
 
 	<!--Función para activar el seguimiento en tiempo real y hacer zoom en él-->
@@ -1434,7 +1435,7 @@
 	// Evento al encontrar la ubicación
 	function ActualizarUbicacion(e) {
 		if (coordenadas_ubicacion_real) {
-			mapa.removeLayer(marca_ubicacion_real);
+			marca_ubicacion_real.remove();
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
 				.bindPopup("Vas por aquí");
 			coordenadas_ubicacion_real=e.latlng;
@@ -1468,12 +1469,12 @@
 			cajadistancia.style.visibility="visible";
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
-			if (distancia<1100 && ruta) {ruta.remove();rutaanimada.remove()};
+			if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada)};
 			cajadistancia.textContent = msg+" (En línea recta).-";
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
 		};
-		if (distancia >100 && distancia <= 105 && orientarme=="si") {
+		if (distancia >110 && distancia <= 115 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
 			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!. (En línea recta)";
 			cajadistancia.textContent = msg;
@@ -1504,7 +1505,7 @@
 		const utterance = new SpeechSynthesisUtterance(leerdistancia);
 		speechSynthesis.speak(utterance);
 		if (distancia>7) {avisollegada="no"};
-		if (distancia<=7) {avisollegada="no";orientarme="no"};
+		if (distancia<=7) {avisollegada="no";orientarme="no";DetenerActualizarUbicacion()};
 		clearTimeout(temporizadormodalflash);
 	};
 	
@@ -1546,14 +1547,15 @@
 		tiempomodalflash=5000;
 		ModalFlash(tiempomodalflash);
 		document.getElementById("dondestoy").style.visibility='hidden';
-		if (ruta) {ruta.remove();rutaanimada.remove()};
+		if (ruta) {ruta.remove()};
+		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
 		coordenadas_ubicacion_real="";
 		distancia="";
 		mapa.stopLocate();
 		mapa.off('locationfound', ActualizarUbicacion);
 		mapa.off('locationerror', ErrorGPS);
 		if (marca_ubicacion_real) {
-			mapa.removeLayer(marca_ubicacion_real);
+			marca_ubicacion_real.remove();
 			coordenadas_ubicacion_real = "";
 			marca_ubicacion_real = "";
 		};
@@ -1583,12 +1585,12 @@
 		document.getElementById("dondestoy").style.visibility='hidden';
 		document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";
 		DetenerActualizarUbicacion();
-		mapa.removeLayer(marca_ubicacion_real);
+		//marca_ubicacion_real.remove();
 		marca_ubicacion_real="";
 		coordenadas_ubicacion_real="";
 		centroide = L.latLng(-33.00374957231557, -68.85766475808848);
-		ruta.remove();
-		rutaanimada.remove();
+		//ruta.remove();
+		//rutaanimada.remove();
 		CentrarMiUbicacion();
 	};
 
@@ -1599,13 +1601,14 @@
 			VerificarGPS();
 		};
 		avisollegada="si";
-		if (ruta) {ruta.remove();rutaanimada.remove()};
+		clearInterval(actualizarruta);
+		if (rutaanimada) {mapa.removeLayer(rutaanimada);};
+		if (ruta) {ruta.remove()};
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
 		if (distancia<=1100 && lugar) {
-			if (ruta) {ruta.remove();rutaanimada.remove()};
-			clearInterval(actualizarruta);
+			//clearInterval(actualizarruta);
 			ActualizarUbicacion();
 		};
 		if (distancia>1100) {
@@ -1666,7 +1669,8 @@
 				});
 				
 			actualizarruta=setInterval(()=>{
-				if (ruta) {ruta.remove();rutaanimada.remove()};
+				if (rutaanimada) {mapa.removeLayer(rutaanimada)};
+				if (ruta) {ruta.remove()};
 				ruta=L.Routing.control({
 				waypoints: [coordenadas_ubicacion_real, centroide],
 				router: L.Routing.osrmv1({
@@ -1700,6 +1704,7 @@
 							// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
 							const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
 							// Creamos la polilínea con la clase CSS para la animación
+							//if (rutaanimada) {mapa.removeLayer(rutaanimada);};
 							rutaanimada = L.polyline(latlngs, {
 								color: '#ff0000',
 								weight: 7,
@@ -1816,7 +1821,14 @@
 	};
 
 	function IrUnidad(agencia) {
-		if (aer !="") {aer.remove()};
+		iraaer="si";
+		mail="";
+		encontrar_a.value = "";
+		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		if (aer !=="") {aer.remove()};
+		clearInterval(actualizarruta);
+		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
+		if (ruta) {ruta.remove()};
 		if (agencia=="Agencia de Extensión Guaymallén") {
 			var formatoPopup = {
 				'maxWidth': '400',
@@ -1962,8 +1974,6 @@
 				.openPopup();
 			document.getElementById("volvereea").style.visibility='visible';
 		};
-		iraaer="si";
-		mail="";
 		if (!coordenadas_ubicacion_real=="") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
@@ -2507,8 +2517,8 @@
 		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
 		orientarme="no";
 		avisollegada="no";
-		if (mail=="si") {EnviarMail()};
-		if (iraaer=="si") {TrazarRuta()};
+		if (mail==="si") {EnviarMail()};
+		if (iraaer==="si") {TrazarRuta()};
 		clearTimeout(temporizadormodalflash);
 		tiempomodalflash=5000;
 	});
@@ -2516,8 +2526,8 @@
 	btnindicacionesmodalflash.addEventListener("click",()=>{
 		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
 		clearTimeout(temporizadormodalflash);
-		if (iraaer=="") {orientarme="si";avisollegada="si"};
-		if (iraaer=="si") {TrazarRuta()};
+		if (iraaer==="") {orientarme="si";avisollegada="si"};
+		if (iraaer==="si") {TrazarRuta()};
 	});
 	const cajadistancia = document.getElementById("distancia");
 	const btncerrarmodalgrafico=document.querySelector("#btn-cerrar-modal-grafico");
