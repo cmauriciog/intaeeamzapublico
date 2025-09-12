@@ -1608,7 +1608,6 @@
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
 		if (distancia<=1100 && lugar) {
-			//clearInterval(actualizarruta);
 			ActualizarUbicacion();
 		};
 		if (distancia>1100) {
@@ -1704,7 +1703,7 @@
 							// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
 							const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
 							// Creamos la polilínea con la clase CSS para la animación
-							//if (rutaanimada) {mapa.removeLayer(rutaanimada);};
+							if (rutaanimada) {mapa.removeLayer(rutaanimada)};
 							rutaanimada = L.polyline(latlngs, {
 								color: '#ff0000',
 								weight: 7,
@@ -2526,8 +2525,8 @@
 	btnindicacionesmodalflash.addEventListener("click",()=>{
 		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
 		clearTimeout(temporizadormodalflash);
-		if (iraaer==="") {orientarme="si";avisollegada="si"};
-		if (iraaer==="si") {TrazarRuta()};
+		orientarme="si";
+		avisollegada="si";
 	});
 	const cajadistancia = document.getElementById("distancia");
 	const btncerrarmodalgrafico=document.querySelector("#btn-cerrar-modal-grafico");
