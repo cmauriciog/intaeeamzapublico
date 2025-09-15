@@ -878,7 +878,8 @@
 	var distanciaTotal = 0;
 	var modo = "superficie";
 	var cant_mediciones=0;
-	var centroide="";
+	var centroide=L.latLng(-33.00376868173891, -68.85766030976325);
+	var entradaeea=L.latLng(-33.003773232329486, -68.85766687268227);
 	var poligono="";
 	var estoyaqui="";
 	var ruta="";
@@ -1263,6 +1264,7 @@
 		oficina="";
 		msgencontrado="";
 		actualizarruta="si";
+		aer="";
 		<!--Borrar las búsquedas anteriores-->
 		if (version=="completa") {
 			if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
@@ -1447,7 +1449,7 @@
 			coordenadas_ubicacion_real=e.latlng;
 			mapa.setView(coordenadas_ubicacion_real, 17);
 		};
-		if (!lugar && ! centroide) {centroide = L.latLng(-33.00500036548466, -68.86185680052853)};
+		//if (!lugar && centroide=L.latLng(-33.00376868173891, -68.85766030976325)) {centroide = L.latLng(-33.00376868173891, -68.85766030976325)};
 		distancia=DistanciaEnTiempoReal();
 		if (distancia>1100 && orientarme=="no") {
 			titulomodalflash.innerText="TRAZAR RUTA";
@@ -1511,7 +1513,7 @@
 	
 	function DistanciaEnTiempoReal() {
 		const point = turf.point([coordenadas_ubicacion_real.lng, coordenadas_ubicacion_real.lat]);
-		if (lugar) {
+		if (lugar && !aer) {
 			const lineSegments = [];
 			const coords = poligono[0];
 			for (let i = 0; i < coords.length - 1; i++) {
@@ -1532,7 +1534,10 @@
 			const snappedCoords = [nearestPoint.geometry.coordinates[1], nearestPoint.geometry.coordinates[0]];
 			return minDistance;
 		};
-		if (!lugar && centroide) {
+		if (!lugar && !aer) {
+			return (centroide.distanceTo(coordenadas_ubicacion_real));
+		};
+		if (!lugar && aer) {
 			return (centroide.distanceTo(coordenadas_ubicacion_real));
 		};
 	};
@@ -1585,12 +1590,14 @@
 		document.getElementById("dondestoy").style.visibility='hidden';
 		document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";
 		DetenerActualizarUbicacion();
-		//marca_ubicacion_real.remove();
+		marca_ubicacion_real.remove();
 		marca_ubicacion_real="";
 		coordenadas_ubicacion_real="";
-		centroide = L.latLng(-33.00374957231557, -68.85766475808848);
-		//ruta.remove();
-		//rutaanimada.remove();
+		//centroide = L.latLng(-33.00374957231557, -68.85766475808848);
+		ruta.remove();
+		mapa.removeLayer(rutaanimada);
+		iraaer="";
+		mail="";
 		CentrarMiUbicacion();
 	};
 
@@ -1611,7 +1618,7 @@
 			ActualizarUbicacion();
 		};
 		if (distancia>1100) {
-			if (! lugar && ! centroide) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
+			if (! lugar) {const centroide=entradaeea}; //&& ! centroide) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
 			ruta=L.Routing.control({
 				waypoints: [coordenadas_ubicacion_real, centroide],
 				router: L.Routing.osrmv1({
@@ -1828,6 +1835,8 @@
 		clearInterval(actualizarruta);
 		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
 		if (ruta) {ruta.remove()};
+		if (lugar) {lugar.remove()};
+		lugar="";
 		if (agencia=="Agencia de Extensión Guaymallén") {
 			var formatoPopup = {
 				'maxWidth': '400',
@@ -2527,6 +2536,13 @@
 		clearTimeout(temporizadormodalflash);
 		orientarme="si";
 		avisollegada="si";
+		if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
+		if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
+		if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada)};
+		cajadistancia.style.visibility='visible';
+		cajadistancia.textContent = msg+" (En línea recta).-";
+		cajadistancia.style.background = "#d4edda";
+		cajadistancia.style.color = "#155724";
 	});
 	const cajadistancia = document.getElementById("distancia");
 	const btncerrarmodalgrafico=document.querySelector("#btn-cerrar-modal-grafico");
