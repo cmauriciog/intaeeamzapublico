@@ -1258,7 +1258,7 @@
 		<!--Resetear variables-->
 		barralateral.close();
 		var buscado=encontrar;
-		ResetearTodo();
+		//ResetearTodo();
 		coincidencia="";
 		sector="";
 		oficina="";
@@ -1293,15 +1293,26 @@
 
 	<!--Funcion para resetear todo-->
 	function ResetearTodo() {
-		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		document.getElementById("volvereea").style.visibility='hidden';
+		if (lugar){lugar.remove()};
+		if (aer){aer.remove()};
+		if (ruta) {ruta.remove()};
+		if (marca_ubicacion_real) {marca_ubicacion_real.remove()};
+		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
+		if (perimetro) {mapa.removeLayer(perimetro)};
+		if (superficie) {mapa.removeLayer(superficie)};
+		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
+		aer="";
+		mail="";
+		coordenadas_ubicacion_real="";
+		distancia="";
+		iraaer="";
+		lugar="";
 		if (version=="completa") {
 			if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 			if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
 			if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
 			if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
-			if (lugar !==""){lugar.remove()};
-			if (aer !==""){aer.remove()};
 			tot_parc=0;
 			sup_total=0;
 			prom_prod=0;
@@ -1322,8 +1333,6 @@
 		if (version=="publica") {
 			if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
 			if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
-			if (lugar !==""){lugar.remove()};
-			if (aer !==""){aer.remove()};
 			mapa.flyTo(coordenadas, zum);
 		};
 	};
