@@ -304,6 +304,7 @@
 			left: 50%;
 			transform: translateX(-50%);
 			background: white;
+			font-size: 16px;
 			padding: 8px 14px;
 			border-radius: 8px;
 			box-shadow: 0 0 6px rgba(0,0,0,0.2);
@@ -1302,12 +1303,17 @@
 		if (perimetro) {mapa.removeLayer(perimetro)};
 		if (superficie) {mapa.removeLayer(superficie)};
 		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
+		clearTimeout(temporizadormodalflash);
+		clearInterval(actualizarruta);
+		clearInterval(intervalo);
 		aer="";
 		mail="";
 		coordenadas_ubicacion_real="";
 		distancia="";
 		iraaer="";
 		lugar="";
+		temporizadormodalflash="";
+		orientarme="";
 		if (version=="completa") {
 			if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 			if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
@@ -1485,7 +1491,7 @@
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
 		};
-		if (distancia >110 && distancia <= 115 && orientarme=="si") {
+		if (distancia >110 && distancia <= 150 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
 			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!. (En línea recta)";
 			cajadistancia.textContent = msg;
