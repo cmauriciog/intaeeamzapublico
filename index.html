@@ -658,6 +658,7 @@
 				<p class="lorem">Las herramientas disponibles son...</p>
 				<br></br>
 				<br></br>
+				<p id="reiniciar"><a href="javascript:ReiniciarPagina()"><i class="fa-solid fa-rotate" style="color: green"></i></a>  <a href="javascript:ReiniciarPagina()" style="color: blue;">  Volver a empezar...</a></p>
 				<p id="gpson"><a href="javascript:desactivar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: red;"></i></a>  <a href="javascript:desactivar_seguimiento(seguimiento)" style="color: blue;">  Desactivar mi ubicación actual</a></p>
 				<p id="gpsoff"><a href="javascript:activar_seguimiento(seguimiento)"><i class="fa-solid fa-location-dot" style="color: green;"></i></a>  <a href="javascript:activar_seguimiento(seguimiento)" style="color: blue;">  Mi ubicación actual</a></p>
 				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><i class="fa-solid fa-location-crosshairs" style="color: green";></i></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">  Centrar en mi ubicación actual</a></p>
@@ -946,6 +947,10 @@
 		dashArray: '3',
 		fillOpacity: 0.8}};
 
+	function ReiniciarPagina () {
+		location.reload();
+	};
+	
 	<!--Función para preparar todos los Pop-ups-->
 	function onEachFeature(feature, layer) {
 		if (encontrar_a.value=="") {
@@ -1514,7 +1519,7 @@
 	function ErrorGPS(e) {
 		cajadistancia.textContent = "No se pudo obtener la ubicación: " + e.message;
 		cajadistancia.style.background = "white";
-		cajadistancia.style.color = "black";
+		cajadistancia.style.color = "red";
 	};
 	
 	//Anuncio en voz alta de cercanía/llegada a destino
@@ -1808,9 +1813,9 @@
 		geojson1.remove();
 		listabusqueda.sort();
 		listabusquedafiltrada = listabusqueda.filter((elemento, index) => {
-		return listabusqueda.indexOf(elemento) === index;
+			return listabusqueda.indexOf(elemento) === index;
 		});
-		};
+	};
 		
 	function PrepararMail() {
 		barralateral.close();
