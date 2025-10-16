@@ -12,8 +12,7 @@
 	<script src="geojson/ensayos.geojson" type="text/javascript"></script>
 	<script src="geojson/personal.geojson" type="text/javascript"></script>
 	<script src="geojson/inta.geojson" type="text/javascript"></script>
-	<script src="usuario.txt" type="text/javascript"></script>
-	<script src="contrasenia.txt" type="text/javascript"></script>
+	<script src="permisos.txt" type="text/javascript"></script>
 	<!-- JS -->
 	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
 	integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
@@ -1444,6 +1443,13 @@
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
+			if (sistema_operativo==="Windows" || sistema_operativo==="Linux") {
+				titulomodalflash.innerText="TRAZAR RUTA";
+				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
+				document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
+				tiempomodalflash=9000;
+				ModalFlash(tiempomodalflash);
+			};
 		};
 		
 		if (conexion==="si") {
