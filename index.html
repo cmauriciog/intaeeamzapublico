@@ -688,7 +688,8 @@
 				<br></br>
 				<br></br>
 				<br></br>
-				<span>Tu visita es la número <div id="sfcp9ylgya5agjfp41fnsgeqzwcqr7wlucu"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contador de visitas web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu" border="0" title="contador de visitas web" alt="contador de visitas web"></a></noscript></span>
+				<span>Tu visita es la número: <div id="cantidadvisitas"></div></span>
+				<!--<span>Tu visita es la número <div id="sfcp9ylgya5agjfp41fnsgeqzwcqr7wlucu"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contador de visitas web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu" border="0" title="contador de visitas web" alt="contador de visitas web"></a></noscript></span>-->
 				<br></br>
 				<br></br>
             </div>
@@ -1443,7 +1444,7 @@
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
-			if (sistema_operativo==="Windows" || sistema_operativo==="Linux") {
+			if (sistema_operativo=="Windows" || sistema_operativo=="Linux") {
 				titulomodalflash.innerText="TRAZAR RUTA";
 				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
 				document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
@@ -2579,6 +2580,16 @@
 	btncerrarmodalgrafico.addEventListener("click",()=>{modalgrafico.close();});
 	const botonnorte=document.getElementById("botonnorte");
 	
+	function ProcesarRespuestaVisitas(data) {
+		document.getElementById('cantidadvisitas').textContent = data.nuevoValor;
+	};
+	
+	function ActualizarVisitas() {
+		console.log("Conectando al Drive...");
+		const script = document.createElement('script');
+		script.src = 'https://script.google.com/macros/s/AKfycbz3syJdQjAK1aBiPvgKoNmZe5gisMqEz6VSru7nA4kcpy-6AsE2G_gY_7Qqj-0eFcYQ/exec?callback=ProcesarRespuestaVisitas';
+		document.body.appendChild(script);
+	};
 
 	//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
 	document.getElementById("gpson").style.visibility='hidden';
@@ -2594,6 +2605,7 @@
 	CargarListbox();
 	ModalFlash(tiempomodalflash);
 	VerificarSistemaOperativo();
+	ActualizarVisitas();
 </script>
 <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 </html>
