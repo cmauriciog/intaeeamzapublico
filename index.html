@@ -1498,9 +1498,11 @@
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
 			if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada)};
-			cajadistancia.textContent = msg+" (En línea recta).-";
-			cajadistancia.style.background = "#d4edda";
-			cajadistancia.style.color = "#155724";
+			if (distancia>=1100 || lugar) {
+				cajadistancia.textContent = msg+" (En línea recta).-";
+				cajadistancia.style.background = "#d4edda";
+				cajadistancia.style.color = "#155724";
+			};
 		};
 		if (distancia >110 && distancia <= 150 && orientarme=="si") {
 			cajadistancia.style.visibility="visible";
