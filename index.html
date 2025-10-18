@@ -1572,6 +1572,20 @@
 		};
 	};
 	
+	function checkInside(coords) {
+		const pt = turf.point([coords.lng, coords.lat]);
+		let found = null;
+		for (const f of perimetro.features) {
+			if (["Polygon", "MultiPolygon"].includes(f.geometry.type)) {
+				if (turf.booleanPointInPolygon(pt, f)) {
+					found = f;
+					break;
+				}
+			}
+		}
+		return found;
+	};
+	
 	// Función para detener geolocalización
 	function DetenerActualizarUbicacion() {
 		orientarme="no";
@@ -1644,6 +1658,8 @@
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("MiModalFlash").style.visibility='hidden';
 		distancia=DistanciaEnTiempoReal();
+		//const dentro = checkInside(coordenadas_ubicacion_real);
+		//alert(dentro);
 		if (distancia<=1100 && lugar) {
 			ActualizarUbicacion();
 		};
