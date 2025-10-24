@@ -122,6 +122,7 @@
 			position: fixed;
 			top: 150px;
 			left: 150px;
+			overflow-y: auto;
 			transition: transform 0.95s ease, opacity 0.95s ease;
 		}
 		.modal-estadistico-cabecera {
@@ -198,6 +199,7 @@
 			box-shadow: 0 0 10px rgba(0,0,0,0.3);
 			display: flex;
 			flex-direction: column;
+			overflow-y: auto;
 			z-index: 1000;
 		}
 		.modalflash-cabecera {
@@ -688,8 +690,7 @@
 				<br></br>
 				<br></br>
 				<br></br>
-				<span>Tu visita es la número: <div id="cantidadvisitas"></div></span>
-				<!--<span>Tu visita es la número <div id="sfcp9ylgya5agjfp41fnsgeqzwcqr7wlucu"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contador de visitas web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=p9ylgya5agjfp41fnsgeqzwcqr7wlucu" border="0" title="contador de visitas web" alt="contador de visitas web"></a></noscript></span>-->
+				<div id="cantidadvisitas"></div>
 				<br></br>
 				<br></br>
             </div>
@@ -751,7 +752,7 @@
 			<br>* Realizar consultas sobre las parcelas y las construcciones de la Experimental Mendoza.
 			<br><br><strong>En la barra lateral podrás encontrar secciones con las herramientas disponibles y un apartado de ayuda para orientarte a encontrarlas y saber su función.-</strong>
 			<br>
-			<span>Tu visita es la número <div id="sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy"></div><script type="text/javascript" src="https://counter1.optistats.ovh/private/counter.js?c=1lrbs17cjmcd59jjpdfyd6agbta7b2qy&down=async" async></script><noscript><a href="https://www.contadorvisitasgratis.com" title="contadores para web"><img src="https://counter1.optistats.ovh/private/contadorvisitasgratis.php?c=1lrbs17cjmcd59jjpdfyd6agbta7b2qy" border="0" title="contadores para web" alt="contadores para web"></a></noscript></span>
+			<div id="visitas"></div>
 			<div style="text-align: center">
 				<button id="btn-indicaciones-modal-flash" style="height:30px; width:90px; background-color:blue;border-color:white;color:white;" onclick="TrazarRuta()">Sí, por favor</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
 				<button id="btn-cerrar-modal-flash" style="height:30px; width:90px; background-color:red;border-color:white;color:white;">Cerrar</button>
@@ -850,7 +851,7 @@
 	var conexion="";
 	var circulo="";
 	var marcador="";
-	var seguimiento="si";
+	var seguimiento="no";
 	var listabusqueda=[];
 	var listabusquedafiltrada=[];
 	var capa_parcelas=[];
@@ -1434,7 +1435,6 @@
 	<!--Función para activar el seguimiento en tiempo real y hacer zoom en él-->
 	function activar_seguimiento(seguimiento) {
 		sondeo_posicion=0;
-		seguimiento="si";
 		barralateral.close();
 		document.getElementById("gps").src="./images/slide_on.jpg";
 		document.getElementById("gpson").style.visibility='visible';
@@ -1444,13 +1444,15 @@
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
-			if (sistema_operativo=="Windows" || sistema_operativo=="Linux") {
+			console.log(sistema_operativo, seguimiento);
+			if ((sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") && seguimiento=="no") {
 				titulomodalflash.innerText="TRAZAR RUTA";
 				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
 				document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 				tiempomodalflash=9000;
 				ModalFlash(tiempomodalflash);
 			};
+			seguimiento="si";
 		};
 		
 		if (conexion==="si") {
@@ -2568,7 +2570,7 @@
 	const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
 	btncerrarmodalflash.addEventListener("click",()=>{
 		document.getElementById("MiModalFlash").style.visibility='hidden';
-		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
+		document.getElementById("visitas").style.visibility='hidden';
 		orientarme="no";
 		avisollegada="no";
 		if (mail==="si") {EnviarMail()};
@@ -2578,7 +2580,7 @@
 	});
 	const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
 	btnindicacionesmodalflash.addEventListener("click",()=>{
-		document.getElementById("sfc1lrbs17cjmcd59jjpdfyd6agbta7b2qy").style.visibility='hidden';
+		document.getElementById("visitas").style.visibility='hidden';
 		clearTimeout(temporizadormodalflash);
 		orientarme="si";
 		avisollegada="si";
@@ -2597,11 +2599,11 @@
 	const botonnorte=document.getElementById("botonnorte");
 	
 	function ProcesarRespuestaVisitas(data) {
-		document.getElementById('cantidadvisitas').textContent = data.nuevoValor;
+		document.getElementById('cantidadvisitas').textContent = "Tu visita es la número: "+data.nuevoValor;
+		document.getElementById('visitas').textContent = "Tu visita es la número: "+data.nuevoValor;
 	};
 	
 	function ActualizarVisitas() {
-		console.log("Conectando al Drive...");
 		const script = document.createElement('script');
 		script.src = 'https://script.google.com/macros/s/AKfycbz3syJdQjAK1aBiPvgKoNmZe5gisMqEz6VSru7nA4kcpy-6AsE2G_gY_7Qqj-0eFcYQ/exec?callback=ProcesarRespuestaVisitas';
 		document.body.appendChild(script);
