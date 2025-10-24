@@ -1444,7 +1444,6 @@
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
-			console.log(sistema_operativo, seguimiento);
 			if ((sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") && seguimiento=="no") {
 				titulomodalflash.innerText="TRAZAR RUTA";
 				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
