@@ -2645,8 +2645,8 @@
 	CargarListbox();
 	ModalFlash(tiempomodalflash);
 	VerificarSistemaOperativo();
-	if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {document.getElementById("modal_inicial").showModal()};
-	if (sistema_operativo=="Android" || sistema_operativo=="iOS") {document.getElementById("modal_inicial").showModal()};
+	if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {modalinicial.close()};
+	if (sistema_operativo=="Android" || sistema_operativo=="iOS") {modalinicial.showModal()};
 	ActualizarVisitas();
 </script>
 <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
