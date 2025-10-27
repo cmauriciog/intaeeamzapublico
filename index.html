@@ -763,7 +763,7 @@
 </body>
 
 <!--Ventana modal inicial-->
-<div id="modal_inicial" style="text-align: center; background-color:yellow; font-size:13px;">
+<dialog id="modal_inicial" style="text-align: center; background-color:yellow; font-size:13px;">
 	<div id="Apaisado">
 		<span id="titulo_modalinicial"><h4>Parece que estás usando un dispositivo movil (celular o tablet).</h4></span>
 		<br><br/>
@@ -775,13 +775,9 @@
 		<span id="cuerpo_modalconectividad"><h2><br/>Por favor solucioná eso porque algunas herramientas no funcionarán correctamente.</h2></span>
 	</div>
 	<div style="text-align: right">
-		<label id="borrablecelular">
-			<input id="nomostrarcelular" type="checkbox" style="width:16px; height:16px;"/>
-			No volver a mostrar
-		</label>
 		<button id="btn-cerrar-modal-inicial" style="height:30px; width:90px; background-color:red;border-color:white;color:white">Ok. Cerrar</button>
 	</div>
-</div>
+</dialog>
 
 <div class="modal-estadistico" id="modalestadistico">
 	<div class="modal-estadistico-cabecera" id="modalestadisticocabecera">
@@ -2617,6 +2613,11 @@
 	const modalgrafico=document.querySelector("#Modal_Grafico");
 	btncerrarmodalgrafico.addEventListener("click",()=>{modalgrafico.close();});
 	const botonnorte=document.getElementById("botonnorte");
+	const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
+	const modalinicial=document.querySelector("#modal_inicial");
+	btncerrarmodalinicial.addEventListener("click",()=>{
+		modalinicial.close()
+	});
 	
 	function ProcesarRespuestaVisitas(data) {
 		document.getElementById('cantidadvisitas').textContent = "Tu visita es la número: "+data.nuevoValor;
@@ -2638,13 +2639,14 @@
 	document.getElementById("dondestoy").style.visibility='hidden';
 	document.getElementById("botonnorte").style.visibility='hidden';
 	document.getElementById("contenedorMediciones").style.visibility='hidden';
+	document.getElementById("Conectividad").style.visibility='hidden';
 	VerificarConexion();
 	VerificarVersion();
 	CargarListbox();
 	ModalFlash(tiempomodalflash);
 	VerificarSistemaOperativo();
-	if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {document.getElementById("modal_inicial").style.visibility='hidden'};
-	if (sistema_operativo=="Android" || sistema_operativo=="iOS") {document.getElementById("modal_inicial").style.display='visible'};
+	if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {document.getElementById("modal_inicial").showModal()};
+	if (sistema_operativo=="Android" || sistema_operativo=="iOS") {document.getElementById("modal_inicial").showModal()};
 	ActualizarVisitas();
 </script>
 <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
