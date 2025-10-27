@@ -762,6 +762,27 @@
 	</div>
 </body>
 
+<!--Ventana modal inicial-->
+<div id="modal_inicial" style="text-align: center; background-color:yellow; font-size:13px;">
+	<div id="Apaisado">
+		<span id="titulo_modalinicial"><h4>Parece que estás usando un dispositivo movil (celular o tablet).</h4></span>
+		<br><br/>
+		<span id="cuerpo_modalinicial"><h4>En caso que no veas los mensajes completos o todas las herramientas,<br/>probá de girar la pantalla. Eso hará que tengas una mejor visión del mapa y sus herramientas.-</h4>
+		<br/>Recordá que en todo momento disponés de distintas herramientas sobre la barra lateral izquierda.<br/>¿Querés saber cómo funcionan? Tocá las tres líneas de su parte superior y recibirás ayuda.</span>
+	</div>
+	<div id="Conectividad">
+		<span id="titulo_modalconectividad"><h4>Parece que no tenés conexión a Internet.</h4></span>
+		<span id="cuerpo_modalconectividad"><h2><br/>Por favor solucioná eso porque algunas herramientas no funcionarán correctamente.</h2></span>
+	</div>
+	<div style="text-align: right">
+		<label id="borrablecelular">
+			<input id="nomostrarcelular" type="checkbox" style="width:16px; height:16px;"/>
+			No volver a mostrar
+		</label>
+		<button id="btn-cerrar-modal-inicial" style="height:30px; width:90px; background-color:red;border-color:white;color:white">Ok. Cerrar</button>
+	</div>
+</div>
+
 <div class="modal-estadistico" id="modalestadistico">
 	<div class="modal-estadistico-cabecera" id="modalestadisticocabecera">
 		<span id="titulomodalestadistico">Resumen estadístico</span>
@@ -1368,14 +1389,14 @@
 		} else if (/android/i.test(userAgent)) {
 			so = "Android";
 		} else if (/ipad|iphone|ipod/i.test(userAgent)) {
-			so = "iOS (iPad o iPhone)";
+			so = "iOS";
 		} else if (/mac/i.test(userAgent)) {
 			so = "MacOS";
 		} else if (/linux/i.test(userAgent)) {
 			so = "Linux";
 		};
 		sistema_operativo=so;
-		if (so=="Windows" || so=="Linux") {document.getElementById("botonnorte").style.visibility="visible"};
+		if (so=="Windows" || so=="Linux" || so=="MacOS") {document.getElementById("botonnorte").style.visibility="visible"};
     };
 	
 	<!--Funcion para verificar estado de conectividad-->
@@ -1847,8 +1868,8 @@
 	function PrepararMail() {
 		barralateral.close();
 		titulomodalflash.innerText="ENVIAR MAIL AL DESARROLLADOR";
-		cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>En un momento, enviarás el mail al desarrollador.</b><br><br><span style="color:black">Por parámetros de configuración de tu dispositivo,'+
-		'es probable que no sea posible hacer un envío semi-automático del mail.<br><br>Si al cerrar este mensaje no se envía, abrí tu aplicación de correo electrónico y pegá la dirección de mail que ha sido'+
+		cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>En un momento, enviarás el mail al desarrollador.</b><br><br><span style="color:black">Por parámetros de configuración de tu dispositivo, '+
+		'es probable que no sea posible hacer un envío semi-automático del mail.<br><br>Si al cerrar este mensaje no se envía, abrí tu aplicación de correo electrónico y pegá la dirección de mail que ha sido '+
 		'copiada en el portapapeles.-</span>';
 		tiempomodalflash=12000;
 		iraaer="";
@@ -2622,6 +2643,8 @@
 	CargarListbox();
 	ModalFlash(tiempomodalflash);
 	VerificarSistemaOperativo();
+	if (sistema_operativo=="Windows" || sistema_operativo=="Linux" || sistema_operativo=="MacOS") {document.getElementById("modal_inicial").style.visibility='hidden'};
+	if (sistema_operativo=="Android" || sistema_operativo=="iOS") {document.getElementById("modal_inicial").style.display='visible'};
 	ActualizarVisitas();
 </script>
 <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
