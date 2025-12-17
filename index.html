@@ -1516,7 +1516,7 @@
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		if (perimetro) {mapa.removeLayer(perimetro)};
 		if (superficie) {mapa.removeLayer(superficie)};
-		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
+		if (rutaanimada) {mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
 		clearTimeout(temporizadormodalflash);
 		clearInterval(actualizarruta);
 		clearInterval(intervalo);
@@ -1669,6 +1669,8 @@
 		
 		if (conexion==="si") {
 			document.getElementById("botoncentrado").style.visibility='visible';
+			if (dispositivo=="movil") {document.getElementById("botoncentrado").style.top = "15px"};
+			if (dispositivo=="movil") {document.getElementById("botoncentrado").style.right = "60px"};
 			mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 			mapa.on('locationfound', ActualizarUbicacion);
 			mapa.on('locationerror', ErrorGPS);
@@ -1677,7 +1679,6 @@
 
 	// Evento al encontrar la ubicación
 	function ActualizarUbicacion(e) {
-		document.getElementById("BotonDetallesRuta").style.visibility='visible';
 		if (coordenadas_ubicacion_real) {
 			marca_ubicacion_real.remove();
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
@@ -1709,12 +1710,12 @@
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 		};
-		if (orientarme=="si" && distancia>1100) {cajadistancia.style.visibility="visible"};
+		if (orientarme=="si" && distancia>1100) {cajadistancia.style.visibility="visible";document.getElementById("BotonDetallesRuta").style.visibility='visible'};
 		if (orientarme=="si" && lugar) {cajadistancia.style.visibility="visible"};
 		if (distancia > 7 && orientarme=="si") {
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
-			if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada)};
+			if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
 			if (distancia>=1100 || lugar) {
 				cajadistancia.textContent = msg+" (En línea recta).-";
 				cajadistancia.style.background = "#d4edda";
@@ -1722,7 +1723,6 @@
 			};
 		};
 		if (distancia >110 && distancia <= 150 && orientarme=="si") {
-			//cajadistancia.style.visibility="visible";
 			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!. (En línea recta)";
 			cajadistancia.textContent = msg;
 			cajadistancia.style.background = "#d4edda";
@@ -1732,10 +1732,18 @@
 		};
 		if (distancia>7 && distancia<100) {avisollegada="si"};
 		if (distancia <= 7 && orientarme=="si") {
-			//cajadistancia.style.visibility="visible";
 			cajadistancia.textContent = "¡Has llegado a tu destino! "+msgencontrado;
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
+			cajadistancia.style.opacity = "1";
+			cajadistancia.style.transition = "opacity 1s ease";
+			setTimeout(() => {
+			cajadistancia.style.opacity = "0";
+			}, 6000);
+			setTimeout(() => {
+			cajadistancia.style.display = "none";
+			}, 7000);
+			mapa.setView(coordenadas_ubicacion_real, 19);
 			if (avisollegada==="si") {AlertaLlegada("Has llegado a tu destino "+msgencontrado)};
 		};
 	};
@@ -1812,7 +1820,7 @@
 		ModalFlash(tiempomodalflash);
 		document.getElementById("dondestoy").style.visibility='hidden';
 		if (ruta) {ruta.remove()};
-		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
+		if (rutaanimada) {mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
 		coordenadas_ubicacion_real="";
 		distancia="";
 		mapa.stopLocate();
@@ -1856,6 +1864,7 @@
 		//centroide = L.latLng(-33.00374957231557, -68.85766475808848);
 		ruta.remove();
 		mapa.removeLayer(rutaanimada);
+		document.getElementById("BotonDetallesRuta").style.visibility='hidden';
 		iraaer="";
 		mail="";
 		CentrarMiUbicacion();
@@ -1869,7 +1878,7 @@
 		};
 		avisollegada="si";
 		clearInterval(actualizarruta);
-		if (rutaanimada) {mapa.removeLayer(rutaanimada);};
+		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
 		if (ruta) {ruta.remove()};
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
 		document.getElementById("MiModalFlash").style.visibility='hidden';
@@ -2871,7 +2880,7 @@
 		avisollegada="si";
 		if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
 		if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
-		if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada)};
+		if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
 		cajadistancia.style.visibility='visible';
 		cajadistancia.textContent = msg+" (En línea recta).-";
 		cajadistancia.style.background = "#d4edda";
