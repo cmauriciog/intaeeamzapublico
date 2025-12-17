@@ -1974,6 +1974,9 @@
 					});
 				}
 				}).addTo(mapa);
+				// Movemos SU CONTENEDOR a nuestro panel oculto
+				const panel = document.getElementById("PanelRutas");
+				panel.replaceChildren(ruta.getContainer());
 				const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`;
 				//Solicito la ruta y la dibujo con animación
 				fetch(osrmUrl)
