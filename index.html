@@ -12,7 +12,6 @@
 	<script src="geojson/ensayos.geojson" type="text/javascript"></script>
 	<script src="geojson/personal.geojson" type="text/javascript"></script>
 	<script src="geojson/inta.geojson" type="text/javascript"></script>
-	<script src="geojson/eventosmuestra.geojson" type="text/javascript"></script>
 	<script src="permisos.txt" type="text/javascript"></script>
 	<!-- JS -->
 	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
@@ -1518,7 +1517,7 @@
 		if (superficie) {mapa.removeLayer(superficie)};
 		if (rutaanimada) {mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
 		clearTimeout(temporizadormodalflash);
-		clearInterval(actualizarruta);
+		//clearInterval(temporizadoractualizarruta);
 		clearInterval(intervalo);
 		aer="";
 		mail="";
@@ -1812,7 +1811,7 @@
 	// Función para detener geolocalización
 	function DetenerActualizarUbicacion() {
 		orientarme="no";
-		clearInterval(actualizarruta);
+		//clearInterval(temporizadoractualizarruta);
 		actualizarruta="si";
 		titulomodalflash.innerText="SEGUIMIENTO DETENIDO";
 		cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Se cancelará la actualización del trazado de ruta.</b><br><br><span style="color:black">porque apagaste el GPS.-</span>';
@@ -1877,7 +1876,7 @@
 			VerificarGPS();
 		};
 		avisollegada="si";
-		clearInterval(actualizarruta);
+		//clearInterval(temporizadoractualizarruta);
 		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
 		if (ruta) {ruta.remove()};
 		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
@@ -1890,124 +1889,163 @@
 		};
 		if (distancia>1100) {
 			if (! lugar) {const centroide=entradaeea}; //&& ! centroide) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
-			ruta=L.Routing.control({
-				waypoints: [coordenadas_ubicacion_real, centroide],
-				router: L.Routing.osrmv1({
-					serviceUrl: 'https://router.project-osrm.org/route/v1',
-					language: 'es',
-				}),
-				showAlternatives: true,
-				routeWhileDragging: true,
-				draggableWaypoints: false,
-				collapsible: true,
-				waypointMode: 'snap',
-				lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]},
-				altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]},
-				createMarker: function(i, wp) {
-					return L.marker(wp.latLng, {
-						draggable: false,
-						icon: L.icon({
-							iconUrl: './images/posicion.png',
-							iconSize: [0, 0]
-						})
-					});
-				}
-			}).addTo(mapa);
-			// Movemos SU CONTENEDOR a nuestro panel oculto
-			const panel = document.getElementById("PanelRutas");
-			panel.appendChild(ruta.getContainer());
-			//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
-			if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});};
-			const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`;
-			//Solicito la ruta y la dibujo con animación
-			fetch(osrmUrl)
-				.then(response => response.json())
-				.then(data => {
-					if (data.routes && data.routes.length > 0) {
-						const route = data.routes[0].geometry;
-						// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
-						const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
-						// Creamos la polilínea con la clase CSS para la animación
-						rutaanimada = L.polyline(latlngs, {
-							color: '#ff0000',
-							weight: 7,
-							opacity: 0.8,
-							className: 'animated-route'
-						}).addTo(mapa);
-					} else {
-						titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
-						cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-						tiempomodalflash=5000;
-						ModalFlash(tiempomodalflash);
-					}
-				})
-				.catch(error => {
-					titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
-					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-					tiempomodalflash=5000;
-					ModalFlash(tiempomodalflash);
-				});
+			<!-- ruta=L.Routing.control({ -->
+				<!-- waypoints: [coordenadas_ubicacion_real, centroide], -->
+				<!-- router: L.Routing.osrmv1({ -->
+					<!-- serviceUrl: 'https://router.project-osrm.org/route/v1', -->
+					<!-- language: 'es', -->
+				<!-- }), -->
+				<!-- showAlternatives: true, -->
+				<!-- routeWhileDragging: true, -->
+				<!-- draggableWaypoints: false, -->
+				<!-- collapsible: true, -->
+				<!-- waypointMode: 'snap', -->
+				<!-- lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]}, -->
+				<!-- altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]}, -->
+				<!-- createMarker: function(i, wp) { -->
+					<!-- return L.marker(wp.latLng, { -->
+						<!-- draggable: false, -->
+						<!-- icon: L.icon({ -->
+							<!-- iconUrl: './images/posicion.png', -->
+							<!-- iconSize: [0, 0] -->
+						<!-- }) -->
+					<!-- }); -->
+				<!-- } -->
+			<!-- }).addTo(mapa); -->
+			<!-- // Movemos SU CONTENEDOR a nuestro panel oculto -->
+			<!-- const panel = document.getElementById("PanelRutas"); -->
+			<!-- panel.appendChild(ruta.getContainer()); -->
+			<!-- //Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez** -->
+			<!-- if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});}; -->
+			<!-- const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`; -->
+			<!-- //Solicito la ruta y la dibujo con animación -->
+			<!-- fetch(osrmUrl) -->
+				<!-- .then(response => response.json()) -->
+				<!-- .then(data => { -->
+					<!-- if (data.routes && data.routes.length > 0) { -->
+						<!-- const route = data.routes[0].geometry; -->
+						<!-- // Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda -->
+						<!-- const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]); -->
+						<!-- // Creamos la polilínea con la clase CSS para la animación -->
+						<!-- rutaanimada = L.polyline(latlngs, { -->
+							<!-- color: '#ff0000', -->
+							<!-- weight: 7, -->
+							<!-- opacity: 0.8, -->
+							<!-- className: 'animated-route' -->
+						<!-- }).addTo(mapa); -->
+					<!-- } else { -->
+						<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
+						<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
+						<!-- tiempomodalflash=5000; -->
+						<!-- ModalFlash(tiempomodalflash); -->
+					<!-- } -->
+				<!-- }) -->
+				<!-- .catch(error => { -->
+					<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
+					<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
+					<!-- tiempomodalflash=5000; -->
+					<!-- ModalFlash(tiempomodalflash); -->
+				<!-- }); -->
 				
-			actualizarruta=setInterval(()=>{
-				if (rutaanimada) {mapa.removeLayer(rutaanimada)};
-				if (ruta) {ruta.remove()};
-				ruta=L.Routing.control({
-				waypoints: [coordenadas_ubicacion_real, centroide],
+			<!-- temporizadoractualizarruta=setInterval(()=>{ -->
+				<!-- if (rutaanimada) {mapa.removeLayer(rutaanimada)}; -->
+				<!-- if (ruta) {ruta.remove()}; -->
+				<!-- ruta=L.Routing.control({ -->
+				<!-- waypoints: [coordenadas_ubicacion_real, centroide], -->
+				<!-- router: L.Routing.osrmv1({ -->
+					<!-- serviceUrl: 'https://router.project-osrm.org/route/v1', -->
+					<!-- language: 'es', -->
+				<!-- }), -->
+				<!-- showAlternatives: true, -->
+				<!-- routeWhileDragging: true, -->
+				<!-- draggableWaypoints: false, -->
+				<!-- collapsible: true, -->
+				<!-- waypointMode: 'snap', -->
+				<!-- lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]}, -->
+				<!-- altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]}, -->
+				<!-- createMarker: function(i, wp) { -->
+					<!-- return L.marker(wp.latLng, { -->
+						<!-- draggable: false, -->
+						<!-- icon: L.icon({ -->
+							<!-- iconUrl: './images/posicion.png', -->
+							<!-- iconSize: [0, 0] -->
+						<!-- }) -->
+					<!-- }); -->
+				<!-- } -->
+				<!-- }).addTo(mapa); -->
+				<!-- // Movemos SU CONTENEDOR a nuestro panel oculto -->
+				<!-- const panel = document.getElementById("PanelRutas"); -->
+				<!-- panel.replaceChildren(ruta.getContainer()); -->
+				<!-- const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`; -->
+				<!-- //Solicito la ruta y la dibujo con animación -->
+				<!-- fetch(osrmUrl) -->
+					<!-- .then(response => response.json()) -->
+					<!-- .then(data => { -->
+						<!-- if (data.routes && data.routes.length > 0) { -->
+							<!-- const route = data.routes[0].geometry; -->
+							<!-- // Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda -->
+							<!-- const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]); -->
+							<!-- // Creamos la polilínea con la clase CSS para la animación -->
+							<!-- if (rutaanimada) {mapa.removeLayer(rutaanimada)}; -->
+							<!-- rutaanimada = L.polyline(latlngs, { -->
+								<!-- color: '#ff0000', -->
+								<!-- weight: 7, -->
+								<!-- opacity: 0.8, -->
+								<!-- className: 'animated-route' -->
+							<!-- }).addTo(mapa); -->
+						<!-- } else { -->
+							<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
+							<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
+							<!-- tiempomodalflash=5000; -->
+							<!-- ModalFlash(tiempomodalflash); -->
+						<!-- } -->
+					<!-- }) -->
+					<!-- .catch(error => { -->
+						<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
+						<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
+						<!-- tiempomodalflash=5000; -->
+						<!-- ModalFlash(tiempomodalflash); -->
+					<!-- }); -->
+			<!-- },300000); -->
+			
+			
+			
+			if (!ruta) {
+				ruta = L.Routing.control({
+				waypoints: [
+				coordenadas_ubicacion_real,
+				centroide
+				],
 				router: L.Routing.osrmv1({
-					serviceUrl: 'https://router.project-osrm.org/route/v1',
-					language: 'es',
+				serviceUrl: 'https://router.project-osrm.org/route/v1',
+				language: 'es'
 				}),
 				showAlternatives: true,
-				routeWhileDragging: true,
 				draggableWaypoints: false,
 				collapsible: true,
-				waypointMode: 'snap',
-				lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]},
-				altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]},
-				createMarker: function(i, wp) {
-					return L.marker(wp.latLng, {
-						draggable: false,
-						icon: L.icon({
-							iconUrl: './images/posicion.png',
-							iconSize: [0, 0]
-						})
-					});
-				}
+				lineOptions: {
+				styles: [{ color: 'red', opacity: 0.6, weight: 6 }]
+				},
+				altLineOptions: {
+				styles: [{ color: 'blue', opacity: 0.5, weight: 4 }]
+				},
+				createMarker: () => null
 				}).addTo(mapa);
-				// Movemos SU CONTENEDOR a nuestro panel oculto
-				const panel = document.getElementById("PanelRutas");
-				panel.replaceChildren(ruta.getContainer());
-				const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`;
-				//Solicito la ruta y la dibujo con animación
-				fetch(osrmUrl)
-					.then(response => response.json())
-					.then(data => {
-						if (data.routes && data.routes.length > 0) {
-							const route = data.routes[0].geometry;
-							// Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda
-							const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]);
-							// Creamos la polilínea con la clase CSS para la animación
-							if (rutaanimada) {mapa.removeLayer(rutaanimada)};
-							rutaanimada = L.polyline(latlngs, {
-								color: '#ff0000',
-								weight: 7,
-								opacity: 0.8,
-								className: 'animated-route'
-							}).addTo(mapa);
-						} else {
-							titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
-							cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-							tiempomodalflash=5000;
-							ModalFlash(tiempomodalflash);
-						}
-					})
-					.catch(error => {
-						titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA";
-						cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>';
-						tiempomodalflash=5000;
-						ModalFlash(tiempomodalflash);
-					});
-			},300000);
+				document.getElementById("BotonDetallesRuta").style.visibility='visible';
+				document.getElementById("PanelRutas")
+				.appendChild(ruta.getContainer());
+			}
+
+				// 🔁 actualizar ruta cada 5 min
+				intervaloRuta = setInterval(() => {
+				ruta.setWaypoints([
+				coordenadas_ubicacion_real,
+				centroide
+				]);
+				}, 300000);
+
+			
+			
 		};
 	};
 
@@ -2110,7 +2148,7 @@
 		encontrar_a.value = "";
 		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		if (aer !=="") {aer.remove()};
-		clearInterval(actualizarruta);
+		//clearInterval(temporizadoractualizarruta);
 		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
 		if (ruta) {ruta.remove()};
 		if (lugar) {lugar.remove()};
