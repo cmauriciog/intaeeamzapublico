@@ -185,37 +185,33 @@
 		
 		/*Modal Flash*/
 		.modalflash {
-			position: absolute;
+			position: fixed;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			width: 50%;
-			height: 60%;
+			width: 95vw;
+			max-width: 700px;
+			max-height: 90vh;
 			background-color: yellow;
+			border: 2px solid black;
 			border-radius: 10px;
-			box-shadow: 0 0 10px rgba(0,0,0,0.3);
 			display: flex;
 			flex-direction: column;
-			overflow-y: auto;
-			z-index: 1000;
+			overflow: hidden;
+			z-index: 99999;   /* MUY IMPORTANTE */
 		}
 		.modalflash-cabecera {
-			background-color: red;
+			background: red;
 			color: white;
-			padding: 10px;
-			text-align: center;
+			padding: 12px;
 			font-weight: bold;
-			border-top-left-radius: 10px;
-			border-top-right-radius: 10px;
+			text-align: center;
+			flex-shrink: 0;
 		}
 		.modalflash-cuerpo {
-			/*flex: 1;*/
-			padding: 10px;
-			/*text-align: center;*/
-			/*display: flex;*/
-			/*align-items: center;*/
-			/*justify-content: center;*/
-			/*display: flex;*/
+			padding: 15px;
+			flex: 1;                /* OCUPA TODA LA ALTURA RESTANTE */
+			overflow-y: auto;       /* SCROLL SI SE LLENA */
 		}
 		.modalflash-botones {
 			display: flex;              /* CLAVE */
@@ -1560,7 +1556,7 @@
 			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
 			btnindicacionesmodalflash.style.display='flex';
 			btncerrarmodalflash.style.display='flex';
-			btncerrarmodalflash.textContent === "No";
+			btncerrarmodalflash.textContent = "No";
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 		};
@@ -1725,7 +1721,7 @@
 				cantidadvisitas.style.display="none";
 				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
 				btnindicacionesmodalflash.style.display='none';
-				btncerrarmodalflash.textContent === "Cerrar";
+				btncerrarmodalflash.textContent = "Cerrar";
 				tiempomodalflash=9000;
 				ModalFlash(tiempomodalflash);
 			};
@@ -2264,7 +2260,7 @@
 			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
 			btnindicacionesmodalflash.style.display='flex';
 			btncerrarmodalflash.style.display='flex';
-			btncerrarmodalflash.textContent === "No";
+			btncerrarmodalflash.textContent = "No";
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 		};
