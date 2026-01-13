@@ -37,14 +37,11 @@
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.css" />
 	<script src="https://unpkg.com/leaflet-routing-machine@3.2.12/dist/leaflet-routing-machine.min.js"></script>
 	<script src="libs/editable.js" ></script>
-	<!--<script src="libs/measure.js"></script>
-	<script src="leaflet.MeasurePolygon.js"></script>-->
 	<script src="./js/leaflet-sidebar.js"></script>
 	<script src="https://kit.fontawesome.com/68fa6cffda.js" crossorigin="anonymous"></script>
 	<script src="js/jquery-3.4.1.min.js" ></script>
 	<!-- Añado un pluging de minimapa -->
 	<script src="https://cdn.jsdelivr.net/gh/maneoverland/leaflet.WorldMiniMap@1.0.0/dist/Control.WorldMiniMap.js" integrity="sha512-PFw8St3qenU1/dmwCfiYYN/bRcqY1p3+sBATR+rZ6622eyXOk/8izVtlmm/k8qW7KbRIJsku838WCV5LMs6FCg==" crossorigin=""></script>
-	
 	<!--Clases para personalizar algunos elementos-->
 	<meta name="theme-color" content="#712cf9"></meta>
 	<style>
@@ -188,12 +185,12 @@
 		
 		/*Modal Flash*/
 		.modalflash {
-			position: fixed;
+			position: absolute;
 			top: 50%;
 			left: 50%;
 			transform: translate(-50%, -50%);
-			width: 50%;/*60vw;*/
-			height: 50%;/*50vh;*/
+			width: 50%;
+			height: 60%;
 			background-color: yellow;
 			border-radius: 10px;
 			box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -220,11 +217,50 @@
 			/*justify-content: center;*/
 			/*display: flex;*/
 		}
-		@media (max-width: 600px) {
-			.modalflash {
-			width: 80vw;
-			height: 60vh;
-			}
+		.modalflash-botones {
+			display: flex;              /* CLAVE */
+			justify-content: center;    /* centra horizontal */
+			align-items: center;
+			gap: 20px;                  /* espacio entre botones */
+			margin-top: 15px;
+		}
+
+		/* estilos de botones */
+		.modalflash-botones button {
+			height: 30px;
+			width: 90px;
+			color: white;
+			border-radius: 4px;
+			cursor: pointer;
+		}
+
+		#btn-indicaciones-modal-flash {
+			background-color: blue;
+			color:white;
+			border: 1px solid white;
+			height:30px;
+			width:90px;
+			display: flex;
+			align-items: center;      /* centra vertical */
+			justify-content: center;  /* centra horizontal */
+		}
+
+		#btn-cerrar-modal-flash {
+			background-color: red;
+			color:white;
+			border: 1px solid white;
+			height:30px;
+			width:90px;
+			display: flex;
+			align-items: center;      /* centra vertical */
+			justify-content: center;  /* centra horizontal */
+		}
+		.modalflash-contador {
+			display: flex;
+			justify-content: center;   /* centra horizontal */
+			align-items: center;
+			margin-top: 10px;
+			text-align: center;
 		}
 		
 		/*Animación inputs búsquedas Unidades//Sectores, servicios y personas*/
@@ -293,27 +329,30 @@
 			padding: 8px;
 			font-size: 1em;
 		}
-		/* Evita que se apilen en pantallas pequeñas */
-		@media (max-width: 600px) {
-			.fila {
-				flex-wrap: nowrap;
-			}
-		}
+		
 		#distancia {
 			position: absolute;
-			top: 10px;
+			top: 1px;
 			left: 50%;
 			transform: translateX(-50%);
-			background: white;
-			font-size: 16px;
-			padding: 8px 14px;
+			width: 80%;
+			max-width: 580px;
+			min-width: 280px;
+			padding: 10px 14px;
 			border-radius: 8px;
-			box-shadow: 0 0 6px rgba(0,0,0,0.2);
-			z-index: 999;
+			text-align: center;
+			font-size: 15px;
 			font-weight: bold;
-			transition: background 0.3s;
+			background: #d4edda;
+			color: #155724;
+			box-shadow: 0 0 6px rgba(0,0,0,0.3);
+			z-index: 999;
+			display: none;
 		}
-		
+		#distancia.visible {
+			display: block;
+		}
+
 		.botonnorte {
 			position: absolute;
 			top: 15px;
@@ -356,8 +395,8 @@
 		
 		.botoncentrado {
 			position: absolute;
-			top: 65px;
-			right: 80px;
+			top: 77px;
+			right: 15px;
 			background: none;
 			border: none;
 			cursor: pointer;
@@ -401,18 +440,6 @@
 			background:#555;
 		}
 		
-		/* Definimos la animación de cambio de color al trazar la ruta*/
-        @keyframes color-animation {
-			0% {stroke: #ffffff;} 
-            35% {stroke: #ff0000;} 
-            70% {stroke: #000000;}
-        }
-        /* Clase CSS que aplica las animaciones a la ruta */
-        .animated-route {
-            stroke-dasharray: 8000;
-            stroke-dashoffset: 8000;
-            animation: dash 15s linear forwards, color-animation 15s infinite;
-        }
         @keyframes dash {
             to {
                 stroke-dashoffset: 0;
@@ -433,6 +460,13 @@
 			height: auto;
 			vertical-align: middle;
 			margin-right: 2px;
+		}
+		
+		/*Configuración de la Barra Lateral*/
+		#barralateral {
+			position: absolute;
+			z-index: 550;
+			max-width: 80%;
 		}
 		
 		/*Estilo del Listbox para la Capa Base*/
@@ -485,31 +519,32 @@
 		
 		/*Boton para desplegar detalles de rutas sugeridas*/
 		#BotonDetallesRuta {
-			position:absolute;
-			top:110px;
-			right:1px;
-			z-index:1050;
-			background:#fff;
-			color:white;
-			border:1px solid #777;
-			/*padding:6px 12px;*/
-			border-radius:6px;
-			cursor:pointer;
-			font-weight:bold;
-			box-shadow:0 2px 4px rgba(0,0,0,.3);
+			position: fixed;
+			top: 28%;
+			right: 3%;
+			z-index: 1050;
+			background: #fff;
+			color: white;
+			border: 1px solid #777;
+			border-radius: 6px;
+			cursor: pointer;
+			font-weight: bold;
+			box-shadow: 0 2px 4px rgba(0,0,0,.3);
 			animation: pulsobotonlimpiar 2s infinite ease-in-out;
 		}
+		
 		#PanelRutas {
-			position:absolute;
-			top:130px;
-			right:1px;
+			position:fixed;
+			top: 35%;
+			right: 0;
 			z-index:1050;
 			display:none;           /* ← CLAVE */
 			background:white;
 			border-radius:6px;
 			box-shadow:0 2px 6px rgba(0,0,0,.35);
 		}
-				/*Bloque para resaltar lo NUEVO*/
+		
+		/*Bloque para resaltar lo NUEVO*/
 		/* Clase resaltado con animación */
 		.resaltarlonovedoso {
 			animation: palpitar 1s infinite ease-in-out, cambiarColor 3s infinite ease-in-out;/*2s infinite alternate;*/
@@ -538,33 +573,39 @@
 		.capa.active{display:block}
 
 		/* guía/tooltip */
-		.guia{
-		position:absolute;max-width:320px;padding:14px 16px;border-radius:10px;background:#a1d99b;box-shadow:0 8px 22px rgba(0,0,0,0.18);z-index:500;cursor:pointer;transform-origin:center top;transition:transform .14s ease,opacity .12s ease;opacity:0;transform:translateY(-6px);color:green;
+		.novedad{
+		position:absolute;max-width:320px;padding:14px 16px;border-radius:10px;background:#a1d99b;box-shadow:0 8px 22px rgba(0,0,0,0.18);z-index:1000;cursor:pointer;transform-origin:center top;transition:transform .14s ease,opacity .12s ease;opacity:0;transform:translateY(-6px);color:green;
 		}
-		.guia.show{opacity:1;transform:translateY(0)}
+		.novedad.show{opacity:1;transform:translateY(0)}
 
 		/* flecha: apuntando hacia abajo (modal encima del botón) */
-		.guia::after{
+		.novedad::after{
 		content:"";position:absolute;width:14px;height:14px;background:red;transform:rotate(45deg);left:50%;transform-origin:center;box-shadow:0 4px 8px rgba(0,0,0,0.08);
 		/* se colocará con JS ajustando --arrow-x */
 		top:100%;margin-left:calc(var(--arrow-x, -7px));
 		}
-		.guia.oculto::after {
+		.novedad.oculto::after {
 			content: none;
 		}
 
 		/* cuando el modal está debajo del botón, usamos la clase bottom y movemos la flecha arriba */
-		.guia.bottom::after{top:auto;bottom:100%;}
+		.novedad.bottom::after{top:auto;bottom:100%;}
 
 		/* texto dentro de la guía */
-		.guia h4{margin:0 0 6px 0;font-size:15px}
-		.guia p{margin:0;font-size:13px;color:#444}
+		.novedad h4{margin:0 0 6px 0;font-size:15px}
+		.novedad p{margin:0;font-size:13px;color:#444}
 
 		/* estilo pequeño para indicar acción */
 		.hint{margin-top:10px;font-size:12px;color:#666}
-
-		@media (max-width:420px){
-		.guia{left:8px;right:8px;max-width:calc(100% - 16px)}
+		@media (max-width: 600px) {
+			.modalflash {
+				width: 83vw;
+				height: 75vh;
+			}
+			.fila {
+				flex-wrap: nowrap;
+			}
+			.novedad{left:8px;right:8px;max-width:calc(100% - 16px)}
 		}
     </style>
 	<!--Icono para la pestaña del navegador-->
@@ -600,7 +641,8 @@
 		</div>
 	</dialog>
 
-	<!--Barra Lateral-->
+	<div id="mapa">
+		<!--Barra Lateral-->
 	<div id="barralateral" class="sidebar collapsed">
         <div class="sidebar-tabs sidebar-tabs1">
             <ul role="tablist">
@@ -875,10 +917,14 @@
             </div>
         </div>
     </div>
-	<div id="mapa">
+	
+	
+	
+	
+	
 		<div id="distancia">Buscando ubicacion...</div>
 		<button id="BotonLimpiarPantalla" onclick="LimpiarPantalla()">🧹 Despejar pantalla</button>
-		<button id="BotonDetallesRuta">Detalles Ruta ▸</button>
+		<button id="BotonDetallesRuta">Detalles Ruta</button>
 		<div id="PanelRutas"></div>
 		<button class="botonnorte" id="botonnorte">
 			<img src="./images/norte.jpg" alt="Norte del Mapa" title="Norte terrestre">
@@ -897,43 +943,47 @@
 			<img src="./images/flecha_izquierda_roja.png"><img src="./images/flecha_izquierda_roja.png">
 		</button>
 	</div>
-	<div class="modalflash" id="MiModalFlash">
-		<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL VISOR WEB DEL INTA EEA MENDOZA...!!!</div>
-		<p class="modalflash-cuerpo" id="cuerpomodalflash"><img src="./images/presentacion.jpg" style="display: block; margin: auto; height:80px" id="imagenmodalflash"/><br><strong>Si sos un visitante, este mapa en línea te permitirá:</strong>
-			<br>* Ubicar una persona, servicio, especialidad o lugar
-			<br>* Encontrar alguna otra unidad del INTA en la zona con una o dos rutas recomendadas
-			<br> (Estas dos herramientas con la opción de hacerlo a partir de tu ubicación en tiempo real)
-			<br>
-			<br>* Acceder a algunas herramientas geográficas como medir distancias, perímetros y superficies, etc.
-			<br><br><strong>Si trabajás en INTA, además podrás:</strong>
-			<br>* Realizar consultas sobre las parcelas y las construcciones de la Experimental Mendoza.
-			<br><br><strong>En la barra lateral podrás encontrar secciones con las herramientas disponibles y un apartado de ayuda para orientarte a encontrarlas y saber su función.-</strong>
-			<br>
-			<div id="visitas" style="color: blue;"></div>
-			<div style="text-align: center">
-				<label id="borrableinicial">
-					<input id="nomostrarinicial" type="checkbox" style="width:16px; height:16px;"/>
-					No volver a mostrar
-				</label>
-				<button id="btn-indicaciones-modal-flash" style="height:30px; width:90px; background-color:blue;border-color:white;color:white;" onclick="TrazarRuta()">Sí</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp
-				<button id="btn-cerrar-modal-flash" style="height:30px; width:90px; background-color:red;border-color:white;color:white;">Cerrar</button>
-			</div>
-			<span style="font-weight: bold; color:red; text-align: center;">Me cierro en: <span id="contador"> </span> segundos</span>
-		</p>
-	</div>
+	
 	
 	<!-- la guía/modal con flecha (se posiciona con JS) -->
-	<div id="cartelnuevo" class="guia" role="dialog" aria-modal="true" style="display:none">
+	<div id="cartelnuevo" class="novedad" role="dialog" aria-modal="true" style="display:none">
 		<p style="color:green";>Las herramientas que estaban en la pantalla,</p>
 		<p style="color:green";>ahora están ordenadas dentro de esta barra.</p>
 		<p style="color:green";>Así, tendrás más espacio para ver mejor el mapa.</p>
 		<br></br>
-		<label id="borrablelonuevo">
+		<label id="borrablelonuevo" style="display: flex; justify-content: center; align-items: center;	gap: 6px;">
 			<input id="nomostrarlonuevo" type="checkbox" style="width:16px; height:16px;"/>
 			No volver a mostrar
 		</label>
 	</div>
 </body>
+
+<div class="modalflash" id="MiModalFlash">
+	<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL VISOR WEB DEL INTA EEA MENDOZA...!!!</div>
+	<p class="modalflash-cuerpo" id="cuerpomodalflash"><img src="./images/presentacion.jpg" style="display: block; margin: auto; height:80px" id="imagenmodalflash"/><br><strong>Si sos un visitante, este mapa en línea te permitirá:</strong>
+		<br>* Ubicar una persona, servicio, especialidad o lugar
+		<br>* Encontrar alguna otra unidad del INTA en la zona con una o dos rutas recomendadas
+		<br> (Estas dos herramientas con la opción de hacerlo a partir de tu ubicación en tiempo real)
+		<br>* Acceder a algunas herramientas geográficas como medir distancias, perímetros y superficies, etc.
+		<br><strong>Si trabajás en INTA, además podrás:</strong>
+		<br>* Realizar consultas sobre las parcelas y las construcciones de la Experimental Mendoza.
+		<br><strong>En la barra lateral podrás encontrar secciones con las herramientas disponibles y un apartado de ayuda para encontrarlas y saber su función.-</strong>
+		<div id="visitas" style="color: blue;"></div>
+		<div style="text-align: center">
+			<label id="borrableinicial">
+				<input id="nomostrarinicial" type="checkbox" style="width:16px; height:16px;"/>
+				No volver a mostrar
+			</label>
+			<div class="modalflash-botones" id="botonesModalFlash">
+				<button id="btn-indicaciones-modal-flash" onclick="TrazarRuta()">Sí</button>
+				<button id="btn-cerrar-modal-flash">Cerrar</button>
+			</div>
+		</div>
+		<div class="modalflash-contador">
+			<span style="font-weight: bold; color:red; text-align: center;">Me cierro en: <span id="contador"> </span> segundos</span>
+		</div>
+	</p>
+</div>
 
 <!--Ventana modal inicial-->
 <dialog id="modal_inicial" style="text-align: center; background-color:yellow; font-size:13px;">
@@ -975,33 +1025,33 @@
 	var Version = "1"; //Cambiar este valor para volver a mostrar el modal de presentacion cada vez que haya una actualizacion importante
 	<!--Mapas o capas bases-->
 	var ign = new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
-		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="_blank">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>  | Versión: '+Version,
+		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="_blank">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> |Versión: '+Version,
 		}
 	);
 
 	var igngris=new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/mapabase_gris@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
-		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="_blank">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> | Versión: '+Version,
+		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="_blank">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>|Versión: '+Version,
 		}
 	);
 
 	var osm = new L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: 'Teselas <a href="https://www.openstreetmap.org/" target="_blank">OSM</a> &copy; ' +
-        '<a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> | Versión: ' + Version
+        '<a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>|Versión: ' + Version
 	});
 	var googlesatelite = new L.tileLayer('https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}', {
-		attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="_blank">Google Satelital</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> | Versión: '+Version,
+		attribution: 'Teselas <a href="https://www.google.com.ar/maps/@-21.5405995,-63.9542602,11544855m/data=!3m1!1e3?entry=ttu" target="_blank">Google Satelital</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>|Versión: '+Version,
 		}
 	);
 	var googlecallejero=new L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
-		attribution: 'Teselas <a href="https://www.google.com/maps/d/viewer?mid=1pFMZyH1aut3nTDdgkw2U9c3jtxY&hl=en_US&ll=-40.429460336394065%2C-63.6166725&z=4/" target="_blank">Google Maps</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> | Versión: '+Version,
+		attribution: 'Teselas <a href="https://www.google.com/maps/d/viewer?mid=1pFMZyH1aut3nTDdgkw2U9c3jtxY&hl=en_US&ll=-40.429460336394065%2C-63.6166725&z=4/" target="_blank">Google Maps</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>|Versión: '+Version,
 		}
 	);
 	var oscuro = new L.tileLayer('http://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-		attribution: 'Teselas <a href="https://carto.com/about-carto/" target="_blank">Carto</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> | Versión: '+Version,
+		attribution: 'Teselas <a href="https://carto.com/about-carto/" target="_blank">Carto</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>|Versión: '+Version,
 		}
 	);
 	var openTopoMap = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-		attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA); <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> | Versión: '+Version,
+		attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA); <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>|Versión: '+Version,
 		});
 
 	<!--Selector de las capas base-->
@@ -1046,8 +1096,9 @@
 	var capturaActiva= false;
 	var firstLatLng, secondLatLng;
 	var conexion="";
-	var circulo="";
-	var marcador="";
+	//var circulo="";
+	//var marcador="";
+	var intervaloRuta = "";
 	var seguimiento="no";
 	var listabusqueda=[];
 	var listabusquedafiltrada=[];
@@ -1057,19 +1108,22 @@
 	var persona="";
 	var oficina="";
 	var lugar="";
-	var ubicacion_real="";
+	//var ubicacion_real="";
 	var marca_ubicacion_real="";
 	var coordenadas_ubicacion_real="";
-	var borrar_ubicacion_real="";
+	//var borrar_ubicacion_real="";
 	var sondeo_posicion="";
 	var aer="";
 	var mail="";
 	var version="publica";
 	var tiempomodalflash=20000;
-	var temporizadormodalflash="";
+	var temporizadormodalflash=null;
+	var intervalo=null;
+	var tiempo=null;
+	var dentroeeamza="";
 	var dispositivo="";
-	var geoposicion="";
-	var origen=[];
+	//var geoposicion="";
+	//var origen=[];
 	var coord=[];
 	var markers=[];
 	var perimetro=null;
@@ -1081,11 +1135,10 @@
 	var centroide=L.latLng(-33.00376868173891, -68.85766030976325);
 	var entradaeea=L.latLng(-33.003773232329486, -68.85766687268227);
 	var poligono="";
-	var estoyaqui="";
+	//var estoyaqui="";
 	var ruta="";
-	var rutaanimada="";
 	var senialgps="";
-	var orientarme="no";
+	var orientarme="";
 	var avisollegada="";
 	var msgencontrado="";
 	var icono_posicion = L.icon({iconUrl: './images/posicion.png',iconSize: [35, 40],});
@@ -1112,9 +1165,15 @@
 	const cajadistancia = document.getElementById("distancia");
 	const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
 	const modalinicial=document.querySelector("#modal_inicial");
+	const mimodalflash=document.querySelector("#MiModalFlash");
 	const nomostrarinicial = document.getElementById('nomostrarinicial');
 	const nomostrarcelular = document.getElementById('nomostrarcelular');
 	const nomostrarlonuevo = document.getElementById('nomostrarlonuevo');
+	const botondetallesruta =document.getElementById("BotonDetallesRuta");
+	const visitas=document.getElementById("visitas");
+	const cantidadvisitas=document.getElementById("cantidadvisitas");
+	const botoncentrado=document.getElementById("botoncentrado");
+	const panelrutas=document.getElementById("PanelRutas");
 	
 	//Estilizar el perímetro de la EEA Mza
 	function PerimetroEEAMza(feature) {
@@ -1495,11 +1554,13 @@
 		capa_buscar.remove();
 		};
 		mapa.flyToBounds(capa_buscar.getBounds(),18);
-		if (!coordenadas_ubicacion_real=="") {
+		if (!coordenadas_ubicacion_real=="" && orientarme=="") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
 			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
-			document.getElementById("btn-indicaciones-modal-flash").style.visibility='visible';
+			btnindicacionesmodalflash.style.display='flex';
+			btncerrarmodalflash.style.display='flex';
+			btncerrarmodalflash.textContent === "No";
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 		};
@@ -1515,10 +1576,11 @@
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		if (perimetro) {mapa.removeLayer(perimetro)};
 		if (superficie) {mapa.removeLayer(superficie)};
-		if (rutaanimada) {mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
-		clearTimeout(temporizadormodalflash);
-		//clearInterval(temporizadoractualizarruta);
+		botondetallesruta.style.display='none';
 		clearInterval(intervalo);
+		clearInterval(intervaloRuta);
+		clearTimeout(temporizadormodalflash);
+		clearTimeout(tiempo);
 		aer="";
 		mail="";
 		coordenadas_ubicacion_real="";
@@ -1596,7 +1658,7 @@
 		online ? conexion="si" : conexion="no";
 		if (conexion=="no") {
 			titulomodalflash.innerText="SIN CONEXION";
-			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>No hay conexión a interntet.</b><br><br><span style="color:black">Por favor, busca la manera de conectarte para poder usar este visor web.</span>';
+			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>No hay conexión a interntet.</b><br><br><span style="color:black">Por favor, busca la manera de conectarte para poder usar este visor web a pleno, es decir, con todas sus herramientas.-</span>';
 			tiempomodalflash=4000;
 			ModalFlash(tiempomodalflash);
 		};
@@ -1635,6 +1697,7 @@
 				'Debido a: '+msg1+'.-</span>';
 				tiempomodalflash=5000;
 				ModalFlash(tiempomodalflash);
+				botondetallesruta.style.display="none";
 			},
 			{
 				enableHighAccuracy: true,
@@ -1656,20 +1719,20 @@
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
-			if (dispositivo=="pc" && seguimiento=="no") {
+			if (dispositivo=="pc" && orientarme=="") {
 				titulomodalflash.innerText="TRAZAR RUTA";
+				visitas.style.display="none";
+				cantidadvisitas.style.display="none";
 				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
-				document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
+				btnindicacionesmodalflash.style.display='none';
+				btncerrarmodalflash.textContent === "Cerrar";
 				tiempomodalflash=9000;
 				ModalFlash(tiempomodalflash);
 			};
+			if (dispositivo==="pc") {botoncentrado.style.display='block'};
+			cajadistancia.classList.add("visible");
+			//botondetallesruta.style.display="block";
 			seguimiento="si";
-		};
-		
-		if (conexion==="si") {
-			document.getElementById("botoncentrado").style.visibility='visible';
-			if (dispositivo=="movil") {document.getElementById("botoncentrado").style.top = "15px"};
-			if (dispositivo=="movil") {document.getElementById("botoncentrado").style.right = "60px"};
 			mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 			mapa.on('locationfound', ActualizarUbicacion);
 			mapa.on('locationerror', ErrorGPS);
@@ -1691,67 +1754,78 @@
 			coordenadas_ubicacion_real=e.latlng;
 			mapa.setView(coordenadas_ubicacion_real, 17);
 		};
-		//if (!lugar && centroide=L.latLng(-33.00376868173891, -68.85766030976325)) {centroide = L.latLng(-33.00376868173891, -68.85766030976325)};
+		dentroeeamza = Chequeardentroeeamza(coordenadas_ubicacion_real);
 		distancia=DistanciaEnTiempoReal();
-		if (distancia>1100 && orientarme=="no") {
-			titulomodalflash.innerText="TRAZAR RUTA";
-			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
-			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
-			document.getElementById("btn-indicaciones-modal-flash").style.visibility='visible';
-			tiempomodalflash=5000;
-			ModalFlash(tiempomodalflash);
-		};
-		if (distancia<=1100 && distancia>7 && orientarme=="no") {
-			titulomodalflash.innerText="TRAZAR RUTA";
-			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo mostrarte en tiempo real por dónde vas '+
-			'y el destino con vista de ambos puntos en el mapa.-<br></span>';
-			document.getElementById("btn-indicaciones-modal-flash").style.visibility='visible';
-			tiempomodalflash=5000;
-			ModalFlash(tiempomodalflash);
-		};
-		if (orientarme=="si" && distancia>1100) {cajadistancia.style.visibility="visible";document.getElementById("BotonDetallesRuta").style.visibility='visible'};
-		if (orientarme=="si" && lugar) {cajadistancia.style.visibility="visible"};
-		if (distancia > 7 && orientarme=="si") {
-			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
-			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
-			if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
-			if (distancia>=1100 || lugar) {
-				cajadistancia.textContent = msg+" (En línea recta).-";
-				cajadistancia.style.background = "#d4edda";
-				cajadistancia.style.color = "#155724";
+		if (orientarme=="") {
+			if (distancia>1100) {
+				titulomodalflash.innerText="TRAZAR RUTA";
+				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
+				'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
+				btnindicacionesmodalflash.style.display='flex';
+				btncerrarmodalflash.style.display='flex';
+				btncerrarmodalflash.innerHTML = "No";
+				tiempomodalflash=5000;
+				ModalFlash(tiempomodalflash);
+			};
+			if (distancia<=1100 && distancia>7) {
+				titulomodalflash.innerText="TRAZAR RUTA";
+				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo mostrarte en tiempo real por dónde vas '+
+				'y el destino con vista de ambos puntos en el mapa.-<br></span>';
+				btnindicacionesmodalflash.style.display='flex';
+				btncerrarmodalflash.style.display='flex';
+				btncerrarmodalflash.innerHTML = "No";
+				tiempomodalflash=5000;
+				ModalFlash(tiempomodalflash);
 			};
 		};
-		if (distancia >110 && distancia <= 150 && orientarme=="si") {
-			msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!. (En línea recta)";
-			cajadistancia.textContent = msg;
-			cajadistancia.style.background = "#d4edda";
-			cajadistancia.style.color = "#155724";
-			msg="Avanza despacio y con atención. ¡Estás a pocos metros del destino!";
-			if (orientarme==="si" && avisollegada==="si") {AlertaLlegada(msg)};
+		if (orientarme=="si") {
+			if (distancia<=1100) {
+				botondetallesruta.style.display="none";
+				panelrutas.style.display="none";
+				if (ruta) {
+					ruta.remove();
+				};
+			};
+			if (distancia>1100) {
+				botondetallesruta.style.display="block";
+			};
 		};
-		if (distancia>7 && distancia<100) {avisollegada="si"};
-		if (distancia <= 7 && orientarme=="si") {
-			cajadistancia.textContent = "¡Has llegado a tu destino! "+msgencontrado;
+		if (distancia > 10) {
+			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
+			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
+		};
+		if (!dentroeeamza || aer || lugar) {
+			cajadistancia.textContent = msg+" (En línea recta).-";
+			cajadistancia.style.background = "#d4edda";
+			cajadistancia.style.color = "#155724"
+		} else {
+			cajadistancia.textContent = "Estás dentro de la EEA Mendoza.-";
 			cajadistancia.style.background = "#d4edda";
 			cajadistancia.style.color = "#155724";
-			cajadistancia.style.opacity = "1";
-			cajadistancia.style.transition = "opacity 1s ease";
+			botondetallesruta.style.display="none";
+		};
+		if ((distancia >80 && distancia <= 150) && (lugar !== "" || aer !== "")) {
+			msg="Avanza despacio y con atención. ¡Estás a pocos metros del destino!";
+			if (avisollegada=="si") {AlertaLlegada(msg)};
+		};
+		if (distancia>10 && distancia<80) {avisollegada="si"};
+		if ((distancia <= 10) && (lugar !=="" || aer !=="")) {
+			cajadistancia.textContent = "¡Has llegado a tu destino!.-";
 			setTimeout(() => {
-			cajadistancia.style.opacity = "0";
-			}, 6000);
-			setTimeout(() => {
-			cajadistancia.style.display = "none";
-			}, 7000);
+				cajadistancia.classList.remove("visible");
+			}, 10000);
 			mapa.setView(coordenadas_ubicacion_real, 19);
-			if (avisollegada==="si") {AlertaLlegada("Has llegado a tu destino "+msgencontrado)};
+			if (avisollegada=="si") {AlertaLlegada("Has llegado a tu destino "+msgencontrado)};
 		};
 	};
 
 	// Evento en caso de error
 	function ErrorGPS(e) {
+		cajadistancia.classList.add("visible");
 		cajadistancia.textContent = "No se pudo obtener la ubicación: " + e.message;
 		cajadistancia.style.background = "white";
 		cajadistancia.style.color = "red";
+		botondetallesruta.style.display='none';
 	};
 	
 	//Anuncio en voz alta de cercanía/llegada a destino
@@ -1759,12 +1833,15 @@
 		const utterance = new SpeechSynthesisUtterance(leerdistancia);
 		speechSynthesis.speak(utterance);
 		if (distancia>7) {avisollegada="no"};
-		if (distancia<=7) {avisollegada="no";orientarme="no";DetenerActualizarUbicacion()};
+		if (distancia<=7) {avisollegada="no";DetenerActualizarUbicacion()};
 		clearTimeout(temporizadormodalflash);
 	};
 	
 	function DistanciaEnTiempoReal() {
 		const point = turf.point([coordenadas_ubicacion_real.lng, coordenadas_ubicacion_real.lat]);
+		if (!lugar && !aer) {
+			return (centroide.distanceTo(coordenadas_ubicacion_real));
+		};
 		if (lugar && !aer) {
 			const lineSegments = [];
 			const coords = poligono[0];
@@ -1786,18 +1863,15 @@
 			const snappedCoords = [nearestPoint.geometry.coordinates[1], nearestPoint.geometry.coordinates[0]];
 			return minDistance;
 		};
-		if (!lugar && !aer) {
-			return (centroide.distanceTo(coordenadas_ubicacion_real));
-		};
 		if (!lugar && aer) {
 			return (centroide.distanceTo(coordenadas_ubicacion_real));
 		};
 	};
 	
-	function checkInside(coords) {
+	function Chequeardentroeeamza(coords) {
 		const pt = turf.point([coords.lng, coords.lat]);
 		let found = null;
-		for (const f of perimetro.features) {
+		for (const f of inta.features) {
 			if (["Polygon", "MultiPolygon"].includes(f.geometry.type)) {
 				if (turf.booleanPointInPolygon(pt, f)) {
 					found = f;
@@ -1810,16 +1884,14 @@
 	
 	// Función para detener geolocalización
 	function DetenerActualizarUbicacion() {
-		orientarme="no";
-		//clearInterval(temporizadoractualizarruta);
+		clearInterval(intervalo);
+		clearInterval(intervaloRuta);
+		clearTimeout(temporizadormodalflash);
+		clearTimeout(tiempo);
 		actualizarruta="si";
-		titulomodalflash.innerText="SEGUIMIENTO DETENIDO";
-		cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Se cancelará la actualización del trazado de ruta.</b><br><br><span style="color:black">porque apagaste el GPS.-</span>';
-		tiempomodalflash=5000;
-		ModalFlash(tiempomodalflash);
 		document.getElementById("dondestoy").style.visibility='hidden';
 		if (ruta) {ruta.remove()};
-		if (rutaanimada) {mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
+		botondetallesruta.style.display='none';
 		coordenadas_ubicacion_real="";
 		distancia="";
 		mapa.stopLocate();
@@ -1835,6 +1907,7 @@
 		'No podrás visualizar tu posición ni recibir indicaciones para llegar a un lugar.'+
 		'<br><br>Podrás volver a activarla en el momento que lo desees.</span>';
 		tiempomodalflash=5000;
+		//btncerrarmodalflash.textContent === "Cerrar";
 		ModalFlash(tiempomodalflash);
 	};
 
@@ -1846,207 +1919,92 @@
 
 	<!--Función para detener el seguimiento en tiempo real-->
 	function desactivar_seguimiento(seguimiento) {
-		document.getElementById("BotonDetallesRuta").style.visibility='hidden';
+		botondetallesruta.style.display='none';
 		barralateral.close();
-		seguimiento="no";
+		seguimiento="";
+		orientarme="";
 		document.getElementById("gps").src="./images/slide_off.jpg";
 		document.getElementById("gpson").style.visibility='hidden';
 		document.getElementById("gpsoff").style.visibility='visible';
-		document.getElementById("botoncentrado").style.visibility='hidden';
-		cajadistancia.style.visibility="hidden";
+		botoncentrado.style.display='none';
+		cajadistancia.classList.remove("visible");
 		document.getElementById("dondestoy").style.visibility='hidden';
 		document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";
-		DetenerActualizarUbicacion();
-		marca_ubicacion_real.remove();
-		marca_ubicacion_real="";
+		//DetenerActualizarUbicacion();
+		clearInterval(intervalo);
+		clearInterval(intervaloRuta);
+		clearTimeout(temporizadormodalflash);
+		clearTimeout(tiempo);
+		if (ruta) {ruta.remove()};
+		botondetallesruta.style.display='none';
 		coordenadas_ubicacion_real="";
-		//centroide = L.latLng(-33.00374957231557, -68.85766475808848);
-		ruta.remove();
-		mapa.removeLayer(rutaanimada);
-		document.getElementById("BotonDetallesRuta").style.visibility='hidden';
+		distancia="";
+		mapa.stopLocate();
+		if (marca_ubicacion_real) {
+			marca_ubicacion_real.remove();
+			coordenadas_ubicacion_real = "";
+			marca_ubicacion_real = "";
+		};
+		titulomodalflash.innerText="SEGUIMIENTO DETENIDO";
+		cuerpomodalflash.innerHTML = '<span style="display: block; text-align: center; width: 100%; color:green;"><br><b>Servicio de seguimiento en tiempo real detenido.</b><br><br><span style="color:black">'+
+		'No podrás visualizar tu posición ni recibir indicaciones para llegar a un lugar.'+
+		'<br><br>Podrás volver a activarla en el momento que lo desees.</span>';
+		btncerrarmodalflash.textContent = "Cerrar";
+		tiempomodalflash=5000;
+		ModalFlash(tiempomodalflash);
+		if (ruta) {ruta.remove()};
 		iraaer="";
 		mail="";
-		CentrarMiUbicacion();
 	};
 
 	<!--Función para Trazar Ruta Sugerida con OSRM-->
 	function TrazarRuta() {
+		clearInterval(intervalo);
+		clearInterval(intervaloRuta);
+		clearTimeout(temporizadormodalflash);
+		clearTimeout(tiempo);
+		modalinicial.close();
+		mimodalflash.style.display='none';
+		btnindicacionesmodalflash.style.display='none';
+		visitas.style.display='none';
+		document.getElementById("borrableinicial").style.display='none';
+		botoncentrado.style.display="block";
 		VerificarConexion();
-		if (conexion==="si") {
-			VerificarGPS();
-		};
+		if (conexion === "si") VerificarGPS();
+		distancia = DistanciaEnTiempoReal();
 		avisollegada="si";
-		//clearInterval(temporizadoractualizarruta);
-		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
-		if (ruta) {ruta.remove()};
-		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
-		document.getElementById("MiModalFlash").style.visibility='hidden';
-		distancia=DistanciaEnTiempoReal();
-		//const dentro = checkInside(coordenadas_ubicacion_real);
-		//alert(dentro);
-		if (distancia<=1100 && lugar) {
+		// SI ESTÁS CERCA → no rutea pero sigue actualizando
+		if (distancia <= 1100) {
+			clearInterval(intervaloRuta);
 			ActualizarUbicacion();
+			return;
 		};
-		if (distancia>1100) {
-			if (! lugar) {const centroide=entradaeea}; //&& ! centroide) {centroide = L.latLng(-33.00374957231557, -68.85766475808848)};
-			<!-- ruta=L.Routing.control({ -->
-				<!-- waypoints: [coordenadas_ubicacion_real, centroide], -->
-				<!-- router: L.Routing.osrmv1({ -->
-					<!-- serviceUrl: 'https://router.project-osrm.org/route/v1', -->
-					<!-- language: 'es', -->
-				<!-- }), -->
-				<!-- showAlternatives: true, -->
-				<!-- routeWhileDragging: true, -->
-				<!-- draggableWaypoints: false, -->
-				<!-- collapsible: true, -->
-				<!-- waypointMode: 'snap', -->
-				<!-- lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]}, -->
-				<!-- altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]}, -->
-				<!-- createMarker: function(i, wp) { -->
-					<!-- return L.marker(wp.latLng, { -->
-						<!-- draggable: false, -->
-						<!-- icon: L.icon({ -->
-							<!-- iconUrl: './images/posicion.png', -->
-							<!-- iconSize: [0, 0] -->
-						<!-- }) -->
-					<!-- }); -->
-				<!-- } -->
-			<!-- }).addTo(mapa); -->
-			<!-- // Movemos SU CONTENEDOR a nuestro panel oculto -->
-			<!-- const panel = document.getElementById("PanelRutas"); -->
-			<!-- panel.appendChild(ruta.getContainer()); -->
-			<!-- //Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez** -->
-			<!-- if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});}; -->
-			<!-- const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`; -->
-			<!-- //Solicito la ruta y la dibujo con animación -->
-			<!-- fetch(osrmUrl) -->
-				<!-- .then(response => response.json()) -->
-				<!-- .then(data => { -->
-					<!-- if (data.routes && data.routes.length > 0) { -->
-						<!-- const route = data.routes[0].geometry; -->
-						<!-- // Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda -->
-						<!-- const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]); -->
-						<!-- // Creamos la polilínea con la clase CSS para la animación -->
-						<!-- rutaanimada = L.polyline(latlngs, { -->
-							<!-- color: '#ff0000', -->
-							<!-- weight: 7, -->
-							<!-- opacity: 0.8, -->
-							<!-- className: 'animated-route' -->
-						<!-- }).addTo(mapa); -->
-					<!-- } else { -->
-						<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
-						<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
-						<!-- tiempomodalflash=5000; -->
-						<!-- ModalFlash(tiempomodalflash); -->
-					<!-- } -->
-				<!-- }) -->
-				<!-- .catch(error => { -->
-					<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
-					<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
-					<!-- tiempomodalflash=5000; -->
-					<!-- ModalFlash(tiempomodalflash); -->
-				<!-- }); -->
-				
-			<!-- temporizadoractualizarruta=setInterval(()=>{ -->
-				<!-- if (rutaanimada) {mapa.removeLayer(rutaanimada)}; -->
-				<!-- if (ruta) {ruta.remove()}; -->
-				<!-- ruta=L.Routing.control({ -->
-				<!-- waypoints: [coordenadas_ubicacion_real, centroide], -->
-				<!-- router: L.Routing.osrmv1({ -->
-					<!-- serviceUrl: 'https://router.project-osrm.org/route/v1', -->
-					<!-- language: 'es', -->
-				<!-- }), -->
-				<!-- showAlternatives: true, -->
-				<!-- routeWhileDragging: true, -->
-				<!-- draggableWaypoints: false, -->
-				<!-- collapsible: true, -->
-				<!-- waypointMode: 'snap', -->
-				<!-- lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]}, -->
-				<!-- altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]}, -->
-				<!-- createMarker: function(i, wp) { -->
-					<!-- return L.marker(wp.latLng, { -->
-						<!-- draggable: false, -->
-						<!-- icon: L.icon({ -->
-							<!-- iconUrl: './images/posicion.png', -->
-							<!-- iconSize: [0, 0] -->
-						<!-- }) -->
-					<!-- }); -->
-				<!-- } -->
-				<!-- }).addTo(mapa); -->
-				<!-- // Movemos SU CONTENEDOR a nuestro panel oculto -->
-				<!-- const panel = document.getElementById("PanelRutas"); -->
-				<!-- panel.replaceChildren(ruta.getContainer()); -->
-				<!-- const osrmUrl = `https://router.project-osrm.org/route/v1/driving/${coordenadas_ubicacion_real.lng},${coordenadas_ubicacion_real.lat};${centroide.lng},${centroide.lat}?overview=full&geometries=geojson`; -->
-				<!-- //Solicito la ruta y la dibujo con animación -->
-				<!-- fetch(osrmUrl) -->
-					<!-- .then(response => response.json()) -->
-					<!-- .then(data => { -->
-						<!-- if (data.routes && data.routes.length > 0) { -->
-							<!-- const route = data.routes[0].geometry; -->
-							<!-- // Convertimos las coordenadas de GeoJSON a un formato que Leaflet entienda -->
-							<!-- const latlngs = route.coordinates.map(coord => [coord[1], coord[0]]); -->
-							<!-- // Creamos la polilínea con la clase CSS para la animación -->
-							<!-- if (rutaanimada) {mapa.removeLayer(rutaanimada)}; -->
-							<!-- rutaanimada = L.polyline(latlngs, { -->
-								<!-- color: '#ff0000', -->
-								<!-- weight: 7, -->
-								<!-- opacity: 0.8, -->
-								<!-- className: 'animated-route' -->
-							<!-- }).addTo(mapa); -->
-						<!-- } else { -->
-							<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
-							<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
-							<!-- tiempomodalflash=5000; -->
-							<!-- ModalFlash(tiempomodalflash); -->
-						<!-- } -->
-					<!-- }) -->
-					<!-- .catch(error => { -->
-						<!-- titulomodalflash.innerText="PROBLEMAS PARA SUGERIR UNA RUTA"; -->
-						<!-- cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>El servidor de OSRM no puede sugerirte una ruta en este momento.-</span>'; -->
-						<!-- tiempomodalflash=5000; -->
-						<!-- ModalFlash(tiempomodalflash); -->
-					<!-- }); -->
-			<!-- },300000); -->
-			
-			
-			
-			if (!ruta) {
-				ruta = L.Routing.control({
-				waypoints: [
-				coordenadas_ubicacion_real,
-				centroide
-				],
-				router: L.Routing.osrmv1({
-				serviceUrl: 'https://router.project-osrm.org/route/v1',
-				language: 'es'
-				}),
-				showAlternatives: true,
-				draggableWaypoints: false,
-				collapsible: true,
-				lineOptions: {
-				styles: [{ color: 'red', opacity: 0.6, weight: 6 }]
-				},
-				altLineOptions: {
-				styles: [{ color: 'blue', opacity: 0.5, weight: 4 }]
-				},
-				createMarker: () => null
-				}).addTo(mapa);
-				document.getElementById("BotonDetallesRuta").style.visibility='visible';
-				document.getElementById("PanelRutas")
-				.appendChild(ruta.getContainer());
-			}
-
-				// 🔁 actualizar ruta cada 5 min
-				intervaloRuta = setInterval(() => {
-				ruta.setWaypoints([
-				coordenadas_ubicacion_real,
-				centroide
-				]);
-				}, 300000);
-
-			
-			
+		//if (distancia > 1100 && !lugar) {
+		//	centroide = entradaeea;
+		//};
+		// 🔥 eliminar ruta anterior
+		if (ruta) {
+			mapa.removeControl(ruta);
+			ruta = null;
 		};
+		// 🔥 crear ruta nueva
+		ruta = L.Routing.control({
+			waypoints: [L.latLng(coordenadas_ubicacion_real.lat, coordenadas_ubicacion_real.lng),L.latLng(centroide.lat, centroide.lng)],
+			router: L.Routing.osrmv1({serviceUrl: 'https://router.project-osrm.org/route/v1',language: 'es'}),
+			showAlternatives: true,
+			draggableWaypoints: false,
+			createMarker: () => null,
+			lineOptions: {styles: [{color: 'red', weight: 9, opacity: 0.9}]},
+			altLineOptions: {styles: [{color: 'orange', weight: 6, opacity: 0.6, dashArray: '8,12'}]}
+		}).addTo(mapa);
+		if (ruta) {botondetallesruta.style.display="block"};
+		panelrutas.style.display = "block";
+		panelrutas.replaceChildren(ruta.getContainer());
+		// 🔁 refresco real
+		clearInterval(intervaloRuta);
+		intervaloRuta = setInterval(() => {
+			TrazarRuta();   // 🔥 recalcula TODO
+		}, 300000); // ⏱️ cada 5 minutos
 	};
 
 	<!--Funcion para mostrar imagen estadísticas en ventana modal-->
@@ -2114,7 +2072,7 @@
 		
 	function PrepararMail() {
 		barralateral.close();
-		document.getElementById("visitas").style.visibility='hidden';
+		visitas.style.display='none';
 		titulomodalflash.innerText="ENVIAR MAIL AL DESARROLLADOR";
 		cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>En un momento, enviarás el mail al desarrollador.</b><br><br><span style="color:black">Por parámetros de configuración de tu dispositivo, '+
 		'es probable que no sea posible hacer un envío semi-automático del mail.<br><br>Si al cerrar este mensaje no se envía, abrí tu aplicación de correo electrónico y pegá la dirección de mail que ha sido '+
@@ -2148,8 +2106,10 @@
 		encontrar_a.value = "";
 		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		if (aer !=="") {aer.remove()};
-		//clearInterval(temporizadoractualizarruta);
-		if (rutaanimada) {mapa.removeLayer(rutaanimada)};
+		clearInterval(intervalo);
+		clearInterval(intervaloRuta);
+		clearTimeout(temporizadormodalflash);
+		clearTimeout(tiempo);
 		if (ruta) {ruta.remove()};
 		if (lugar) {lugar.remove()};
 		lugar="";
@@ -2298,11 +2258,13 @@
 				.openPopup();
 			document.getElementById("volvereea").style.visibility='visible';
 		};
-		if (!coordenadas_ubicacion_real=="") {
+		if (!coordenadas_ubicacion_real=="" && orientarme=="") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
 			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
-			document.getElementById("btn-indicaciones-modal-flash").style.visibility='visible';
+			btnindicacionesmodalflash.style.display='flex';
+			btncerrarmodalflash.style.display='flex';
+			btncerrarmodalflash.textContent === "No";
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 		};
@@ -2365,6 +2327,7 @@
 			sugerenciaz.style.visibility='hidden';
 		  };
 		if (inputbusqueda.value.trim() !=="") {
+			//botondetallesruta.style.display="none";
 			sugerenciaz.style.visibility='visible';
 			inputbusqueda.classList.add('filled');
 			const query = inputbusqueda.value.toLowerCase();
@@ -2401,6 +2364,7 @@
 			sugerenciasbiz.style.visibility='hidden';
 		  };
 		if (inputbusquedabis.value.trim() !=="") {
+			//botondetallesruta.style.display="none";
 			sugerenciasbiz.style.visibility='visible';
 			inputbusquedabis.classList.add('filled');
 			const query = inputbusquedabis.value.toLowerCase();
@@ -2656,8 +2620,8 @@
 	
 	//Bloque Modal Flash
 	function ModalFlash(tiempo) {
-		document.getElementById("MiModalFlash").style.visibility='visible';
-		let intervalo;
+		mimodalflash.style.display='block';
+		//let interv;
 		let timeout;
 		let restante = tiempo/1000;
 		document.getElementById('contador').textContent = restante;
@@ -2667,8 +2631,9 @@
 			if (restante <= 0) clearInterval(intervalo);
 			}, 1000);
 		temporizadormodalflash=setTimeout(() => {
-			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
-			document.getElementById("MiModalFlash").style.visibility='hidden';
+			btnindicacionesmodalflash.style.display='none';
+			mimodalflash.style.display='none';
+			clearTimeout(temporizadormodalflash);
 			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
 			if (mail=="si") {EnviarMail()};
 		}, tiempo);
@@ -2678,7 +2643,7 @@
 	function VerificarVersion() {
 		if (version=="publica") {
 			document.getElementById("cerrarsesion").style.visibility='hidden';
-			document.getElementById("MiModalFlash").style.visibility='hidden';
+			mimodalflash.style.display='none';
 			document.getElementById("titulo_vid").style.visibility='hidden';
 			document.getElementById("titulo_otro_criterio").style.visibility='hidden';
 			document.getElementById("cobertura_vid").style.visibility='hidden';
@@ -2698,7 +2663,7 @@
 		};
 		if (version=="completa") {
 			document.getElementById("cerrarsesion").style.visibility='visible';
-			document.getElementById("MiModalFlash").style.visibility='visible';
+			mimodalflash.style.display='block';
 			document.getElementById("titulo_vid").style.visibility='visible';
 			document.getElementById("titulo_otro_criterio").style.visibility='visible';
 			document.getElementById("cobertura_vid").style.visibility='visible';
@@ -2709,23 +2674,6 @@
 			document.getElementById("titulocontrasenia").style.visibility='hidden';
 		};
 	};
-	
-	//Función para girar el norte si está activado el modo giro de pantalla en el celular
-	//function ActualizarGiro() {
-	//    botonnorte.style.visibility="visible";
-    //    let angulo = 0;
-        // window.orientation está deprecado en algunos navegadores, por eso usamos matchMedia también
-    //    if (window.orientation === 0 || window.matchMedia("(orientation: portrait)").matches) {
-    //        angulo = 0; // Vertical
-    //    } else if (window.orientation === 90) {
-    //        angulo = 90; // Horizontal (derecha)
-    //    } else if (window.orientation === -90) {
-    //        angulo = -90; // Horizontal (izquierda)
-    //    } else if (window.orientation === 180) {
-    //        angulo = 180; // Invertido
-    //    }
-    //    botonnorte.style.transform = `rotate(${angulo}deg)`;
-    //};
 	
 	//Bloque para las mediciones
 	function AgregarPunto(e) {
@@ -2798,26 +2746,6 @@
 		resultado2.innerHTML = "";
 	};
 	
-	// Evento que detecta cambios de orientación
-    //window.addEventListener("orientationchange", ActualizarGiro);
-	
-	// Función para Capturar mediciones
-	//function CapturarMediciones() {
-	//	document.getElementById("contenedorMediciones").style.visibility='visible';
-	//	capturaActiva = !capturaActiva;
-	//	const icono=document.getElementById("imagenmediciones");
-	//	if (capturaActiva) {
-	//		mapa.on('click', AgregarPunto);
-	//		icono.src = "./images/nomediciones.jpg";
-	//		document.getElementById("contenedorMediciones").style.visibility='visible';
-	//	} else {
-	//		mapa.off('click', AgregarPunto);
-	//		icono.src="./images/mediciones.jpg";
-	//		document.getElementById("contenedorMediciones").style.visibility='hidden';
-	//		ResetearMediciones();
-	//	};
-	//};
-	
 	// ====================
 	// FUNCIÓN PARA CAMBIAR CAPA
 	// ====================
@@ -2885,12 +2813,17 @@
 	};
 	
 	//Capturar evento sobre botones
-	//const btncerrarmodalflash=document.querySelector("#btn-cerrar-modal-flash");
 	btncerrarmodalflash.addEventListener("click",()=>{
-		document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
-		document.getElementById("MiModalFlash").style.visibility='hidden';
-		//document.getElementById("modalinicial").close();
+		btnindicacionesmodalflash.style.display='none';
+		mimodalflash.style.display='none';
+		visitas.style.display='none';
+		document.getElementById("borrableinicial").style.display='none';
 		modalinicial.close();
+		clearInterval(intervalo);
+		clearInterval(intervaloRuta);
+		clearTimeout(temporizadormodalflash);
+		clearTimeout(tiempo);
+		if (ruta) {ruta.remove();botondetallesruta.style.display="none"};
 		if (nomostrarinicial.checked) {
 			try {
 				localStorage.setItem('MOSTRAR_INICIAL', Version);
@@ -2900,71 +2833,45 @@
 				console.warn('No se pudo guardar preferencia en localStorage', e);
 			}
 		};
-		orientarme="no";
+		if (btncerrarmodalflash.textContent.trim() === "No") {orientarme = "no"};
 		avisollegada="no";
 		if (mail==="si") {EnviarMail()};
 		if (iraaer==="si") {TrazarRuta()};
-		document.getElementById("visitas").style.visibility='hidden';
-		clearTimeout(temporizadormodalflash);
-		tiempomodalflash=5000;
-		//document.getElementById("MiModalFlash").style.visibility='hidden';
-		//orientarme="no";
-		//avisollegada="no";
-		//clearTimeout(temporizadormodalflash);
-		//tiempomodalflash=5000;
+		visitas.style.display='none';
 	});
-	//const btnindicacionesmodalflash=document.querySelector("#btn-indicaciones-modal-flash");
+	
 	btnindicacionesmodalflash.addEventListener("click",()=>{
-		document.getElementById("visitas").style.visibility='hidden';
+		visitas.style.display='none';
 		clearTimeout(temporizadormodalflash);
 		orientarme="si";
 		avisollegada="si";
 		if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
 		if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
-		if (distancia<1100 && ruta) {ruta.remove();mapa.removeLayer(rutaanimada);document.getElementById("BotonDetallesRuta").style.visibility='hidden'};
-		cajadistancia.style.visibility='visible';
+		if (distancia<1100 && ruta) {ruta.remove();botondetallesruta.style.display='none'};
+		cajadistancia.classList.add("visible");
 		cajadistancia.textContent = msg+" (En línea recta).-";
-		cajadistancia.style.background = "#d4edda";
-		cajadistancia.style.color = "#155724";
+		clearInterval(intervalo);
+		clearInterval(intervaloRuta);
+		clearTimeout(tiempo);
 	});
 
 	// === BOTÓN MOSTRAR / OCULTAR DETALLES RUTAS===
-	let abierto = false;
-	document.getElementById("BotonDetallesRuta").onclick = () => {
+	let abierto = true;
+	botondetallesruta.onclick = () => {
 		abierto = !abierto;
-		PanelRutas.style.display = abierto ? "block" : "none";
-		BotonDetallesRuta.textContent = abierto ? "Detalles Ruta ▾" : "Detalles Ruta ▸";
+		panelrutas.style.display = abierto ? "block" : "none";
+		botondetallesruta.textContent = abierto ? "Detalles Ruta ▾" : "Detalles Ruta ▸";
 		mapa.invalidateSize();
 	};
 	
-	//const cajadistancia = document.getElementById("distancia");
 	const btncerrarmodalgrafico=document.querySelector("#btn-cerrar-modal-grafico");
 	const modalgrafico=document.querySelector("#Modal_Grafico");
 	btncerrarmodalgrafico.addEventListener("click",()=>{modalgrafico.close();});
 	const botonnorte=document.getElementById("botonnorte");
-	//const btncerrarmodalinicial=document.querySelector("#btn-cerrar-modal-inicial");
-	//const modalinicial=document.querySelector("#modal_inicial");
 	btncerrarmodalinicial.addEventListener("click",()=>{
+		document.getElementById("borrablecelular").style.display='none';
 		modalinicial.close()
 	});
-	
-	//function ProcesarRespuestaVisitas(data) {
-	//	document.getElementById('cantidadvisitas').textContent = "Tu visita es la número: "+data.nuevoValor;
-	//	document.getElementById('visitas').textContent = "Tu visita es la número: "+data.nuevoValor;
-	//};
-	
-	//function ActualizarVisitas() {
-	//	const script = document.createElement('script');
-	//	script.src = contadorvisitasdrive;
-	//	document.body.appendChild(script);
-	//};
-	
-	
-	
-	
-	
-	
-	
 	
 	//Bloque para resaltar o remarcar lo nuevo
 		//const elementonovedoso = document.getElementById('botonreportarpredicado');
@@ -2972,29 +2879,31 @@
 		const novedaden="barralateral";//Cambiar si fuera otro elemento el que contenga la novedad
 		// Fechas de inicio y fin para resaltar o remarcar una novedad (pueden incluir hora si querés)
 		const inicio = new Date("2025-11-01"); //yyyy-mm-dd
-		const fin = new Date("2025-12-30"); //yyyy-mm-dd
+		const fin = new Date("2026-01-30"); //yyyy-mm-dd
 		const hoy = new Date();
 		const cartelnuevo = document.getElementById('cartelnuevo');
 		if (hoy >= inicio && hoy <= fin && Version !==localStorage.getItem('MOSTRAR_NUEVO')) {
 			elementonovedoso.classList.add('resaltarlonovedoso');
-			abrirguia();
-			const tiempo = setTimeout(() => {
+			abrirnovedad();
+			tiempo = setTimeout(() => {
 				elementonovedoso.classList.remove('resaltarlonovedoso');
-				cerrarguia();
+				cerrarnovedad();
 			}, 25000);
+		} else {
+			cerrarnovedad();
 		};
 		
 		//Bloque para LO NUEVO
-		function abrirguia(){
+		function abrirnovedad(){
 			cartelnuevo.style.display = 'block';
 			// posicionar la guía apuntando al botón
 			if (dispositivo !=="movil") {document.getElementById("flecharoja").style.visibility='visible'};
-			posicionguia();
+			posicionnovedad();
 			// animación de aparición
 			requestAnimationFrame(()=> cartelnuevo.classList.add('show'));
 		};
 
-		function cerrarguia(){
+		function cerrarnovedad(){
 			cartelnuevo.classList.remove('show');
 			// después de la transición, ocultamos
 			setTimeout(()=> cartelnuevo.style.display = 'none', 160);
@@ -3009,7 +2918,7 @@
 			}
 		};
 
-		function posicionguia(){
+		function posicionnovedad(){
 			if (novedaden !=="barralateral") {
 				const btnRect = elementonovedoso.getBoundingClientRect();
 				const gRect = cartelnuevo.getBoundingClientRect();
@@ -3051,27 +2960,26 @@
 			} else {
 				cartelnuevo.style.left = '7%';
 				cartelnuevo.style.top = '50%';
-				document.querySelector('.guia').classList.add('oculto');
+				document.querySelector('.novedad').classList.add('oculto');
 			};
 		};
 
 		// reposicionar si hay resize o scroll
 		window.addEventListener('resize', ()=>{
-			if(cartelnuevo.style.display !== 'none') posicionguia();
+			if(cartelnuevo.style.display !== 'none') posicionnovedad();
 		});
 		window.addEventListener('scroll', ()=>{
-			if(cartelnuevo.style.display !== 'none') posicionguia();
+			if(cartelnuevo.style.display !== 'none') posicionnovedad();
 		}, {passive:true});
 
 		// tambien cerrar con escape
 		document.addEventListener('keydown', (e)=>{
-			if(e.key === 'Escape') cerrarguia();
+			if(e.key === 'Escape') cerrarnovedad();
 		});
 		
 		nomostrarinicial.addEventListener("click",()=>{
-			document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
-			document.getElementById("MiModalFlash").style.visibility='hidden';
-			//document.getElementById("modalinicial").close();
+			btnindicacionesmodalflash.style.display='none';
+			mimodalflash.style.display='none';
 			modalinicial.close();
 			if (nomostrarinicial.checked) {
 				try {
@@ -3082,7 +2990,6 @@
 					console.warn('No se pudo guardar preferencia en localStorage', e);
 				}
 			};
-			orientarme="no";
 			avisollegada="no";
 			clearTimeout(temporizadormodalflash);
 			tiempomodalflash=5000;
@@ -3092,7 +2999,7 @@
 			if (nomostrarcelular.checked) {
 				try {
 					localStorage.setItem('MOSTRAR_CELULAR', 'no');
-					document.getElementById("borrablecelular").style.display="none";//visibility="hidden";
+					document.getElementById("borrablecelular").style.display="none";
 				} catch(e){
 					// ignore storage errors
 					console.warn('No se pudo guardar preferencia en localStorage', e);
@@ -3117,8 +3024,6 @@
 			}
 		});
 	
-	
-	
 	//Función para volver a mostrar los modales o mensajes cancelados por el usuario
 	function RestablecerNoMostrar() {
 		let inicial = Version;
@@ -3133,9 +3038,9 @@
 	
 	//Función No Volver a mostrar sugerencia para girar el celular
 	function VerificarNoVolverAMostrar(){
-		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL') || null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrableinicial").style.display="none";document.getElementById("borrablelonuevo").display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
-		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrablecelular").display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
-		if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible'} else {document.getElementById("flecharoja").style.visibility='hidden'};
+		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL') || null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrableinicial").style.display="none";document.getElementById("borrablelonuevo").style.display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
+		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrablecelular").style.display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
+		//if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible';console.log(Version+localStorage.getItem('MOSTRAR_NUEVO'))} else {document.getElementById("flecharoja").style.visibility='hidden'};
 		if (dispositivo=="movil") {document.getElementById("flecharoja").style.visibility='hidden'};
 	};
 	
@@ -3143,27 +3048,24 @@
 	//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
 	document.getElementById("gpson").style.visibility='hidden';
 	document.getElementById("cuadroestadisticasbarralateral").style.visibility='hidden';
-	document.getElementById("btn-indicaciones-modal-flash").style.visibility='hidden';
+	btnindicacionesmodalflash.style.display='none';
 	document.getElementById("distancia").style.visibility='hidden';
-	document.getElementById("botoncentrado").style.visibility='hidden';
+	botoncentrado.style.display='none';
 	document.getElementById("dondestoy").style.visibility='hidden';
 	document.getElementById("botonnorte").style.visibility='hidden';
 	document.getElementById("contenedorMediciones").style.visibility='hidden';
 	document.getElementById("Conectividad").style.visibility='hidden';
 	document.getElementById("BotonLimpiarPantalla").style.visibility='hidden';
-	document.getElementById("BotonDetallesRuta").style.visibility='hidden';
-	document.getElementById("MiModalFlash").style.visibility='hidden';
+	//btnsinindicacionesmodalflash.style.display="none";
+	botondetallesruta.style.display='none';
+	mimodalflash.style.display='none';
 	mapa.removeControl(minimapamundial);
 	VerificarConexion();
 	VerificarVersion();
 	CargarListbox();
-	//ModalFlash(tiempomodalflash);
 	VerificarDispositivo();
 	VerificarNoVolverAMostrar();
 	if (dispositivo=="pc") {modalinicial.close()};
-	//if (dispositivo=="movil") {modalinicial.showModal()};
-	//if (dispositivo=="Windows Phone" || sistema_operativo=="Android" || sistema_operativo=="iOS (iPad o iPhone)") {dispositivo="movil"}
-	//else if (sistema_operativo=="Windows" || sistema_operativo=="MacOS" || sistema_operativo=="Linux") {dispositivo="pc"}
 	if (!dispositivo=="pc" && !dispositivo=="movil") {dispositivo="desconocido"};
 	window.addEventListener("load", async () => {
 		const fd = new FormData();
@@ -3176,8 +3078,8 @@
 			})
 			.then(r => r.json())
 			.then(({status, data}) => {
-				document.getElementById('cantidadvisitas').textContent = "Tu visita es la número: "+data+"...!!!.-";
-				document.getElementById('visitas').textContent = "Tu visita es la número: "+data+"...!!!.-";
+				cantidadvisitas.textContent = "Tu visita es la número: "+data+"...!!!.-";
+				visitas.textContent = "Tu visita es la número: "+data+"...!!!.-";
 			});
 			try {
 				//document.getElementById('cantidadvisitas').textContent = "Tu visita es la número: "+data.nuevoValor;
