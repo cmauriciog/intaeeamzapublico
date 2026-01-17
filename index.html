@@ -913,7 +913,7 @@
             </div>
         </div>
     </div>
-		<div id="distancia">Buscando ubicacion...</div>
+		<div id="distancia">Buscando ubicación...</div>
 		<button id="BotonLimpiarPantalla" onclick="LimpiarPantalla()">🧹 Despejar pantalla</button>
 		<button id="BotonDetallesRuta">Detalles Ruta</button>
 		<div id="PanelRutas"></div>
@@ -1122,7 +1122,8 @@
 	var distanciaTotal = 0;
 	var modo = "superficie";
 	var cant_mediciones=0;
-	var centroide=L.latLng(-33.00376868173891, -68.85766030976325);
+	//var centroide=L.latLng(-33.00376868173891, -68.85766030976325); ==>INTA
+	var centroide=L.latLng(-32.91088020461707, -68.77240741596638);
 	var entradaeea=L.latLng(-33.003773232329486, -68.85766687268227);
 	var poligono="";
 	//var estoyaqui="";
@@ -1164,6 +1165,7 @@
 	const cantidadvisitas=document.getElementById("cantidadvisitas");
 	const botoncentrado=document.getElementById("botoncentrado");
 	const panelrutas=document.getElementById("PanelRutas");
+	let refrescoRutaActivo = false;
 	
 	//Estilizar el perímetro de la EEA Mza
 	function PerimetroEEAMza(feature) {
@@ -1801,13 +1803,14 @@
 		if (distancia>10 && distancia<80) {avisollegada="si"};
 		if ((distancia <= 10) && (lugar !=="" || aer !=="")) {
 			cajadistancia.textContent = "¡Has llegado a tu destino!.-";
+			refrescoRutaActivo = false;
 			clearInterval(intervaloRuta);
 			intervaloRuta = null;
 			setTimeout(() => {
 				cajadistancia.classList.remove("visible");
 			}, 10000);
 			mapa.setView(coordenadas_ubicacion_real, 19);
-			if (avisollegada=="si") {AlertaLlegada("Has llegado a tu destino "+msgencontrado)};
+			if (avisollegada=="si") {AlertaLlegada("Has llegado a tu destino ")};//+msgencontrado)};
 		};
 	};
 
@@ -2000,15 +2003,21 @@
 	<!-- }; -->
 	
 	
-	
+	function RefrescarRuta() {
+		if (!refrescoRutaActivo) return;
+		//alert("⏱️ Refrescando ruta", new Date().toLocaleTimeString());
+		TrazarRuta();
+		setTimeout(RefrescarRuta, 300000); // 5 minutos
+	};
 	
 	function IniciarRuteo() {
-		if (intervaloRuta) return; // evita duplicados
-		TrazarRuta(); // primera vez
-		intervaloRuta = setInterval(TrazarRuta, 300000);
+		if (refrescoRutaActivo) return;
+		refrescoRutaActivo = true;
+		RefrescarRuta(); // arranca
 	};
 	
 	function TrazarRuta() {
+		//alert("⏱️ TrazarRuta ejecutada:", new Date().toLocaleTimeString());
 		clearTimeout(temporizadormodalflash);
 		clearTimeout(tiempo);
 		modalinicial.close();
@@ -2045,8 +2054,13 @@
 			draggableWaypoints: false,
 			createMarker: () => null,
 			lineOptions: {
-				styles: [{ color: 'red', weight: 9, opacity: 0.9 }]
-			}
+				styles: [{ color: 'red', weight: 9, opacity: 0.9 }]},
+
+
+altLineOptions: {styles: [{color: 'blue', weight: 6, opacity: 0.6, dashArray: '8,12'}]} 
+
+
+			
 		}).addTo(mapa);
 		botondetallesruta.style.display = "block";
 		panelrutas.style.display = "block";
