@@ -391,8 +391,8 @@
 		
 		.botoncentrado {
 			position: absolute;
-			top: 77px;
-			right: 15px;
+			top: 70px;
+			right: 10px;
 			background: none;
 			border: none;
 			cursor: pointer;
@@ -1951,7 +1951,6 @@
 	function IniciarRuteo() {
 		if (refrescoRutaActivo) return;
 		refrescoRutaActivo = true;
-		console.log("Vamos a trazar la ruta");
 		RefrescarRuta(); // arranca
 	};
 	
@@ -3091,6 +3090,9 @@
 	document.getElementById("BotonLimpiarPantalla").style.visibility='hidden';
 	botondetallesruta.style.display='none';
 	mimodalflash.style.display='none';
+	const contenedorzoom = document.querySelector('.leaflet-top.leaflet-right');
+	contenedorzoom.style.setProperty('top', '10px', 'important');
+	contenedorzoom.style.setProperty('right', '10px', 'important');
 	mapa.removeControl(minimapamundial);
 	VerificarConexion();
 	VerificarVersion();
