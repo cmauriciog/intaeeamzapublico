@@ -705,9 +705,11 @@
 						<option value="Merlot" >Merlot (tinta para vino)</option>
 						<option value="Pinot" >Pinot (tinta para vino)</option>
 						<option value="Riesling" >Riesling (blanca para vino)</option>
+						<option value="Sauvignon Blanc" >Sauvignon Blanc (blanca para vino)</option>
 						<option value="Semillon" >Semillón (blanca para vino)</option>
 						<option value="Syrah" >Syrah (tinta para vino)</option>
 						<option value="Torrontes" >Torrontés (blanca para vino)</option>
+						<option value="Verdicchio" >Verdicchio (blanca para vino)</option>
 						<option value="Coleccion vinificacion" >Colección de variedades p/vino</option>
 						<option value="Coleccion varietal" >Colección de varietales</option>
 						<option value="Coleccion criollas" >Colección de variedades criollas</option>
@@ -735,7 +737,7 @@
 						<option value="" ></option>
 						<option value="Cultivo">Cultivos</option>
 						<option value="Edificio">Edificios</option>
-						<option value="Media Sombra">Media Sombra</option>
+						<option value="MediaSombra">Media Sombra</option>
 						<option value="Invernaculo">Invernáculos</option>
 						<option value="Estructura">Otros</option>
 					</select>
@@ -745,7 +747,7 @@
 						<option value="" ></option>
 						<option value="Vid">Vid</option>
 						<option value="Cerezo">Cerezos</option>
-						<option value="Huerta">Huerta Orgánica</option>
+						<option value="EspacioAgroecologico">Espacio Agroecologico</option>
 						<option value="Inculto">Inculto</option>
 						<option value="Hortalizas">Hortalizas</option>
 						<option value="Tomate">Tomate</option>
@@ -842,7 +844,7 @@
 				<p class="lorem">Las herramientas disponibles son...</p>
 				<br>
 				<p id="reiniciar"><a href="javascript:ReiniciarPagina()"><img src="images/Reiniciar.png"></img></a>  <a href="javascript:ReiniciarPagina()" style="color: blue;">  Volver a empezar...</a></p>
-				<p id="restablecernomostrar"><a href="#" onclick="RestablecerNoMostrar(); return false;" style="color:blue;">  Volver a mostrar mensajes informativos.</a> (Restablecer los mensajes informativos que puedas haber cancelado).</p>
+				<p id="restablecernomostrar"><a href="#" onclick="RestablecerNoMostrar(); return false;" style="color:blue;"><img src="images/Informacion.png"></img>  Volver a mostrar mensajes informativos.</a> (Restablecer los mensajes informativos que puedas haber cancelado).</p>
 				<p id="gpson"><a href="javascript:desactivar_seguimiento(seguimiento)"><img src="images/MiUbicacion.png"></img></a>  <a href="javascript:desactivar_seguimiento(seguimiento)" style="color: blue;">  Desactivar mi ubicación actual</a></p>
 				<p id="gpsoff"><a href="javascript:activar_seguimiento(seguimiento)"><img src="images/MiUbicacion.png"></img></a>  <a href="javascript:activar_seguimiento(seguimiento)" style="color: blue;">  Mi ubicación actual</a></p>
 				<p id="dondestoy"><a href="javascript:CentrarMiUbicacion()"><img src="images/MiUbicacion.png"></img></a>  <a href="javascript:CentrarMiUbicacion()" style="color: blue;">  Centrar en mi ubicación actual</a></p>
@@ -937,9 +939,11 @@
 	
 	<!-- la guía/modal con flecha (se posiciona con JS) -->
 	<div id="cartelnuevo" class="novedad" role="dialog" aria-modal="true" style="display:none">
-		<p style="color:green";>Las herramientas que estaban en la pantalla,</p>
+		<!--<p style="color:green";>Las herramientas que estaban en la pantalla,</p>
 		<p style="color:green";>ahora están ordenadas dentro de esta barra.</p>
-		<p style="color:green";>Así, tendrás más espacio para ver mejor el mapa.</p>
+		<p style="color:green";>Así, tendrás más espacio para ver mejor el mapa.</p>-->
+		<br><p class="resaltarlonovedoso"><strong>LO NUEVO DE ESTA VERSION</strong></p>
+		<br><p style="color: blue;">Se actualizaron todas las estadísticas de producción hasta el año 2025.<br><br>Por otra parte, se modificaron algunas parcelas.</p>
 		<br></br>
 		<label id="borrablelonuevo" style="display: flex; justify-content: center; align-items: center;	gap: 6px;">
 			<input id="nomostrarlonuevo" type="checkbox" style="width:16px; height:16px;"/>
@@ -965,7 +969,7 @@
 				No volver a mostrar
 			</label>
 			<div class="modalflash-botones" id="botonesModalFlash">
-				<button id="btn-indicaciones-modal-flash" onclick="IniciarRuteo()">Sí</button>
+				<button id="btn-indicaciones-modal-flash" onclick="TrazarRuta()">Sí</button>
 				<button id="btn-cerrar-modal-flash">Cerrar</button>
 			</div>
 		</div>
@@ -1001,7 +1005,7 @@
 		<span id="titulomodalestadistico">Resumen estadístico</span>
 		<div class="modal-estadistico-acciones">
 			<span class="minimize-btn" onclick="MinimizarModalEstadistico()">🗕</span>
-			<span onclick="CerrarModal()">✖</span>
+			<span onclick="CerrarModalEstadistico()">✖</span>
 		</div>
 	</div>
 	<div class="modal-estadistico-cuerpo" id="modalestadisticocuerpo">
@@ -1012,7 +1016,7 @@
 </div>
 
 <script>
-	var Version = "1"; //Cambiar este valor para volver a mostrar el modal de presentacion cada vez que haya una actualizacion importante
+	var Version = "2"; //Cambiar este valor para volver a mostrar el modal de presentacion cada vez que haya una actualizacion importante
 	<!--Mapas o capas bases-->
 	var ign = new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
 		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="_blank">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> |Versión: '+Version,
@@ -1209,36 +1213,46 @@
 		sup_total=sup_total+feature.properties.Sup_Croqui;
 		tot_parc=tot_parc+1;
 		<!--Calcular el promedio general-->
-		prom_prod=prom_prod+feature.properties.Prod_2017+feature.properties.Prod_2018+feature.properties.Prod_2019+feature.properties.Prod_2020+feature.properties.Prod_2021;
+		prom_prod=prom_prod+feature.properties.Prod_2017+feature.properties.Prod_2018+feature.properties.Prod_2019+feature.properties.Prod_2020+feature.properties.Prod_2021+feature.properties.Prod_2022+feature.properties.Prod_2023+feature.properties.Prod_2024+feature.properties.Prod_2025;
 		<!--Calcular los años con producción (se excluyen los que no tienen datos)-->
 		if (feature.properties.Prod_2017 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2018 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2019 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2020 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2021 !=null) {anios_prod=anios_prod+1};
+		if (feature.properties.Prod_2022 !=null) {anios_prod=anios_prod+1};
+		if (feature.properties.Prod_2023 !=null) {anios_prod=anios_prod+1};
+		if (feature.properties.Prod_2024 !=null) {anios_prod=anios_prod+1};
+		if (feature.properties.Prod_2025 !=null) {anios_prod=anios_prod+1};
 		<!--Establecer el mini-logo del PopUp de acuerdo al cultivo/uso de la parcela-->
 		if (feature.properties.Variedad=="Ancelotta" || feature.properties.Variedad=="Barbera Dasty" || feature.properties.Variedad=="Bonarda" || feature.properties.Variedad=="Cabernet"
 			|| feature.properties.Variedad=="Malbec" || feature.properties.Variedad=="Merlot" || feature.properties.Variedad=="Pinot" || feature.properties.Variedad=="Syrah"
 			|| feature.properties.Variedad=="Cabernet Sauvignon") {logo='./images/Uvas_Tintas.jpg'};
 		if (feature.properties.Variedad=="Chardonnay" || feature.properties.Variedad=="Chenin" || feature.properties.Variedad=="Riesling" || feature.properties.Variedad=="Sauvignon"
-			|| feature.properties.Variedad=="Semillon" || feature.properties.Variedad=="Torrontes") {logo='./images/Uvas_Blancas.jpg'};
+			|| feature.properties.Variedad=="Semillon" || feature.properties.Variedad=="Torrontes" || feature.properties.Variedad=="Verdicchio" || feature.properties.Variedad=="Sauvignon Blanc") {logo='./images/Uvas_Blancas.jpg'};
 		if (feature.properties.Variedad=="Variedades de mesa" || feature.properties.Variedad=="Coleccion vinificacion" || feature.properties.Variedad=="Coleccion varietal"
-			|| feature.properties.Variedad=="Coleccion criollas" || feature.properties.Variedad=="Americanas" || feature.properties.Variedad=="Portainjertos") {logo='./images/Mezcla.jpg'};
-		if (feature.properties.Especie=="Huerta" || feature.properties.Especie=="Hortalizas" ) {logo='./images/Hortalizas.png'};
-		if (feature.properties.Especie=="Cerezo") {logo='./images/Cerezos.jpg'};
+			|| feature.properties.Variedad=="Coleccion criollas" || feature.properties.Variedad=="Americanas" || feature.properties.Variedad=="Portainjertos" || feature.properties.Variedad=="Uvas de mesa") {logo='./images/Mezcla.jpg'};
+		if (feature.properties.Especie=="Huerta" || feature.properties.Especie=="Hortalizas" || feature.properties.Especie=="EspacioAgroecologico") {logo='./images/Hortalizas.png'};
+		if (feature.properties.Especie=="Cerezo" || feature.properties.Especie=="Frutales") {logo='./images/Cerezos.jpg'};
 		if (feature.properties.Especie=="Flores") {logo='./images/Flores.jpg'};
 		if (feature.properties.Especie=="Hidroponia") {logo='./images/Hidroponia.jpg'};
-		if (feature.properties.Cobertura=="Invernaculo") {logo='./images/Invernaculos.jpg'};
-		if (feature.properties.Cobertura=="Edificio" || feature.properties.Cobertura=="Estructura") {logo='./images/Edificios.jpg'};
+		if (feature.properties.Cobertura=="Invernaculo" || feature.properties.Especie=="Sombraculo Plantines") {logo='./images/Invernaculos.jpg'};
+		if (feature.properties.Cobertura=="Edificio" || feature.properties.Cobertura=="Estructura" || feature.properties.Cobertura=="MediaSombra") {logo='./images/Edificios.jpg'};
 		if (feature.properties.Especie=="Inculto") {logo='./images/Inculto.jpg'};
+		if (feature.properties.Especie=="Compostaje") {logo='./images/Compostaje.jpg'};
+		if (feature.properties.Especie=="Nativas") {logo='./images/Nativas.jpg'};
+		if (feature.properties.Especie=="Energia Solar") {logo='./images/EnergiaSolar.jpg'};
+		if (feature.properties.Especie=="Aromaticas") {logo='./images/Aromaticas.jpg'};
+		if (feature.properties.Especie=="Humedal aguas grises") {logo='./images/HumedalGrises.jpg'};
+		if (feature.properties.Especie=="Hotel de Insectos") {logo='./images/HotelInsectos.jpg'};
 		var formatoPopup = {
 			'maxWidth': '200',
 			'className' : 'popups'}
 		<!--Reconocer las parcelas que tienen o no información sobre producción-->
-		if (feature.properties.id==2 || feature.properties.id==4 || feature.properties.id==8 || feature.properties.id==9 || feature.properties.id==10 || feature.properties.id==11
+		if (feature.properties.id==2 || feature.properties.id==4 || feature.properties.id==8 || feature.properties.id==11 
 			|| feature.properties.id==19 || feature.properties.id==27 || feature.properties.id==28 || feature.properties.id==29 || feature.properties.id==31 || feature.properties.id==33
-			|| feature.properties.id==37 || feature.properties.id==38 || feature.properties.id==42 || feature.properties.id==46 || feature.properties.id==50 || feature.properties.id>59 && feature.properties.id<95
-			|| feature.properties.id==391 || feature.properties.id==392 || feature.properties.id==401) {
+			|| feature.properties.id==37 || feature.properties.id==38 || feature.properties.id==42 || feature.properties.id==46 || feature.properties.id>58 && feature.properties.id<95
+			|| feature.properties.id==101 || feature.properties.id==102 || feature.properties.id>200 && feature.properties.id<212 || feature.properties.id==313 || feature.properties.id==391 || feature.properties.id==401) {
 				grafico="SinInfo.jpg"}
 		else {
 			grafico=feature.properties.id+".jpg"};
@@ -1265,13 +1279,17 @@
 			if (feature.properties.Plantacion ==null) {planta="Sin información"};
 			if (feature.properties.Conduccion ==null) {conduc="Sin información"};
 			if (feature.properties.Variedad ==null) {varied="Sin información"};
+			if (feature.properties.Hileras ==null) {hileras="Sin información"};
+			if (feature.properties.Hileras !==null) {varied=feature.properties.Hileras};
+			if (feature.properties.Sup_Croqui ==null) {superficie="Sin información"};
+			if (feature.properties.Sup_Croqui !==null) {superficie=feature.properties.Sup_Croqui+" ha"};
 			if (feature.properties.Responsabl !=null) {respon=feature.properties.Responsabl};
 			if (feature.properties.Plantacion !=null) {planta=feature.properties.Plantacion};
 			if (feature.properties.Conduccion !=null) {conduc=feature.properties.Conduccion};
 			if (feature.properties.Variedad !=null) {varied=feature.properties.Variedad};
 			<!--PopUp a mostrar SI: La parcela tiene un cultivo y no tiene datos de producción-->
 			var contenidoPopup="<b><h4>Especie: "+feature.properties.Especie+"   "+"<img src="+logo+" width='35' height='35' /img>"+"</b></h4><br/>Variedad: "+varied+"<br/>Conducción: "+conduc+
-				"<br/>Año de plantación: "+planta+"<br/>Hileras: "+feature.properties.Hileras+"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"+"<br/>Responsable: "+respon};
+				"<br/>Año de plantación: "+planta+"<br/>Hileras: "+hileras+"<br/>Superficie: "+superficie+"<br/>Responsable: "+respon};
 		if (feature.properties.Cobertura !="Cultivo") {
 			<!--PopUp a mostrar SI: La parcela no tiene cultivo-->
 			var contenidoPopup="Cobertura: "+feature.properties.Cobertura+"   "+"<img src="+logo+" width='35' height='35' /img>"+"<br/>Descripción: "+feature.properties.Descripcio+
@@ -1402,6 +1420,7 @@
 		if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
 		if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
 		if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
+		if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 		capa_filtrada=L.geoJSON(parcelas,{filter:Filtrar_Gral, style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
 		var resumen='<span>Criterio de filtro: <span style=color:blue><strong>'+criterio+" - "+valor+'</strong>.</span><br><span>Cantidad de parcelas: <span style=color:blue><strong>'+tot_parc+
 			'</strong>.</span></span><br><span>Superficie: <span style=color:blue><strong>'+sup_total.toFixed(2)+'</strong>.</span></span><br><span>Promedio de Producción Anual: <span style=color:blue><strong>'+
@@ -1415,6 +1434,7 @@
 		cobertura_vid.value="";
 		document.getElementById("quitartodo").style.visibility='visible';
 		document.getElementById("mostrartodo").style.visibility='visible';
+		barralateral.close();
 	};
 
 	<!--Funcion para filtrar parcelas con vid-->
@@ -1425,9 +1445,12 @@
 		if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 		var busqueda=cobertura_vid.value;
 		var criterio = new RegExp(busqueda, "i");
+		if (tot_parc<1) {var prom_gral_prod=0};
+		if (tot_parc>1) {var prom_gral_prod=prom_prod/anios_prod};
+		if (tot_parc==1) {var prom_gral_prod=prom_prod};
 		var resumen='<span>Criterio de filtro: <span style=color:blue><strong>Vid</strong>.</span><br><span>Variedad: <span style=color:blue><strong>'+busqueda+
 			'</strong>.</span></span><br><span>Cantidad de Parcelas: <span style=color:blue><strong>'+tot_parc+'</strong>.</span></span><br><span>Superficie: <span style=color:blue><strong>'+
-			sup_total.toFixed(2)+'</strong>.</span></span><br><span>Promedio de Producción Anual: <span style=color:blue><strong>'+(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha"+'</strong>.</span></span>';
+			sup_total.toFixed(2)+'</strong>.</span></span><br><span>Promedio de Producción Anual: <span style=color:blue><strong>'+prom_gral_prod.toFixed(2)+" qq/ha"+'</strong>.</span></span>';
 		document.getElementById("cuadroestadisticasbarralateral").style.visibility='visible';
 		modal.style.visibility='visible';
 		document.getElementById("estadisticasbarralateral").innerHTML=resumen;
@@ -1444,6 +1467,7 @@
 		if (criterio=="Cobertura" && sel_cobertura.value !=""){if (feature.properties.Cobertura==sel_cobertura.value) return true; resumen=otro_criterio.value+" "+sel_cobertura.value};
 		if (criterio=="Conduccion" && sel_conduccion.value !=""){if (feature.properties.Conduccion==sel_conduccion.value) return true; resumen=otro_criterio.value+" "+sel_conduccion.value};
 		if (criterio=="Especie" && sel_especie.value !=""){if (feature.properties.Especie==sel_especie.value) return true; resumen=otro_criterio.value+" "+sel_especie.value};
+		if (sel_especie.value =="EspacioAgroecologico"){if (feature.properties.id>200 && feature.properties.id<212) return true};
 		if (criterio=="Responsable" && sel_responsable.value !=""){if (feature.properties.Responsabl==sel_responsable.value) return true; resumen=otro_criterio.value+" "+sel_responsable.value};
 		if (criterio=="Riego" && sel_riego.value !=""){if (feature.properties.Riego==sel_riego.value) return true; resumen=otro_criterio.value+" "+sel_riego.value};
 		if (criterio=="Plantacion" && sel_plantacion.value !=""){
@@ -1559,7 +1583,8 @@
 		if (marca_ubicacion_real) {marca_ubicacion_real.remove()};
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		if (perimetro) {mapa.removeLayer(perimetro)};
-		if (superficie) {mapa.removeLayer(superficie)};
+		//if (superficie) {mapa.removeLayer(superficie)};
+		if (tot_parc) {CerrarModalEstadistico()};
 		botondetallesruta.style.display='none';
 		clearInterval(intervalo);
 		clearInterval(intervaloRuta);
@@ -1573,6 +1598,7 @@
 		lugar="";
 		temporizadormodalflash="";
 		orientarme="";
+		barralateral.close();
 		if (version=="completa") {
 			if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 			if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
@@ -1942,17 +1968,17 @@
 		mail="";
 	};
 	
-	function RefrescarRuta() {
-		if (!refrescoRutaActivo) return;
-		TrazarRuta();
-		setTimeout(RefrescarRuta, 180000); // 3 minutos
-	};
+	//function RefrescarRuta() {
+	//	if (!refrescoRutaActivo) return;
+	//	TrazarRuta();
+	//	setTimeout(RefrescarRuta, 180000); // 3 minutos
+	//};
 	
-	function IniciarRuteo() {
-		if (refrescoRutaActivo) return;
-		refrescoRutaActivo = true;
-		RefrescarRuta(); // arranca
-	};
+	//function IniciarRuteo() {
+	//	if (refrescoRutaActivo) return;
+	//	refrescoRutaActivo = true;
+	//	RefrescarRuta(); // arranca
+	//};
 	
 	function TrazarRuta() {
 		clearTimeout(temporizadormodalflash);
@@ -2007,19 +2033,21 @@
 		};
 		
 		ruta.on('routesfound', function (e) {
-			panelrutas.innerHTML = '';
+			//panelrutas.innerHTML = '';
 			e.routes.forEach((route, index) => {
 				const distanciaKm = (route.summary.totalDistance / 1000).toFixed(2);
 				const tiempoFormateado = segundosAHorasMinutos(route.summary.totalTime);
-				const div = document.createElement('div');
-				div.style.padding = '8px';
-				div.style.borderBottom = '1px solid #ccc';
-				div.innerHTML = `
-					<strong>Ruta ${index === 0 ? 'principal' : 'alternativa ' + index}</strong><br>
-					📏 Distancia: ${distanciaKm} km<br>
-					⏱️ Tiempo estimado: ${tiempoFormateado}
-				`;
-				panelrutas.appendChild(div);
+				//const div = document.createElement('div');
+				//div.style.padding = '8px';
+				//div.style.borderBottom = '1px solid #ccc';
+				//div.innerHTML = `
+				//	<strong>Ruta ${index === 0 ? 'principal' : 'alternativa ' + index}</strong><br>
+				//	📏 Distancia: ${distanciaKm} km<br>
+				//	⏱️ Tiempo estimado: ${tiempoFormateado}
+				//`;
+				//console.log(`Ruta ${index === 0 ? 'principal' : 'alternativa ' + index}. Distancia: ${distanciaKm} km. Tiempo estimado: ${tiempoFormateado}`);
+				cajadistancia.insertAdjacentHTML("beforeend", `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}: Distancia: ${distanciaKm} km, Tiempo estimado: ${tiempoFormateado}.`);
+				//panelrutas.appendChild(div);
 			});
 		});
 		//Hasta acá.-
@@ -2436,7 +2464,7 @@
 		modal.style.height = size.height ? `${size.height}px` : "300px";
 	};
 	
-	function CerrarModal() {
+	function CerrarModalEstadistico() {
 		modal.style.visibility='hidden';
 	};
 	
@@ -2602,6 +2630,11 @@
 			mapa.removeLayer(osm);
 			mapa.addLayer(googlesatelite);
 			capa=googlesatelite;
+			mapa.removeLayer(predioeeamza);
+			marcadoreeamzaeste.remove();
+			marcadoreeamzaoeste.remove();
+			MostrarTodo();
+			if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
 			ModalFlash(tiempomodalflash);
 		} else {
 			tiempomodalflash=5000;
@@ -2628,7 +2661,7 @@
 		document.getElementById("username").style.visibility='visible';
 		document.getElementById("password").style.visibility='visible';
 		document.getElementById("botonmostrarocultar").style.visibility='visible';
-			document.getElementById("botoningresar").style.visibility='visible';
+		document.getElementById("botoningresar").style.visibility='visible';
 		document.getElementById("cerrarsesion").style.visibility='hidden';
 		barralateral.close();
 		cuerpomodalflash.innerHTML = '<span style="display: block; text-align: center; width: 100%; color:red;"><br><b>Has cerrado sesión correctamente.</b><br><br><span style="color:black">Sólo tendrás acceso a la información<br>básica de la EEA Mendoza.</span>';
@@ -2638,6 +2671,11 @@
 		mapa.removeLayer(googlesatelite);
 		mapa.addLayer(osm);
 		capa=osm;
+		if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
+		if (Object.keys(capa_parcelas).length !== 0) {capa_parcelas.remove()};
+		predioeeamza.addTo(mapa);
+		marcadoreeamzaeste.addTo(mapa);
+		marcadoreeamzaoeste.addTo(mapa);
 		ModalFlash(tiempomodalflash);
 	};
 	
@@ -2861,7 +2899,7 @@
 		if (btncerrarmodalflash.textContent.trim() === "No") {orientarme = "no"};
 		avisollegada="no";
 		if (mail==="si") {EnviarMail()};
-		if (iraaer==="si") {IniciarRuteo()};
+		if (iraaer==="si") {TrazarRuta()};
 		visitas.style.display='none';
 	});
 	
@@ -2908,14 +2946,16 @@
 	
 	//Bloque para resaltar o remarcar lo nuevo
 		const elementonovedoso = document.getElementById('barralateral');
-		const novedaden="barralateral";//Cambiar si fuera otro elemento el que contenga la novedad
+		//const novedaden="barralateral";//Cambiar si fuera otro elemento el que contenga la novedad
+		const novedaden="";
 		// Fechas de inicio y fin para resaltar o remarcar una novedad (pueden incluir hora si querés)
-		const inicio = new Date("2025-11-01"); //yyyy-mm-dd
-		const fin = new Date("2026-01-30"); //yyyy-mm-dd
+		const inicio = new Date("2026-02-24"); //yyyy-mm-dd
+		const fin = new Date("2026-03-30"); //yyyy-mm-dd
 		const hoy = new Date();
 		const cartelnuevo = document.getElementById('cartelnuevo');
 		if (hoy >= inicio && hoy <= fin && Version !==localStorage.getItem('MOSTRAR_NUEVO')) {
-			elementonovedoso.classList.add('resaltarlonovedoso');
+			//Supender el resaltado de la barra lateral
+			//elementonovedoso.classList.add('resaltarlonovedoso');
 			abrirnovedad();
 			const tiempo = setTimeout(() => {
 				elementonovedoso.classList.remove('resaltarlonovedoso');
@@ -2928,8 +2968,9 @@
 		//Bloque para LO NUEVO
 		function abrirnovedad(){
 			cartelnuevo.style.display = 'block';
-			// posicionar la guía apuntando al botón
-			if (dispositivo !=="movil") {document.getElementById("flecharoja").style.visibility='visible'};
+			//posicionar la guía apuntando al botón
+			//Cancelamos temporalmente las flechas rojas apuntando a la barra lateral
+			//if (dispositivo !=="movil") {document.getElementById("flecharoja").style.visibility='visible'};
 			posicionnovedad();
 			// animación de aparición
 			requestAnimationFrame(()=> cartelnuevo.classList.add('show'));
@@ -2952,7 +2993,19 @@
 
 		function posicionnovedad(){
 			if (novedaden !=="barralateral") {
-				const btnRect = elementonovedoso.getBoundingClientRect();
+				//Cancelamos temporalmente la barra lateral como elemento novedoso
+				//const btnRect = elementonovedoso.getBoundingClientRect();
+				//Forzamos para que el cartel de lo nuevo se muestre en el centro de la pantalla y lo hacemos "palpitar"....
+				const centerX = window.innerWidth / 2;
+				const centerY = window.innerHeight / 2;
+				const btnRect = {
+				  left: centerX,
+				  top: centerY,
+				  right: centerX,
+				  bottom: centerY,
+				  width: 0,
+				  height: 0
+				};
 				const gRect = cartelnuevo.getBoundingClientRect();
 				const margin = 10; // separación mínima
 
@@ -2989,6 +3042,8 @@
 				// la pseudo-element tiene left:50% y margin-left: calc(var(--arrow-x, -7px))
 				// así que ponemos --arrow-x en px
 				cartelnuevo.style.setProperty('--arrow-x', (arrowOffset - 7) + 'px');
+				//cartelnuevo.classList.add('resaltarlonovedoso');
+				flecharoja.style.visibility="hidden";
 			} else {
 				cartelnuevo.style.left = '7%';
 				cartelnuevo.style.top = '50%';
@@ -3070,7 +3125,7 @@
 	
 	//Función No Volver a mostrar sugerencia para girar el celular
 	function VerificarNoVolverAMostrar(){
-		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL') || null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrableinicial").style.display="none";document.getElementById("borrablelonuevo").style.display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
+		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL') || null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrableinicial").style.display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
 		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrablecelular").style.display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
 		//if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible';console.log(Version+localStorage.getItem('MOSTRAR_NUEVO'))} else {document.getElementById("flecharoja").style.visibility='hidden'};
 		if (dispositivo=="movil") {document.getElementById("flecharoja").style.visibility='hidden'};
