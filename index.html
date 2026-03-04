@@ -397,7 +397,7 @@
 			border: none;
 			cursor: pointer;
 			padding: 0;
-			z-index:1030;
+			z-index:999;
 		}
 		.botoncentrado img {
 			width: 35px;
@@ -1136,7 +1136,7 @@
 	var iraaer="";
 	var titulomodalflash=document.getElementById("titulomodalflash");
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
-	var aers=["Agencia de Extensión Guaymallén","Agencia de Extensión Junín","Agencia de Extensión Lavalle","Agencia de Extensión La Consulta","Agencia de Extensión Luján de Cuyo","Agencia de Extensión Maipú","Oficina de Información Uspallata","Experimental Junín","Experimental La Consulta","Experimental Rama Caída","Experimental San Juan"];
+	var aers=["Agencia de Extensión Junín","Agencia de Extensión Lavalle","Agencia de Extensión La Consulta","Agencia de Extensión Luján de Cuyo","Agencia de Extensión Maipú","Oficina de Información Uspallata","Experimental Junín","Experimental La Consulta","Experimental Rama Caída","Experimental San Juan"];
 	var grupoeeamza = L.featureGroup().addTo(mapa);
 	
 	//Añado el predio de la EEA Mendoza
@@ -2033,26 +2033,52 @@
 		};
 		
 		ruta.on('routesfound', function (e) {
-			//panelrutas.innerHTML = '';
 			e.routes.forEach((route, index) => {
 				const distanciaKm = (route.summary.totalDistance / 1000).toFixed(2);
 				const tiempoFormateado = segundosAHorasMinutos(route.summary.totalTime);
-				//const div = document.createElement('div');
-				//div.style.padding = '8px';
-				//div.style.borderBottom = '1px solid #ccc';
-				//div.innerHTML = `
-				//	<strong>Ruta ${index === 0 ? 'principal' : 'alternativa ' + index}</strong><br>
-				//	📏 Distancia: ${distanciaKm} km<br>
-				//	⏱️ Tiempo estimado: ${tiempoFormateado}
-				//`;
-				//console.log(`Ruta ${index === 0 ? 'principal' : 'alternativa ' + index}. Distancia: ${distanciaKm} km. Tiempo estimado: ${tiempoFormateado}`);
 				cajadistancia.insertAdjacentHTML("beforeend", `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}: Distancia: ${distanciaKm} km, Tiempo estimado: ${tiempoFormateado}.`);
-				//panelrutas.appendChild(div);
 			});
 		});
 		//Hasta acá.-
 		
-		
+		//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
+		if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});};
+		if (distancia>1100) {
+			actualizarruta=setInterval(()=>{
+				if (ruta) {ruta.remove()};
+				ruta=L.Routing.control({
+				waypoints: [coordenadas_ubicacion_real, centroide],
+				router: L.Routing.osrmv1({
+					serviceUrl: 'https://router.project-osrm.org/route/v1',
+					language: 'es',
+				}),
+				showAlternatives: true,
+				routeWhileDragging: true,
+				draggableWaypoints: false,
+				collapsible: true,
+				waypointMode: 'snap',
+				lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]},
+				altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]},
+				createMarker: function(i, wp) {
+					return L.marker(wp.latLng, {
+						draggable: false,
+						icon: L.icon({
+							iconUrl: './images/posicion.png',
+							iconSize: [0, 0]
+						})
+					});
+				}
+				}).addTo(mapa);
+				panelrutas.replaceChildren(ruta.getContainer());
+				ruta.on('routesfound', function (e) {
+					e.routes.forEach((route, index) => {
+						const distanciaKm = (route.summary.totalDistance / 1000).toFixed(2);
+						const tiempoFormateado = segundosAHorasMinutos(route.summary.totalTime);
+						cajadistancia.insertAdjacentHTML('beforeend', `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}: Distancia: ${distanciaKm} km, Tiempo estimado: ${tiempoFormateado}.`);
+					});
+				});
+			},60000);
+		};
 		botondetallesruta.style.display = "block";
 		panelrutas.style.display = "block";
 		panelrutas.replaceChildren(ruta.getContainer());
@@ -2164,20 +2190,6 @@
 		if (ruta) {ruta.remove()};
 		if (lugar) {lugar.remove()};
 		lugar="";
-		if (agencia=="Agencia de Extensión Guaymallén") {
-			var formatoPopup = {
-				'maxWidth': '400',
-				'className' : 'popups'};
-			let coord="-32.88053993173516, -68.77169734266394".split(",");
-			centroide=L.latLng(-32.88053993173516, -68.77169734266394);
-			mapa.flyTo(coord, 16);
-			let contenidoPopup="<b><h4>Agencia de Extensión Guaymallén"+"</h4></b><br/><u>Dirección</u>: Mathus Hoyos s/n, Bermejo, Guaymallén."+
-				"<br/>Predio de la Escuela Técnica Miguel Amado Pouget"+"<br/><u>Teléfono</u>: 11-6562-6368."+"<br/><u>Mail</u>: bakos.pedro@inta.gob.ar";
-			aer=L.marker(coord).addTo(mapa)
-				.bindPopup(contenidoPopup, formatoPopup)
-				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
-		};
 		if (agencia=="Agencia de Extensión Lavalle") {
 			var formatoPopup = {
 				'maxWidth': '400',
