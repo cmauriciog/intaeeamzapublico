@@ -2707,6 +2707,7 @@
 			btnindicacionesmodalflash.style.display='none';
 			mimodalflash.style.display='none';
 			clearTimeout(temporizadormodalflash);
+			clearTimeout(tiempomodalflash);
 			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
 			if (mail=="si") {EnviarMail()};
 		}, tiempo);
