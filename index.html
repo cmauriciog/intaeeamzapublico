@@ -1091,7 +1091,7 @@
 	var capturaActiva= false;
 	var firstLatLng, secondLatLng;
 	var conexion="";
-	var intervaloRuta = "";
+	//var intervaloRuta = "";
 	var seguimiento="no";
 	var listabusqueda=[];
 	var listabusquedafiltrada=[];
@@ -1110,7 +1110,7 @@
 	var tiempomodalflash=20000;
 	var temporizadormodalflash=null;
 	var intervalo=null;
-	var tiempo=null;
+	//var tiempo=null;
 	var dentroeeamza="";
 	var dispositivo="";
 	var coord=[];
@@ -1588,9 +1588,9 @@
 		if (tot_parc) {CerrarModalEstadistico()};
 		botondetallesruta.style.display='none';
 		clearInterval(intervalo);
-		clearInterval(intervaloRuta);
+		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		clearTimeout(tiempo);
+		//clearTimeout(tiempo);
 		aer="";
 		mail="";
 		coordenadas_ubicacion_real="";
@@ -1736,7 +1736,6 @@
 				btnindicacionesmodalflash.style.display='none';
 				btncerrarmodalflash.textContent = "Cerrar";
 				tiempomodalflash=9000;
-				console.log(dispositivo);
 				ModalFlash(tiempomodalflash);
 			};
 			if (dispositivo==="pc") {botoncentrado.style.display='block'};
@@ -1823,8 +1822,8 @@
 		if (distancia <= 10 && dispositivo=="movil") {
 			cajadistancia.textContent = "¡Has llegado a tu destino!.-";
 			//refrescoRutaActivo = false;
-			clearInterval(intervaloRuta);
-			intervaloRuta = null;
+			//clearInterval(intervaloRuta);
+			//intervaloRuta = null;
 			setTimeout(() => {
 				cajadistancia.classList.remove("visible");
 			}, 10000);
@@ -1899,9 +1898,9 @@
 	// Función para detener geolocalización
 	function DetenerActualizarUbicacion() {
 		clearInterval(intervalo);
-		clearInterval(intervaloRuta);
+		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		clearTimeout(tiempo);
+		//clearTimeout(tiempo);
 		actualizarruta="si";
 		document.getElementById("dondestoy").style.visibility='hidden';
 		if (ruta) {ruta.remove()};
@@ -1945,9 +1944,9 @@
 		document.getElementById("dondestoy").style.visibility='hidden';
 		document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";
 		clearInterval(intervalo);
-		clearInterval(intervaloRuta);
+		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		clearTimeout(tiempo);
+		//clearTimeout(tiempo);
 		if (ruta) {ruta.remove()};
 		botondetallesruta.style.display='none';
 		coordenadas_ubicacion_real="";
@@ -1972,7 +1971,7 @@
 	
 	function TrazarRuta() {
 		clearTimeout(temporizadormodalflash);
-		clearTimeout(tiempo);
+		//clearTimeout(tiempo);
 		modalinicial.close();
 		mimodalflash.style.display='none';
 		btnindicacionesmodalflash.style.display='none';
@@ -2176,9 +2175,9 @@
 		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		if (aer !=="") {aer.remove()};
 		clearInterval(intervalo);
-		clearInterval(intervaloRuta);
+		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		clearTimeout(tiempo);
+		//clearTimeout(tiempo);
 		if (ruta) {ruta.remove()};
 		if (lugar) {lugar.remove()};
 		lugar="";
@@ -2688,8 +2687,9 @@
 	//Bloque Modal Flash
 	function ModalFlash(tiempo) {
 		mimodalflash.style.display='block';
-		//let interv;
-		let timeout;
+		clearTimeout(temporizadormodalflash);
+		clearTimeout(tiempomodalflash);
+		clearInterval(intervalo);
 		let restante = tiempo/1000;
 		document.getElementById('contador').textContent = restante;
 		intervalo = setInterval(() => {
@@ -2703,8 +2703,6 @@
 			clearTimeout(temporizadormodalflash);
 			clearTimeout(tiempomodalflash);
 			clearInterval(intervalo);
-			clearInterval(intervaloRuta);
-			clearTimeout(tiempo);
 			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
 			if (mail=="si") {EnviarMail()};
 		}, tiempo);
@@ -2888,9 +2886,9 @@
 		document.getElementById("borrableinicial").style.display='none';
 		modalinicial.close();
 		clearInterval(intervalo);
-		clearInterval(intervaloRuta);
+		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		clearTimeout(tiempo);
+		//clearTimeout(tiempo);
 		if (ruta) {ruta.remove();botondetallesruta.style.display="none"};
 		if (avisovelocidadmaxima=="" && avisollegada=="si" && dentroeeamza && dispositivo=="movil") {
 			const utterance = new SpeechSynthesisUtterance("La velocidad maxima recomendada para circular dentro del inta es de 30 kilometros por hora.-");
@@ -2924,8 +2922,8 @@
 		cajadistancia.classList.add("visible");
 		cajadistancia.textContent = msg+" (En línea recta).-";
 		clearInterval(intervalo);
-		clearInterval(intervaloRuta);
-		clearTimeout(tiempo);
+		//clearInterval(intervaloRuta);
+		//clearTimeout(tiempo);
 		if (dispositivo=="movil") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>Se te ofrecerán alertas por voz.</b><br><br><span style="color:black">Por lo tanto, asegurate de tener activado el sonido del dispositivo y a un volumen que puedas escucharlo sin distraerte demasiado.-<br></span>';
