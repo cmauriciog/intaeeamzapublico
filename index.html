@@ -1305,7 +1305,7 @@
 			mapa.flyTo(coord, 16);
 			poligono=feature.geometry.coordinates[0];
 			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre.";msgencontrado="Este sector se llama "+inputbusqueda.value;};
+			+"</p></h4></b></strong>Lo encontrarás en este edificio o sector que lleva ese mismo nombre.";msgencontrado="Este sector se llama "+inputbusqueda.value;};
 			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
 			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"se trabaja con "+inputbusqueda.value;};
 			if (coincidencia =="persona" && oficina=="") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
@@ -1736,6 +1736,7 @@
 				btnindicacionesmodalflash.style.display='none';
 				btncerrarmodalflash.textContent = "Cerrar";
 				tiempomodalflash=9000;
+				console.log(dispositivo);
 				ModalFlash(tiempomodalflash);
 			};
 			if (dispositivo==="pc") {botoncentrado.style.display='block'};
@@ -1969,18 +1970,6 @@
 		mail="";
 	};
 	
-	//function RefrescarRuta() {
-	//	if (!refrescoRutaActivo) return;
-	//	TrazarRuta();
-	//	setTimeout(RefrescarRuta, 180000); // 3 minutos
-	//};
-	
-	//function IniciarRuteo() {
-	//	if (refrescoRutaActivo) return;
-	//	refrescoRutaActivo = true;
-	//	RefrescarRuta(); // arranca
-	//};
-	
 	function TrazarRuta() {
 		clearTimeout(temporizadormodalflash);
 		clearTimeout(tiempo);
@@ -2098,49 +2087,11 @@
 	};
 
 	<!--Función para armar el arreglo de sectores-->
-	//function ListaSectores(feature, layer) {
-
-    //const p = feature.properties;
-
-    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Descripcio != "Deposito"
-    //   && p.Descripcio != null) {
-    //    listabusqueda.push(p.Descripcio);
-    //}
-
-    //Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico.
-    //Caso Espacio Agroecológico, por ejemplo
-    //if (p.id > 200 && p.id < 212) {
-    //    listabusqueda.push(p.Descripcio);
-    //}
-
-    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad != null) {
-    //    listabusqueda.push(p.Actividad);
-    //}
-
-    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad1 != null) {
-    //    listabusqueda.push(p.Actividad1);
-    //}
-
-    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad2 != null) {
-    //    listabusqueda.push(p.Actividad2);
-    //}
-
-    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad3 != null) {
-    //    listabusqueda.push(p.Actividad3);
-    //}
-
-//};
-	
-	
-	
-	
 	function ListaSectores(feature, layer) {
 		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Descripcio !="Deposito"
 			&& feature.properties.Descripcio !=null) {
 			listabusqueda.push(feature.properties.Descripcio);
 		};
-		//Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico. Caso Espacio Agroecológico, por ejemplo
-		if (feature.properties.id>200 && feature.properties.id<212) {listabusqueda.push(feature.properties.Descripcio)};
 		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad !=null) {
 			listabusqueda.push(feature.properties.Actividad);
 		};
@@ -2153,6 +2104,8 @@
 		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad3 !=null) {
 			listabusqueda.push(feature.properties.Actividad3);
 		};
+		//Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico. Caso Espacio Agroecológico, por ejemplo
+		if (feature.properties.id>200 && feature.properties.id<212) {listabusqueda.push(feature.properties.Descripcio)};
 	};
 
 	<!--Función para armar el arreglo de personas y especialidades-->
@@ -2749,7 +2702,7 @@
 			mimodalflash.style.display='none';
 			clearTimeout(temporizadormodalflash);
 			clearTimeout(tiempomodalflash);
-			//clearInterval(intervalo);
+			clearInterval(intervalo);
 			clearInterval(intervaloRuta);
 			clearTimeout(tiempo);
 			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
