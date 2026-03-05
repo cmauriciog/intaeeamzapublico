@@ -2098,62 +2098,62 @@
 	};
 
 	<!--Función para armar el arreglo de sectores-->
-	function ListaSectores(feature, layer) {
+	//function ListaSectores(feature, layer) {
 
-    const p = feature.properties;
+    //const p = feature.properties;
 
-    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Descripcio != "Deposito"
-        && p.Descripcio != null) {
-        listabusqueda.push(p.Descripcio);
-    }
+    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Descripcio != "Deposito"
+    //   && p.Descripcio != null) {
+    //    listabusqueda.push(p.Descripcio);
+    //}
 
     //Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico.
     //Caso Espacio Agroecológico, por ejemplo
-    if (p.id > 200 && p.id < 212) {
-        listabusqueda.push(p.Descripcio);
-    }
+    //if (p.id > 200 && p.id < 212) {
+    //    listabusqueda.push(p.Descripcio);
+    //}
 
-    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad != null) {
-        listabusqueda.push(p.Actividad);
-    }
+    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad != null) {
+    //    listabusqueda.push(p.Actividad);
+    //}
 
-    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad1 != null) {
-        listabusqueda.push(p.Actividad1);
-    }
+    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad1 != null) {
+    //    listabusqueda.push(p.Actividad1);
+    //}
 
-    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad2 != null) {
-        listabusqueda.push(p.Actividad2);
-    }
+    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad2 != null) {
+    //    listabusqueda.push(p.Actividad2);
+    //}
 
-    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad3 != null) {
-        listabusqueda.push(p.Actividad3);
-    }
+    //if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad3 != null) {
+    //    listabusqueda.push(p.Actividad3);
+    //}
 
-};
+//};
 	
 	
 	
 	
-	//function ListaSectores(feature, layer) {
-	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Descripcio !="Deposito"
-	//		&& feature.properties.Descripcio !=null) {
-	//		listabusqueda.push(feature.properties.Descripcio);
-	//	};
-	//	//Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico. Caso Espacio Agroecológico, por ejemplo
-	//	if (feature.properties.id==201) {listabusqueda.push(feature.properties.Descripcio)};
-	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad !=null) {
-	//		listabusqueda.push(feature.properties.Actividad);
-	//	};
-	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad1 !=null) {
-	//		listabusqueda.push(feature.properties.Actividad1);
-	//	};
-	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad2 !=null) {
-	//		listabusqueda.push(feature.properties.Actividad2);
-	//	};
-	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad3 !=null) {
-	//		listabusqueda.push(feature.properties.Actividad3);
-	//	};
-	//};
+	function ListaSectores(feature, layer) {
+		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Descripcio !="Deposito"
+			&& feature.properties.Descripcio !=null) {
+			listabusqueda.push(feature.properties.Descripcio);
+		};
+		//Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico. Caso Espacio Agroecológico, por ejemplo
+		if (feature.properties.id>200 && feature.properties.id<212) {listabusqueda.push(feature.properties.Descripcio)};
+		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad !=null) {
+			listabusqueda.push(feature.properties.Actividad);
+		};
+		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad1 !=null) {
+			listabusqueda.push(feature.properties.Actividad1);
+		};
+		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad2 !=null) {
+			listabusqueda.push(feature.properties.Actividad2);
+		};
+		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad3 !=null) {
+			listabusqueda.push(feature.properties.Actividad3);
+		};
+	};
 
 	<!--Función para armar el arreglo de personas y especialidades-->
 	function ListaPersonas(feature, layer) {
@@ -2749,7 +2749,7 @@
 			mimodalflash.style.display='none';
 			clearTimeout(temporizadormodalflash);
 			clearTimeout(tiempomodalflash);
-			clearInterval(intervalo);
+			//clearInterval(intervalo);
 			clearInterval(intervaloRuta);
 			clearTimeout(tiempo);
 			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
