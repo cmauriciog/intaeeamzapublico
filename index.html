@@ -844,6 +844,7 @@
 				<p class="lorem">Las herramientas disponibles son...</p>
 				<br>
 				<p id="reiniciar"><a href="javascript:ReiniciarPagina()"><img src="images/Reiniciar.png"></img></a>  <a href="javascript:ReiniciarPagina()" style="color: blue;">  Volver a empezar...</a></p>
+				<p id="volveralaeea"><a href="javascript:VolverEEA()"><img src="images/inta.jpg"></img></a>  <a href="javascript:VolverEEA()" style="color: blue;">  Volver al predio del INTA...</a></p>
 				<p id="restablecernomostrar"><a href="#" onclick="RestablecerNoMostrar(); return false;" style="color:blue;"><img src="images/Informacion.png"></img>  Volver a mostrar mensajes informativos.</a> (Restablecer los mensajes informativos que puedas haber cancelado).</p>
 				<p id="gpson"><a href="javascript:desactivar_seguimiento(seguimiento)"><img src="images/MiUbicacion.png"></img></a>  <a href="javascript:desactivar_seguimiento(seguimiento)" style="color: blue;">  Desactivar mi ubicación actual</a></p>
 				<p id="gpsoff"><a href="javascript:activar_seguimiento(seguimiento)"><img src="images/MiUbicacion.png"></img></a>  <a href="javascript:activar_seguimiento(seguimiento)" style="color: blue;">  Mi ubicación actual</a></p>
@@ -1162,7 +1163,7 @@
 	const cantidadvisitas=document.getElementById("cantidadvisitas");
 	const botoncentrado=document.getElementById("botoncentrado");
 	const panelrutas=document.getElementById("PanelRutas");
-	let refrescoRutaActivo = false;
+	//let refrescoRutaActivo = false;
 	
 	//Estilizar el perímetro de la EEA Mza
 	function PerimetroEEAMza(feature) {
@@ -1306,14 +1307,14 @@
 			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
 			+"</p></h4></b></strong>Lo encontrarás en este edificio que lleva ese mismo nombre.";msgencontrado="Este sector se llama "+inputbusqueda.value;};
 			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"se trabaja con "+inputbusqueda.value;};
+			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"se trabaja con "+inputbusqueda.value;};
 			if (coincidencia =="persona" && oficina=="") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value;};
+			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value;};
 			if (coincidencia =="persona" && oficina !=="") {var contenidoPopup="<p>Si estás buscando a:</p>"
-			+"<h4><strong><p style='color:blue'>"+inputbusqueda.value+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"
+			+"<h4><strong><p style='color:blue'>"+inputbusqueda.value+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"
 			+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value+"preguntá por la oficina de "+oficina;};
 			if (coincidencia=="especialidad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"+
+			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"+
 			"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value+"te recomiendo preguntar por "+persona;};
 			lugar=L.marker(coord).addTo(mapa)
 						.bindPopup(contenidoPopup, formatoPopup)
@@ -1820,7 +1821,7 @@
 		if (distancia>10 && distancia<80) {avisollegada="si"};
 		if (distancia <= 10 && dispositivo=="movil") {
 			cajadistancia.textContent = "¡Has llegado a tu destino!.-";
-			refrescoRutaActivo = false;
+			//refrescoRutaActivo = false;
 			clearInterval(intervaloRuta);
 			intervaloRuta = null;
 			setTimeout(() => {
@@ -1845,7 +1846,7 @@
 		const utterance = new SpeechSynthesisUtterance(leerdistancia);
 		speechSynthesis.speak(utterance);
 		if (distancia>10) {avisollegada="no"};
-		if (distancia<=10) {avisollegada="no";DetenerActualizarUbicacion()};
+		if (distancia<=10) {avisollegada="no"};//DetenerActualizarUbicacion()};
 		clearTimeout(temporizadormodalflash);
 	};
 	
@@ -2098,23 +2099,61 @@
 
 	<!--Función para armar el arreglo de sectores-->
 	function ListaSectores(feature, layer) {
-		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Descripcio !="Deposito"
-			&& feature.properties.Descripcio !=null) {
-			listabusqueda.push(feature.properties.Descripcio);
-		};
-		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad !=null) {
-			listabusqueda.push(feature.properties.Actividad);
-		};
-		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad1 !=null) {
-			listabusqueda.push(feature.properties.Actividad1);
-		};
-		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad2 !=null) {
-			listabusqueda.push(feature.properties.Actividad2);
-		};
-		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad3 !=null) {
-			listabusqueda.push(feature.properties.Actividad3);
-		};
-	};
+
+    const p = feature.properties;
+
+    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Descripcio != "Deposito"
+        && p.Descripcio != null) {
+        listabusqueda.push(p.Descripcio);
+    }
+
+    //Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico.
+    //Caso Espacio Agroecológico, por ejemplo
+    if (p.id > 200 && p.id < 212) {
+        listabusqueda.push(p.Descripcio);
+    }
+
+    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad != null) {
+        listabusqueda.push(p.Actividad);
+    }
+
+    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad1 != null) {
+        listabusqueda.push(p.Actividad1);
+    }
+
+    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad2 != null) {
+        listabusqueda.push(p.Actividad2);
+    }
+
+    if (p.Cobertura != "Cultivo" && p.Descripcio != "Vivienda" && p.Cobertura != "Invernaculo" && p.Actividad3 != null) {
+        listabusqueda.push(p.Actividad3);
+    }
+
+};
+	
+	
+	
+	
+	//function ListaSectores(feature, layer) {
+	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Descripcio !="Deposito"
+	//		&& feature.properties.Descripcio !=null) {
+	//		listabusqueda.push(feature.properties.Descripcio);
+	//	};
+	//	//Agregamos espacios excepcionales como: aquellos que son cultivos, pero se deben incluir en la búsqueda para todo publico. Caso Espacio Agroecológico, por ejemplo
+	//	if (feature.properties.id==201) {listabusqueda.push(feature.properties.Descripcio)};
+	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad !=null) {
+	//		listabusqueda.push(feature.properties.Actividad);
+	//	};
+	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad1 !=null) {
+	//		listabusqueda.push(feature.properties.Actividad1);
+	//	};
+	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad2 !=null) {
+	//		listabusqueda.push(feature.properties.Actividad2);
+	//	};
+	//	if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Actividad3 !=null) {
+	//		listabusqueda.push(feature.properties.Actividad3);
+	//	};
+	//};
 
 	<!--Función para armar el arreglo de personas y especialidades-->
 	function ListaPersonas(feature, layer) {
@@ -2337,6 +2376,7 @@
 		if (aer !="") {aer.remove(),document.getElementById("buscarunidad").value=""};
 		let coord="-33.00598405638592, -68.85600484779212".split(",");
 		document.getElementById("volvereea").style.visibility='hidden';
+		barralateral.close();
 		mapa.flyTo(coord,16);
 		grupoeeamza.addTo(mapa);
 	};
@@ -2397,7 +2437,8 @@
 			sugerenciaz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultados = listabusquedafiltrada
-			.filter(item => item.toLowerCase().includes(query))
+			//.filter(item => item.toLowerCase().includes(query))
+			.filter(item => item && item.toLowerCase().includes(query))
 			.slice(0,5); //Limitar a las primeras 5 coincidencias
 			resultados.forEach(item => {
 				const div = document.createElement('div');
@@ -2708,6 +2749,9 @@
 			mimodalflash.style.display='none';
 			clearTimeout(temporizadormodalflash);
 			clearTimeout(tiempomodalflash);
+			clearInterval(intervalo);
+			clearInterval(intervaloRuta);
+			clearTimeout(tiempo);
 			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
 			if (mail=="si") {EnviarMail()};
 		}, tiempo);
