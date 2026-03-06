@@ -264,12 +264,15 @@
 			padding: 15px 20px;
 			font-size: 18px;
 			border: 3px solid;
+			/*box-sizing: border-box;*/
+			/*border: 3px solid #ff0080;*/
 			border-radius: 10px;
 			outline: none;
 			background: linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0, #ff0080);
 			background-size: 400% 400%;
 			color: white;
 			transition: all 0.3s ease;
+			/*transition: background 0.3s ease, border-color 0.3s ease;*/
 			animation: gradientAnimation 5s ease infinite, borderAnimation 5s ease infinite;
 		}
 		@keyframes gradientAnimation {
@@ -2388,13 +2391,20 @@
 		if (inputbusqueda.value.trim() !=="") {
 			//botondetallesruta.style.display="none";
 			sugerenciaz.style.visibility='visible';
-			inputbusqueda.classList.add('filled');
+			//inputbusqueda.classList.add('filled');
+			if (!inputbusqueda.classList.contains('filled')) {
+				inputbusqueda.classList.add('filled');
+			};
 			const query = inputbusqueda.value.toLowerCase();
-			sugerenciaz.innerHTML = '';
+			//sugerenciaz.innerHTML = '';
+			while (sugerenciaz.firstChild) {
+				sugerenciaz.removeChild(sugerenciaz.firstChild);
+			};
 			if (query.length === 0) return;
 			const resultados = listabusquedafiltrada
 			//.filter(item => item.toLowerCase().includes(query))
-			.filter(item => item && item.toLowerCase().includes(query))
+			//.filter(item => item && item.toLowerCase().includes(query))
+			.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
 			.slice(0,5); //Limitar a las primeras 5 coincidencias
 			resultados.forEach(item => {
 				const div = document.createElement('div');
