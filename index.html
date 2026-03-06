@@ -391,8 +391,8 @@
 		
 		.botoncentrado {
 			position: absolute;
-			top: 70px;
-			right: 10px;
+			top: 65px;
+			right: 1px;
 			background: none;
 			border: none;
 			cursor: pointer;
@@ -461,7 +461,7 @@
 		/*Configuración de la Barra Lateral*/
 		#barralateral {
 			position: absolute;
-			z-index: 550;
+			z-index: 1000;
 			max-width: 80%;
 		}
 		
@@ -986,7 +986,7 @@
 		<span id="titulo_modalinicial"><h4>Parece que estás usando un dispositivo movil (celular o tablet).</h4></span>
 		<br><br/>
 		<span id="cuerpo_modalinicial"><h4>En caso que no veas los mensajes completos o todas las herramientas,<br/>probá de girar la pantalla. Eso hará que tengas una mejor visión del mapa y sus herramientas.-</h4>
-		<br/>Recordá que en todo momento disponés de distintas herramientas sobre la barra lateral izquierda.<br/>¿Querés saber cómo funcionan? Tocá las tres líneas de su parte superior y recibirás ayuda.</span>
+		<br/>Recordá que en todo momento disponés de distintas herramientas sobre la barra lateral izquierda.<br/>¿Querés saber cómo funcionan? Tocá <img src="images/Home.jpg"></img> y recibirás ayuda.</span>
 	</div>
 	<div id="Conectividad">
 		<span id="titulo_modalconectividad"><h4>Parece que no tenés conexión a Internet.</h4></span>
@@ -1824,9 +1824,9 @@
 			//refrescoRutaActivo = false;
 			//clearInterval(intervaloRuta);
 			//intervaloRuta = null;
-			setTimeout(() => {
-				cajadistancia.classList.remove("visible");
-			}, 10000);
+			//setTimeout(() => {
+			//	cajadistancia.classList.remove("visible");
+			//}, 10000);
 			mapa.setView(coordenadas_ubicacion_real, 19);
 			if (avisollegada=="si") {AlertaLlegada("Has llegado a tu destino "+msgencontrado)};
 		};
@@ -2027,6 +2027,9 @@
 				const tiempoFormateado = segundosAHorasMinutos(route.summary.totalTime);
 				cajadistancia.insertAdjacentHTML("beforeend", `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}: Distancia: ${distanciaKm} km, Tiempo estimado: ${tiempoFormateado}.`);
 			});
+			botondetallesruta.style.display = "block";
+			panelrutas.style.display = "block";
+			panelrutas.replaceChildren(ruta.getContainer());
 		});
 		//Hasta acá.-
 		
@@ -2068,9 +2071,9 @@
 				});
 			},60000);
 		};
-		botondetallesruta.style.display = "block";
-		panelrutas.style.display = "block";
-		panelrutas.replaceChildren(ruta.getContainer());
+		//botondetallesruta.style.display = "block";
+		//panelrutas.style.display = "block";
+		//panelrutas.replaceChildren(ruta.getContainer());
 	};
 
 	<!--Funcion para mostrar imagen estadísticas en ventana modal-->
@@ -2704,6 +2707,7 @@
 			clearTimeout(temporizadormodalflash);
 			clearTimeout(tiempomodalflash);
 			clearInterval(intervalo);
+			btncerrarmodalflash.click();
 			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
 			if (mail=="si") {EnviarMail()};
 		}, tiempo);
@@ -3155,8 +3159,8 @@
 	botondetallesruta.style.display='none';
 	mimodalflash.style.display='none';
 	const contenedorzoom = document.querySelector('.leaflet-top.leaflet-right');
-	contenedorzoom.style.setProperty('top', '10px', 'important');
-	contenedorzoom.style.setProperty('right', '10px', 'important');
+	contenedorzoom.style.setProperty('top', '1px', 'important');
+	contenedorzoom.style.setProperty('right', '1px', 'important');
 	mapa.removeControl(minimapamundial);
 	VerificarConexion();
 	VerificarVersion();
