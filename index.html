@@ -627,8 +627,8 @@
 <!-- Barra de encabezado -->
 <div class="fila">
 	<div class="col-input">
-		<!--<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..."/>
-		<div id="sugerenciasbusqueda" class="sugerencias"></div>-->
+		<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..."/>
+		<div id="sugerenciasbusqueda" class="sugerencias"></div>
 	</div>
 	<div class="col-imagen">
 		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:lightblue; color:blue;width:80px"><strong>Mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="./images/slide_off.jpg" width="50" height="30"></img></a></div>
@@ -2395,46 +2395,48 @@
 	});
 	
 	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Superior-->
-	//var inputbusquedabis = document.getElementById('encontrar_a');
-	//const sugerenciaz = document.getElementById('sugerenciasbusqueda');
-	//inputbusquedabis.addEventListener('input', () => {
-	//	if (inputbusquedabis.value.trim() === '') {
-	//		inputbusquedabis.classList.remove('filled');
-	//		sugerenciaz.style.visibility='hidden';
-	//	  };
-	//	if (inputbusquedabis.value.trim() !=="") {
-	//		//botondetallesruta.style.display="none";
-	//		sugerenciaz.style.visibility='visible';
-	//		//inputbusquedabis.classList.add('filled');
-	//		if (!inputbusquedabis.classList.contains('filled')) {
-	//			inputbusquedabis.classList.add('filled');
-	//		};
-	//		const query = inputbusquedabis.value.toLowerCase();
-	//		sugerenciaz.innerHTML = '';
-	//		if (query.length === 0) return;
-	//		const resultados = listabusquedafiltrada
-	//		//.filter(item => item.toLowerCase().includes(query))
-	//		//.filter(item => item && item.toLowerCase().includes(query))
-	//		.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
-	//		.slice(0,5); //Limitar a las primeras 5 coincidencias
-	//		resultados.forEach(item => {
-	//			const div = document.createElement('div');
-	//			div.textContent = item;
-	//			div.classList.add('sugerencia-item');
-	//			div.addEventListener('click', () => {
-	//				inputbusquedabis.value = item;
-	//				sugerenciaz.innerHTML = '';
-	//				EncontrarA(item);
-	//			});
-	//			sugerenciaz.appendChild(div);
-	//		});
-	//	};
-	//});
-	//document.addEventListener('click', function(e) {
-	//	if (!sugerenciaz.contains(e.target) && e.target !== inputbusquedabis) {
-	//		sugerenciaz.innerHTML = '';
-	//	};
-	//});
+	var inputbusqueda = document.getElementById('encontrar_a');
+	const sugerenciaz = document.getElementById('sugerenciasbusqueda');
+	inputbusqueda.addEventListener('input', () => {
+		let pos = inputbusqueda.selectionStart;
+		if (inputbusqueda.value.trim() === '') {
+			inputbusqueda.classList.remove('filled');
+			sugerenciaz.style.visibility='hidden';
+		  };
+		if (inputbusqueda.value.trim() !=="") {
+			//botondetallesruta.style.display="none";
+			sugerenciaz.style.visibility='visible';
+			//inputbusquedabis.classList.add('filled');
+			if (!inputbusqueda.classList.contains('filled')) {
+				inputbusqueda.classList.add('filled');
+			};
+			const query = inputbusqueda.value.toLowerCase();
+			sugerenciaz.innerHTML = '';
+			if (query.length === 0) return;
+			const resultados = listabusquedafiltrada
+			//.filter(item => item.toLowerCase().includes(query))
+			//.filter(item => item && item.toLowerCase().includes(query))
+			.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
+			.slice(0,5); //Limitar a las primeras 5 coincidencias
+			resultados.forEach(item => {
+				const div = document.createElement('div');
+				div.textContent = item;
+				div.classList.add('sugerencia-item');
+				div.addEventListener('click', () => {
+					inputbusqueda.value = item;
+					sugerenciaz.innerHTML = '';
+					EncontrarA(item);
+				});
+				sugerenciaz.appendChild(div);
+			});
+		};
+		inputbusqueda.setSelectionRange(pos, pos);
+	});
+	document.addEventListener('click', function(e) {
+		if (!sugerenciaz.contains(e.target) && e.target !== inputbusquedabis) {
+			sugerenciaz.innerHTML = '';
+		};
+	});
 	
 	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Barra Lateral-->
 	var inputbusquedabis = document.getElementById('encontrar_abis');
