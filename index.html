@@ -2400,10 +2400,7 @@
 				inputbusqueda.classList.add('filled');
 			};
 			const query = inputbusqueda.value.toLowerCase();
-			//sugerenciaz.innerHTML = '';
-			while (sugerenciaz.firstChild) {
-				sugerenciaz.removeChild(sugerenciaz.firstChild);
-			};
+			sugerenciaz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultados = listabusquedafiltrada
 			//.filter(item => item.toLowerCase().includes(query))
