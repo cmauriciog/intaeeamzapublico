@@ -1219,7 +1219,7 @@
 	<!--Función para preparar todos los Pop-ups-->
 	function onEachFeature(feature, layer) {
 		if (encontrar_a.value=="") {
-		if (encontrar_abis.value=="") {
+		//if (encontrar_abis.value=="") {
 		sup_total=sup_total+feature.properties.Sup_Croqui;
 		tot_parc=tot_parc+1;
 		<!--Calcular el promedio general-->
@@ -2190,8 +2190,8 @@
 	function IrUnidad(agencia) {
 		iraaer="si";
 		mail="";
-		//encontrar_a.value = "";
-		//encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		encontrar_a.value = "";
+		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		encontrar_abis.value = "";
 		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		if (aer !=="") {aer.remove()};
@@ -2398,7 +2398,7 @@
 	var inputbusqueda = document.getElementById('encontrar_a');
 	const sugerenciaz = document.getElementById('sugerenciasbusqueda');
 	inputbusqueda.addEventListener('input', () => {
-		//let pos = inputbusqueda.selectionStart;
+		let pos = inputbusqueda.selectionStart;
 		if (inputbusqueda.value.trim() === '') {
 			inputbusqueda.classList.remove('filled');
 			sugerenciaz.style.visibility='hidden';
@@ -2430,10 +2430,10 @@
 				sugerenciaz.appendChild(div);
 			});
 		};
-		//inputbusqueda.setSelectionRange(pos, pos);
+		inputbusqueda.setSelectionRange(pos, pos);
 	});
 	document.addEventListener('click', function(e) {
-		if (!sugerenciaz.contains(e.target) && e.target !== inputbusqueda) {
+		if (!sugerenciaz.contains(e.target) && e.target !== inputbusquedabis) {
 			sugerenciaz.innerHTML = '';
 		};
 	});
