@@ -627,7 +627,7 @@
 <!-- Barra de encabezado -->
 <div class="fila">
 	<div class="col-input">
-		<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..." type="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+		<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..."/>
 		<div id="sugerenciasbusqueda" class="sugerencias"></div>
 	</div>
 	<div class="col-imagen">
@@ -2190,8 +2190,8 @@
 	function IrUnidad(agencia) {
 		iraaer="si";
 		mail="";
-		encontrar_a.value = "";
-		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		//encontrar_a.value = "";
+		//encontrar_a.placeholder = "¿Buscás algo o alguien?...";
 		encontrar_abis.value = "";
 		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		if (aer !=="") {aer.remove()};
@@ -2398,7 +2398,7 @@
 	var inputbusqueda = document.getElementById('encontrar_a');
 	const sugerenciaz = document.getElementById('sugerenciasbusqueda');
 	inputbusqueda.addEventListener('input', () => {
-		//let pos = inputbusqueda.selectionStart;
+		let pos = inputbusqueda.selectionStart;
 		if (inputbusqueda.value.trim() === '') {
 			inputbusqueda.classList.remove('filled');
 			sugerenciaz.style.visibility='hidden';
@@ -2430,10 +2430,10 @@
 				sugerenciaz.appendChild(div);
 			});
 		};
-		//inputbusqueda.setSelectionRange(pos, pos);
+		inputbusqueda.setSelectionRange(pos, pos);
 	});
 	document.addEventListener('click', function(e) {
-		if (!sugerenciaz.contains(e.target) && e.target !== inputbusqueda) {
+		if (!sugerenciaz.contains(e.target) && e.target !== inputbusquedabis) {
 			sugerenciaz.innerHTML = '';
 		};
 	});
@@ -2454,8 +2454,7 @@
 			sugerenciasbiz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultadosbis = listabusquedafiltrada
-			//.filter(item => item.toLowerCase().includes(query))
-			.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
+			.filter(item => item.toLowerCase().includes(query))
 			.slice(0,5); //Limitar a las primeras 5 coincidencias
 			resultadosbis.forEach(item => {
 				const div = document.createElement('div');
@@ -2466,7 +2465,7 @@
 					sugerenciasbiz.innerHTML = '';
 					barralateral.close();
 					//document.getElementById("encontrar_a").value=item;
-					//document.getElementById("encontrar_abis").value=item;
+					document.getElementById("encontrar_abis").value=item;
 					EncontrarA(item);
 				});
 				sugerenciasbiz.appendChild(div);
