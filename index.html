@@ -627,8 +627,8 @@
 <!-- Barra de encabezado -->
 <div class="fila">
 	<div class="col-input">
-		<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..."/>
-		<div id="sugerenciasbusqueda" class="sugerencias"></div>
+		<!--<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..."/>
+		<div id="sugerenciasbusqueda" class="sugerencias"></div>-->
 	</div>
 	<div class="col-imagen">
 		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:lightblue; color:blue;width:80px"><strong>Mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="./images/slide_off.jpg" width="50" height="30"></img></a></div>
@@ -1218,7 +1218,8 @@
 	
 	<!--Función para preparar todos los Pop-ups-->
 	function onEachFeature(feature, layer) {
-		if (encontrar_a.value=="") {
+		//if (encontrar_a.value=="") {
+		if (encontrar_abis.value=="") {
 		sup_total=sup_total+feature.properties.Sup_Croqui;
 		tot_parc=tot_parc+1;
 		<!--Calcular el promedio general-->
@@ -1312,18 +1313,18 @@
 			coord.push(centroide.lat,centroide.lng);
 			mapa.flyTo(coord, 16);
 			poligono=feature.geometry.coordinates[0];
-			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Lo encontrarás en este edificio o sector que lleva ese mismo nombre.";msgencontrado="Este sector se llama "+inputbusqueda.value;};
-			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"se trabaja con "+inputbusqueda.value;};
-			if (coincidencia =="persona" && oficina=="") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
-			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value;};
+			if (coincidencia=="sector") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusquedabis.value
+			+"</p></h4></b></strong>Lo encontrarás en este edificio o sector que lleva ese mismo nombre.";msgencontrado="Este sector se llama "+inputbusquedabis.value;};
+			if (coincidencia =="actividad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusquedabis.value
+			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"se trabaja con "+inputbusquedabis.value;};
+			if (coincidencia =="persona" && oficina=="") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusquedabis.value
+			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusquedabis.value;};
 			if (coincidencia =="persona" && oficina !=="") {var contenidoPopup="<p>Si estás buscando a:</p>"
-			+"<h4><strong><p style='color:blue'>"+inputbusqueda.value+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"
-			+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value+"preguntá por la oficina de "+oficina;};
-			if (coincidencia=="especialidad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusqueda.value
+			+"<h4><strong><p style='color:blue'>"+inputbusquedabis.value+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"
+			+"<p>Te recomendamos preguntar por la Oficina o el Laboratorio de: "+"<h4><strong><p style='color:blue'>"+oficina+"</h4></p></strong>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusquedabis.value+"preguntá por la oficina de "+oficina;};
+			if (coincidencia=="especialidad") {var contenidoPopup="<p>Si estás buscando a:</p>"+"<h4><strong><p style='color:blue'>"+inputbusquedabis.value
 			+"</p></h4></b></strong>Se encuentra en este edificio, llamado: "+"<h4><strong><p style='color:blue'>"+sector+"</h4></p></strong>"+
-			"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusqueda.value+"te recomiendo preguntar por "+persona;};
+			"<p>Te recomendamos preguntar por: "+"<h4><strong><p style='color:blue'>"+persona+"</p></strong></h4>";msgencontrado="En este sector llamado "+sector+"encontrarás a "+inputbusquedabis.value+"te recomiendo preguntar por "+persona;};
 			lugar=L.marker(coord).addTo(mapa)
 						.bindPopup(contenidoPopup, formatoPopup)
 						.openPopup()};
@@ -1332,8 +1333,10 @@
 
 	<!--Funcion para filtrar con criterio distinto a vid. Es insensible al uso de mayúsculas/minúsculas y busca con criterio tipo "*...*" -->
 	function CriterioAbuscar(valor) {
-		encontrar_a.value = "";
-		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		//encontrar_a.value = "";
+		//encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		encontrar_abis.value = "";
+		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		cobertura_vid.value="";
 		criterio=valor;
 		document.getElementById("responsable").style.visibility='hidden';
@@ -1392,8 +1395,10 @@
 
 	<!--Funcion para filtrar con otro criterio distinto a vid-->
 	function CoberturasAbuscar(valor) {
-		encontrar_a.value = "";
-		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		//encontrar_a.value = "";
+		//encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		encontrar_abis.value = "";
+		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		sup_total=0;
 		tot_parc=0;
 		prom_prod=0;
@@ -1420,8 +1425,10 @@
 
 	<!--Funcion para filtrar parcelas con valores distintos a vid-->
 	function BuscarOtro(valor) {
-		encontrar_a.value = "";
-		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		//encontrar_a.value = "";
+		//encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		encontrar_abis.value = "";
+		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		sup_total=0;
 		tot_parc=0;
 		prom_prod=0;
@@ -1525,17 +1532,17 @@
 	function Filtrar_Buscar(feature) {
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		criterio="";
-		if (feature.properties.Descripcio==inputbusqueda.value) {return true,coincidencia="sector",sector=feature.properties.Descripcio};
-		if (feature.properties.Actividad==inputbusqueda.value || feature.properties.Actividad1==inputbusqueda.value || feature.properties.Actividad2==inputbusqueda.value
-		|| feature.properties.Actividad3==inputbusqueda.value) {return true,sector=feature.properties.Descripcio,coincidencia="actividad"};
+		if (feature.properties.Descripcio==inputbusquedabis.value) {return true,coincidencia="sector",sector=feature.properties.Descripcio};
+		if (feature.properties.Actividad==inputbusquedabis.value || feature.properties.Actividad1==inputbusquedabis.value || feature.properties.Actividad2==inputbusquedabis.value
+		|| feature.properties.Actividad3==inputbusquedabis.value) {return true,sector=feature.properties.Descripcio,coincidencia="actividad"};
 	};
 
 	<!--Funcion para buscar persona/especialidad-->
 	function Filtrar_Buscar1(feature) {
-		if (feature.properties.Persona==inputbusqueda.value && feature.properties.Ofi_Lab !==null) {return true,sector=feature.properties.Sector,coincidencia="persona",oficina=feature.properties.Ofi_Lab};
-		if (feature.properties.Persona==inputbusqueda.value && feature.properties.Ofi_Lab ==null) {return true,sector=feature.properties.Sector,coincidencia="persona"};
-		if (feature.properties.Especial==inputbusqueda.value || feature.properties.Especial1==inputbusqueda.value
-			|| feature.properties.Especial2==inputbusqueda.value || feature.properties.Ofi_Lab==inputbusqueda.value)
+		if (feature.properties.Persona==inputbusquedabis.value && feature.properties.Ofi_Lab !==null) {return true,sector=feature.properties.Sector,coincidencia="persona",oficina=feature.properties.Ofi_Lab};
+		if (feature.properties.Persona==inputbusquedabis.value && feature.properties.Ofi_Lab ==null) {return true,sector=feature.properties.Sector,coincidencia="persona"};
+		if (feature.properties.Especial==inputbusquedabis.value || feature.properties.Especial1==inputbusquedabis.value
+			|| feature.properties.Especial2==inputbusquedabis.value || feature.properties.Ofi_Lab==inputbusquedabis.value)
 				{return true,sector=feature.properties.Sector,coincidencia="especialidad",persona=feature.properties.Persona};
 	};
 
@@ -2183,8 +2190,10 @@
 	function IrUnidad(agencia) {
 		iraaer="si";
 		mail="";
-		encontrar_a.value = "";
-		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		//encontrar_a.value = "";
+		//encontrar_a.placeholder = "¿Buscás algo o alguien?...";
+		encontrar_abis.value = "";
+		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		if (aer !=="") {aer.remove()};
 		clearInterval(intervalo);
 		//clearInterval(intervaloRuta);
@@ -2349,17 +2358,17 @@
 	new L.control.scale({imperial:false}).addTo(mapa);
 
 	<!--Bloque Busqueda Unidades-->
-	const inputbusquedaunidad = document.getElementById('buscarunidad');
+	const inputbusquedabisunidad = document.getElementById('buscarunidad');
 	const sugerencia = document.getElementById('sugerenciasunidad');
-	inputbusquedaunidad.addEventListener('input', () => {
-		if (inputbusquedaunidad.value.trim() === '') {
-			inputbusquedaunidad.classList.remove('filled');
+	inputbusquedabisunidad.addEventListener('input', () => {
+		if (inputbusquedabisunidad.value.trim() === '') {
+			inputbusquedabisunidad.classList.remove('filled');
 			sugerencia.style.visibility='hidden';
 		  };
-		if (inputbusquedaunidad.value.trim() !=="") {
+		if (inputbusquedabisunidad.value.trim() !=="") {
 			sugerencia.style.visibility='visible';
-			inputbusquedaunidad.classList.add('filled');
-			const query = inputbusquedaunidad.value.toLowerCase();
+			inputbusquedabisunidad.classList.add('filled');
+			const query = inputbusquedabisunidad.value.toLowerCase();
 			sugerencia.innerHTML = '';
 			if (query.length === 0) return;
 			const resultados = aers
@@ -2370,7 +2379,7 @@
 				div.textContent = item;
 				div.classList.add('sugerencia-item');
 				div.addEventListener('click', () => {
-					inputbusquedaunidad.value = item;
+					inputbusquedabisunidad.value = item;
 					sugerencia.innerHTML = '';
 					IrUnidad(item);
 					barralateral.close();
@@ -2380,66 +2389,66 @@
 		};
 	});
 	document.addEventListener('click', function(e) {
-		if (!sugerencia.contains(e.target) && e.target !== inputbusquedaunidad) {
+		if (!sugerencia.contains(e.target) && e.target !== inputbusquedabisunidad) {
 			sugerencia.innerHTML = '';
 		};
 	});
 	
 	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Superior-->
-	var inputbusqueda = document.getElementById('encontrar_a');
-	const sugerenciaz = document.getElementById('sugerenciasbusqueda');
-	inputbusqueda.addEventListener('input', () => {
-		if (inputbusqueda.value.trim() === '') {
-			inputbusqueda.classList.remove('filled');
-			sugerenciaz.style.visibility='hidden';
-		  };
-		if (inputbusqueda.value.trim() !=="") {
-			//botondetallesruta.style.display="none";
-			sugerenciaz.style.visibility='visible';
-			//inputbusqueda.classList.add('filled');
-			if (!inputbusqueda.classList.contains('filled')) {
-				inputbusqueda.classList.add('filled');
-			};
-			const query = inputbusqueda.value.toLowerCase();
-			sugerenciaz.innerHTML = '';
-			if (query.length === 0) return;
-			const resultados = listabusquedafiltrada
-			//.filter(item => item.toLowerCase().includes(query))
-			//.filter(item => item && item.toLowerCase().includes(query))
-			.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
-			.slice(0,5); //Limitar a las primeras 5 coincidencias
-			resultados.forEach(item => {
-				const div = document.createElement('div');
-				div.textContent = item;
-				div.classList.add('sugerencia-item');
-				div.addEventListener('click', () => {
-					inputbusqueda.value = item;
-					sugerenciaz.innerHTML = '';
-					EncontrarA(item);
-				});
-				sugerenciaz.appendChild(div);
-			});
-		};
-	});
-	document.addEventListener('click', function(e) {
-		if (!sugerenciaz.contains(e.target) && e.target !== inputbusqueda) {
-			sugerenciaz.innerHTML = '';
-		};
-	});
+	//var inputbusquedabis = document.getElementById('encontrar_a');
+	//const sugerenciaz = document.getElementById('sugerenciasbusqueda');
+	//inputbusquedabis.addEventListener('input', () => {
+	//	if (inputbusquedabis.value.trim() === '') {
+	//		inputbusquedabis.classList.remove('filled');
+	//		sugerenciaz.style.visibility='hidden';
+	//	  };
+	//	if (inputbusquedabis.value.trim() !=="") {
+	//		//botondetallesruta.style.display="none";
+	//		sugerenciaz.style.visibility='visible';
+	//		//inputbusquedabis.classList.add('filled');
+	//		if (!inputbusquedabis.classList.contains('filled')) {
+	//			inputbusquedabis.classList.add('filled');
+	//		};
+	//		const query = inputbusquedabis.value.toLowerCase();
+	//		sugerenciaz.innerHTML = '';
+	//		if (query.length === 0) return;
+	//		const resultados = listabusquedafiltrada
+	//		//.filter(item => item.toLowerCase().includes(query))
+	//		//.filter(item => item && item.toLowerCase().includes(query))
+	//		.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
+	//		.slice(0,5); //Limitar a las primeras 5 coincidencias
+	//		resultados.forEach(item => {
+	//			const div = document.createElement('div');
+	//			div.textContent = item;
+	//			div.classList.add('sugerencia-item');
+	//			div.addEventListener('click', () => {
+	//				inputbusquedabis.value = item;
+	//				sugerenciaz.innerHTML = '';
+	//				EncontrarA(item);
+	//			});
+	//			sugerenciaz.appendChild(div);
+	//		});
+	//	};
+	//});
+	//document.addEventListener('click', function(e) {
+	//	if (!sugerenciaz.contains(e.target) && e.target !== inputbusquedabis) {
+	//		sugerenciaz.innerHTML = '';
+	//	};
+	//});
 	
 	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Barra Lateral-->
-	var inputbusquedabis = document.getElementById('encontrar_abis');
+	var inputbusquedabisbis = document.getElementById('encontrar_abis');
 	const sugerenciasbiz = document.getElementById('sugerenciasbusquedabis');
-	inputbusquedabis.addEventListener('input', () => {
-		if (inputbusquedabis.value.trim() === '') {
-			inputbusquedabis.classList.remove('filled');
+	inputbusquedabisbis.addEventListener('input', () => {
+		if (inputbusquedabisbis.value.trim() === '') {
+			inputbusquedabisbis.classList.remove('filled');
 			sugerenciasbiz.style.visibility='hidden';
 		  };
-		if (inputbusquedabis.value.trim() !=="") {
+		if (inputbusquedabisbis.value.trim() !=="") {
 			//botondetallesruta.style.display="none";
 			sugerenciasbiz.style.visibility='visible';
-			inputbusquedabis.classList.add('filled');
-			const query = inputbusquedabis.value.toLowerCase();
+			inputbusquedabisbis.classList.add('filled');
+			const query = inputbusquedabisbis.value.toLowerCase();
 			sugerenciasbiz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultadosbis = listabusquedafiltrada
@@ -2450,10 +2459,11 @@
 				div.textContent = item;
 				div.classList.add('sugerencia-item');
 				div.addEventListener('click', () => {
-					inputbusquedabis.value = item;
+					inputbusquedabisbis.value = item;
 					sugerenciasbiz.innerHTML = '';
 					barralateral.close();
-					document.getElementById("encontrar_a").value=item;
+					//document.getElementById("encontrar_a").value=item;
+					document.getElementById("encontrar_abis").value=item;
 					EncontrarA(item);
 				});
 				sugerenciasbiz.appendChild(div);
@@ -2461,7 +2471,7 @@
 		};
 	});
 	document.addEventListener('click', function(e) {
-		if (!sugerenciasbiz.contains(e.target) && e.target !== inputbusquedabis) {
+		if (!sugerenciasbiz.contains(e.target) && e.target !== inputbusquedabisbis) {
 			sugerenciasbiz.innerHTML = '';
 		};
 	});
