@@ -2454,7 +2454,8 @@
 			sugerenciasbiz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultadosbis = listabusquedafiltrada
-			.filter(item => item.toLowerCase().includes(query))
+			//.filter(item => item.toLowerCase().includes(query))
+			.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
 			.slice(0,5); //Limitar a las primeras 5 coincidencias
 			resultadosbis.forEach(item => {
 				const div = document.createElement('div');
