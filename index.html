@@ -86,7 +86,7 @@
             max-height: 150px;
             overflow-y: auto;
             background-color: red;
-            max-width: 120px;
+            width: 200px;
 			position: absolute;
 			z-index: 1002;
         }
@@ -2437,18 +2437,18 @@
 	//});
 	
 	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Barra Lateral-->
-	var inputbusquedabisbis = document.getElementById('encontrar_abis');
+	var inputbusquedabis = document.getElementById('encontrar_abis');
 	const sugerenciasbiz = document.getElementById('sugerenciasbusquedabis');
-	inputbusquedabisbis.addEventListener('input', () => {
-		if (inputbusquedabisbis.value.trim() === '') {
-			inputbusquedabisbis.classList.remove('filled');
+	inputbusquedabis.addEventListener('input', () => {
+		if (inputbusquedabis.value.trim() === '') {
+			inputbusquedabis.classList.remove('filled');
 			sugerenciasbiz.style.visibility='hidden';
 		  };
-		if (inputbusquedabisbis.value.trim() !=="") {
+		if (inputbusquedabis.value.trim() !=="") {
 			//botondetallesruta.style.display="none";
 			sugerenciasbiz.style.visibility='visible';
-			inputbusquedabisbis.classList.add('filled');
-			const query = inputbusquedabisbis.value.toLowerCase();
+			inputbusquedabis.classList.add('filled');
+			const query = inputbusquedabis.value.toLowerCase();
 			sugerenciasbiz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultadosbis = listabusquedafiltrada
@@ -2459,7 +2459,7 @@
 				div.textContent = item;
 				div.classList.add('sugerencia-item');
 				div.addEventListener('click', () => {
-					inputbusquedabisbis.value = item;
+					inputbusquedabis.value = item;
 					sugerenciasbiz.innerHTML = '';
 					barralateral.close();
 					//document.getElementById("encontrar_a").value=item;
@@ -2471,7 +2471,7 @@
 		};
 	});
 	document.addEventListener('click', function(e) {
-		if (!sugerenciasbiz.contains(e.target) && e.target !== inputbusquedabisbis) {
+		if (!sugerenciasbiz.contains(e.target) && e.target !== inputbusquedabis) {
 			sugerenciasbiz.innerHTML = '';
 		};
 	});
