@@ -307,10 +307,10 @@
 			height: 6vh; /* Fija alto al 6% del alto de pantalla */
 			align-items: center;
 			background-color: lightblue;
-			padding-left: 80px; /* Separación del borde */
+			padding-left: 10px; /* Separación del borde */
 		}
 		.col-texto, .col-input {
-			width: 85%;
+			width: 75%;
 			padding-right: 10px;
 			display: flex;
 			align-items: center;
@@ -2398,7 +2398,6 @@
 	var inputbusqueda = document.getElementById('encontrar_a');
 	const sugerenciaz = document.getElementById('sugerenciasbusqueda');
 	inputbusqueda.addEventListener('input', () => {
-		//let pos = inputbusqueda.selectionStart;
 		if (inputbusqueda.value.trim() === '') {
 			inputbusqueda.classList.remove('filled');
 			sugerenciaz.style.visibility='hidden';
@@ -2425,6 +2424,9 @@
 				div.addEventListener('click', () => {
 					inputbusqueda.value = item;
 					sugerenciaz.innerHTML = '';
+					barralateral.close();
+					document.getElementById("encontrar_a").value=item;
+					document.getElementById("encontrar_abis").value=item;
 					EncontrarA(item);
 				});
 				sugerenciaz.appendChild(div);
@@ -2465,7 +2467,7 @@
 					inputbusquedabis.value = item;
 					sugerenciasbiz.innerHTML = '';
 					barralateral.close();
-					//document.getElementById("encontrar_a").value=item;
+					document.getElementById("encontrar_a").value=item;
 					document.getElementById("encontrar_abis").value=item;
 					EncontrarA(item);
 				});
