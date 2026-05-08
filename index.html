@@ -12,25 +12,18 @@
 	<script src="geojson/ensayos.geojson" type="text/javascript"></script>
 	<script src="geojson/personal.geojson" type="text/javascript"></script>
 	<script src="geojson/inta.geojson" type="text/javascript"></script>
+	<script src="geojson/caminosinternos.geojson" type="text/javascript"></script>
 	<script src="permisos.txt" type="text/javascript"></script>
 	<!-- JS -->
-	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"
-	integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ=="
-	crossorigin=""></script>
+	<script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
 	<!-- Turf.js para cálculos geométricos -->
 	<script src="https://unpkg.com/@turf/turf/turf.min.js"></script>
 	<!-- CSS -->
 	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
-	integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ=="
-	crossorigin=""/>
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.1/dist/leaflet.css"/>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin=""/>
 	<!-- Repositorios en línea y locales -->
-	<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
 	<link rel="stylesheet" href="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.css"/>
-	<!--<link rel="stylesheet" href="libs/leaflet-measure-path.css"/>-->
 	<link rel="stylesheet" href="./css/leaflet-sidebar.css"/>
-	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 	<script src="https://unpkg.com/leaflet-draw@1.0.4/dist/leaflet.draw.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
 	<!-- Leaflet Routing Machine -->
@@ -191,14 +184,16 @@
 			transform: translate(-50%, -50%);
 			width: 95vw;
 			max-width: 700px;
-			max-height: 93vh;
+			/* 🔥 CLAVE */
+			height: auto;          /* se ajusta al contenido */
+			max-height: 93vh;      /* límite máximo */
 			background-color: yellow;
 			border: 2px solid black;
 			border-radius: 10px;
 			display: flex;
 			flex-direction: column;
-			overflow-y: auto;
-			z-index: 99999;   /* MUY IMPORTANTE */
+			overflow: hidden;      /* evita espacio raro */
+			z-index: 9999999;
 		}
 		.modalflash-cabecera {
 			background: red;
@@ -210,8 +205,9 @@
 		}
 		.modalflash-cuerpo {
 			padding: 10px;
-			flex: 1;                /* OCUPA TODA LA ALTURA RESTANTE */
-			overflow-y: auto;       /* SCROLL SI SE LLENA */
+			/* 🔥 IMPORTANTE */
+			flex: 0;              /* NO expandirse */
+			overflow-y: auto;
 		}
 		.modalflash-botones {
 			display: flex;              /* CLAVE */
@@ -264,15 +260,12 @@
 			left: 5px;
 			padding: 15px 20px;
 			font-size: 18px;
-			/*border: 3px solid;*/
-			/*box-sizing: border-box;*/
 			border: 3px solid #ff0080;
 			border-radius: 10px;
 			outline: none;
 			background: linear-gradient(45deg, #ff0080, #ff8c00, #40e0d0, #ff0080);
 			background-size: 400% 400%;
 			color: white;
-			/*transition: all 0.3s ease;*/
 			width:100%;
 			flex:1;
 			min-width:120px;
@@ -405,7 +398,7 @@
 			border: none;
 			cursor: pointer;
 			padding: 0;
-			z-index:999;
+			z-index:9999;
 		}
 		.botoncentrado img {
 			width: 35px;
@@ -526,7 +519,7 @@
 			position: fixed;
 			top: 28%;
 			right: 3%;
-			z-index: 1050;
+			z-index: 1050 !important;
 			background: #fff;
 			color: white;
 			border: 1px solid #777;
@@ -604,12 +597,117 @@
 		@media (max-width: 600px) {
 			.modalflash {
 				width: 83vw;
-				height: 75vh;
+				height: auto;        /* ✅ */
+				max-height: 75vh;    /* ✅ límite, no fijo */
+				overflow-y: auto;
 			}
 			.fila {
 				flex-wrap: nowrap;
 			}
 			.novedad{left:8px;right:8px;max-width:calc(100% - 16px)}
+		}
+		.ocultar {
+			display: none !important;
+		}
+		/*Cuadro animado*/
+		.colorful-div {
+			width: 300px;
+			height: auto;
+			border-radius: 20px;
+			background: linear-gradient(270deg, #ff5f6d, #ffc371, #24c6dc, #514a9d);
+			background-size: 800% 800%;
+			animation: gradientShift 10s ease infinite;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			color: white;
+			font-size: 1rem;
+			box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+			text-align: center;
+		}
+		@keyframes gradientShift {
+			0% { background-position: 0% 50%; }
+			50% { background-position: 100% 50%; }
+			100% { background-position: 0% 50%; }
+		}
+		
+		/*Probando las sugerencias...*/
+		#ventanaSugerencias {
+			position: fixed;
+			top: 120px;
+			left: 50%;
+			transform: translateX(-50%);
+			max-height: 420px;
+			background-color: #f0fbfd;
+			border: 1px solid #e0d6cc;
+			border-radius: 16px;
+			box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+			z-index: 9999;
+			display: none;
+			overflow: hidden;
+			font-family: Arial, sans-serif;
+			width: 95%;        /* 👉 ocupa más pantalla */
+			max-width: 600px;  /* 👉 más ancho en PC */
+		}
+
+		/* Header */
+		#headerSugerencias {
+			background-color: #013e8c;
+			color: #ffffff;
+			padding: 14px 16px;
+			font-size: 18px; /* 👉 más grande en PC */
+			font-weight: bold;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		/* Botón cerrar */
+		#cerrarSugerencias {
+			cursor: pointer;
+			font-size: 22px;
+		}
+
+		/* Lista */
+		.sugerenciasbusqueda {
+			max-height: 340px;
+			overflow-y: auto;
+			padding: 10px;
+			display: block;   /* 👉 cada item ocupa toda la fila */
+			width: 100%;      /* 👉 ancho completo */
+		}
+
+		/* Items */
+		.sugerenciasbusqueda {
+			/*display: block; /* 👉 evita grid o flex */*/
+			width: 100%;      /* 👉 ancho completo */
+			flex-direction: column; /* 👉 una sola columna */
+			padding: 12px 20px;   /* 👉 menos alto */
+			min-height: auto;     /* 👉 que no fuerce altura */
+			margin-bottom: 14px;
+			font-size: 20px !important;
+			line-height: 1.6;
+			background-color: #e6f7ff !important;  /* celeste */
+			border-radius: 12px;
+			color: #007bff !important;             /* azul */
+			cursor: pointer !important;            /* mano */
+			transition: all 0.2s ease;
+			display: flex;
+			text-align: justify;   /* 👉 justificado real */
+		}
+
+		.sugerenciasbusqueda:hover {
+			background-color: #cceeff !important;
+			transform: scale(1.03);
+			cursor: pointer !important;
+		}
+
+		@media (min-width: 768px) {
+			.sugerenciasbusqueda{
+				font-size: 20px;
+				padding: 22px 20px;
+				min-height: 40px;
+			}
 		}
     </style>
 	<!--Icono para la pestaña del navegador-->
@@ -628,10 +726,16 @@
 <div class="fila">
 	<div class="col-input">
 		<input type="text" id="encontrar_a" class="animated-input" placeholder="¿Buscás algo o alguien?..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-		<div id="sugerenciasbusqueda" class="sugerencias"></div>
+		<div id="ventanaSugerencias">
+			<div id="headerSugerencias">
+				Sugerencias
+				<span id="cerrarSugerencias">✖</span>
+			</div>
+			<div id="sugerenciasbusqueda" class="sugerenciasbusqueda"></div>
+		</div>
 	</div>
 	<div class="col-imagen">
-		<div id="ubicacion_texto" style="font-size:10px; text-align:right; background-color:lightblue; color:blue;width:80px"><strong>Mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="./images/slide_off.jpg" width="50" height="30"></img></a></div>
+		<div id="ubicacion_texto" class="colorful-div" style="text-align:center;color:blue;"><strong>Mi ubicación</strong><a id="ubicacion_estado" href="javascript:activar_seguimiento(seguimiento)"><img id="gps" src="./images/slide_off.jpg" width="50" height="30"></img></a></div>
 	</div>
 </div>
 <body>
@@ -693,7 +797,7 @@
 				<br></br>
 				<p id="titulobuscarterritorio" class="lorem">Escribí o seleccioná el lugar o la persona...</p>
 				<input type="text" id="encontrar_abis" class="animated-input" placeholder="¿Buscás algo o alguien?..." autocomplete="off"/>
-				<div id="sugerenciasbusquedabis"></div>
+				<div id="sugerenciasbusquedabis" class="sugerenciasbusqueda"></div>
 				<br></br>
 				<br></br>
 				<p id="parrafoterritorio" style="color:blue">Escribí el nombre del lugar, el servicio, la persona o la especialidad que necesitás ubicar...</p>
@@ -948,9 +1052,6 @@
 	
 	<!-- la guía/modal con flecha (se posiciona con JS) -->
 	<div id="cartelnuevo" class="novedad" role="dialog" aria-modal="true" style="display:none">
-		<!--<p style="color:green";>Las herramientas que estaban en la pantalla,</p>
-		<p style="color:green";>ahora están ordenadas dentro de esta barra.</p>
-		<p style="color:green";>Así, tendrás más espacio para ver mejor el mapa.</p>-->
 		<br><p class="resaltarlonovedoso"><strong>LO NUEVO DE ESTA VERSION</strong></p>
 		<br><p style="color: blue;">Se actualizaron todas las estadísticas de producción hasta el año 2025.<br><br>Por otra parte, se modificaron algunas parcelas.</p>
 		<br></br>
@@ -961,7 +1062,8 @@
 	</div>
 </body>
 
-<div class="modalflash" id="MiModalFlash">
+<!--Ventana modal flash para desaparecer después de cierto tiempo-->
+<dialog class="modalflash" id="MiModalFlash">
 	<div class="modalflash-cabecera" id="titulomodalflash">¡¡¡ BIENVENIDO AL VISOR WEB DEL INTA EEA MENDOZA...!!!</div>
 	<p class="modalflash-cuerpo" id="cuerpomodalflash"><img src="./images/presentacion.jpg" style="display: block; margin: auto; height:80px" id="imagenmodalflash"/><br><strong>Si sos un visitante, este mapa en línea te permitirá:</strong>
 		<br>* Ubicar una persona, servicio, especialidad o lugar
@@ -978,7 +1080,7 @@
 				No volver a mostrar
 			</label>
 			<div class="modalflash-botones" id="botonesModalFlash">
-				<button id="btn-indicaciones-modal-flash" onclick="TrazarRuta()">Sí</button>
+				<button id="btn-indicaciones-modal-flash" onclick="DondeEstoy()">Sí</button>
 				<button id="btn-cerrar-modal-flash">Cerrar</button>
 			</div>
 		</div>
@@ -986,7 +1088,7 @@
 			<span style="font-weight: bold; color:red; text-align: center;">Me cierro en: <span id="contador"> </span> segundos</span>
 		</div>
 	</p>
-</div>
+</dialog>
 
 <!--Ventana modal inicial-->
 <dialog id="modal_inicial" style="text-align: center; background-color:yellow; font-size:13px;">
@@ -1099,7 +1201,6 @@
 	var capturaActiva= false;
 	var firstLatLng, secondLatLng;
 	var conexion="";
-	//var intervaloRuta = "";
 	var seguimiento="no";
 	var listabusqueda=[];
 	var listabusquedafiltrada=[];
@@ -1118,7 +1219,6 @@
 	var tiempomodalflash=20000;
 	var temporizadormodalflash=null;
 	var intervalo=null;
-	//var tiempo=null;
 	var dentroeeamza="";
 	var dispositivo="";
 	var coord=[];
@@ -1131,6 +1231,10 @@
 	var cant_mediciones=0;
 	var centroide=L.latLng(-33.00376868173891, -68.85766030976325);
 	var entradaeea=L.latLng(-33.003773232329486, -68.85766687268227);
+	var puntomascercano=null;
+	var alertaMostrada = false;
+	var avisovelocidadmaxima="";
+	var aviso=0;
 	var poligono="";
 	var ruta="";
 	var senialgps="";
@@ -1147,6 +1251,17 @@
 	var cuerpomodalflash=document.getElementById("cuerpomodalflash");
 	var aers=["Agencia de Extensión Junín","Agencia de Extensión Lavalle","Agencia de Extensión La Consulta","Agencia de Extensión Luján de Cuyo","Agencia de Extensión Maipú","Oficina de Información Uspallata","Experimental Junín","Experimental La Consulta","Experimental Rama Caída","Experimental San Juan"];
 	var grupoeeamza = L.featureGroup().addTo(mapa);
+	var calculandoRuta = false;
+	var recalcular = false;
+	var ultimaUbicacion = null;
+	var ultimoDestino = null;
+	var ultimaActualizacionRuta = 0;
+	var ultimaUbicacionRuta = null;
+	var mapaCentrado=false;
+	var alertaInicial = false;
+	var alertaZonaMedia = false;
+	var alertaLlegada = false;
+	var proveedorRuta = "";
 	
 	//Añado el predio de la EEA Mendoza
 	var predioeeamza=L.geoJSON(inta,{style: PerimetroEEAMza}).addTo(grupoeeamza);
@@ -1171,7 +1286,6 @@
 	const cantidadvisitas=document.getElementById("cantidadvisitas");
 	const botoncentrado=document.getElementById("botoncentrado");
 	const panelrutas=document.getElementById("PanelRutas");
-	//let refrescoRutaActivo = false;
 	
 	//Estilizar el perímetro de la EEA Mza
 	function PerimetroEEAMza(feature) {
@@ -1216,15 +1330,15 @@
 		location.reload();
 	};
 	
-	<!--Función para preparar todos los Pop-ups-->
+	//Función para preparar todos los Pop-ups
 	function onEachFeature(feature, layer) {
 		if (encontrar_a.value=="") {
-		//if (encontrar_abis.value=="") {
+		let logo = './images/Edificios.jpg';
 		sup_total=sup_total+feature.properties.Sup_Croqui;
 		tot_parc=tot_parc+1;
-		<!--Calcular el promedio general-->
+		//Calcular el promedio general
 		prom_prod=prom_prod+feature.properties.Prod_2017+feature.properties.Prod_2018+feature.properties.Prod_2019+feature.properties.Prod_2020+feature.properties.Prod_2021+feature.properties.Prod_2022+feature.properties.Prod_2023+feature.properties.Prod_2024+feature.properties.Prod_2025;
-		<!--Calcular los años con producción (se excluyen los que no tienen datos)-->
+		//Calcular los años con producción (se excluyen los que no tienen datos)
 		if (feature.properties.Prod_2017 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2018 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2019 !=null) {anios_prod=anios_prod+1};
@@ -1234,7 +1348,7 @@
 		if (feature.properties.Prod_2023 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2024 !=null) {anios_prod=anios_prod+1};
 		if (feature.properties.Prod_2025 !=null) {anios_prod=anios_prod+1};
-		<!--Establecer el mini-logo del PopUp de acuerdo al cultivo/uso de la parcela-->
+		//Establecer el mini-logo del PopUp de acuerdo al cultivo/uso de la parcela
 		if (feature.properties.Variedad=="Ancelotta" || feature.properties.Variedad=="Barbera Dasty" || feature.properties.Variedad=="Bonarda" || feature.properties.Variedad=="Cabernet"
 			|| feature.properties.Variedad=="Malbec" || feature.properties.Variedad=="Merlot" || feature.properties.Variedad=="Pinot" || feature.properties.Variedad=="Syrah"
 			|| feature.properties.Variedad=="Cabernet Sauvignon") {logo='./images/Uvas_Tintas.jpg'};
@@ -1258,7 +1372,7 @@
 		var formatoPopup = {
 			'maxWidth': '200',
 			'className' : 'popups'}
-		<!--Reconocer las parcelas que tienen o no información sobre producción-->
+		//Reconocer las parcelas que tienen o no información sobre producción
 		if (feature.properties.id==2 || feature.properties.id==4 || feature.properties.id==8 || feature.properties.id==11 
 			|| feature.properties.id==19 || feature.properties.id==27 || feature.properties.id==28 || feature.properties.id==29 || feature.properties.id==31 || feature.properties.id==33
 			|| feature.properties.id==37 || feature.properties.id==38 || feature.properties.id==42 || feature.properties.id==46 || feature.properties.id>58 && feature.properties.id<95
@@ -1279,7 +1393,7 @@
 			var variedad_parcela=feature.properties.Variedad;
 			if (feature.properties.Responsabl !=null) {var responsable_parcela=feature.properties.Responsabl};
 			if (feature.properties.Responsabl ==null) {var responsable_parcela="Sin Información"};
-			<!--PopUp a mostrar SI: La parcela tiene un cultivo y tiene datos de producción-->
+			//PopUp a mostrar SI: La parcela tiene un cultivo y tiene datos de producción
 			var contenidoPopup="<b><h4>Especie: "+feature.properties.Especie+"   "+"<img src="+logo+" width='35' height='35' /img>"+"</b></h4><br/>Variedad: "+varied+"<br/>Conducción: "+conduc+
 				"<br/>Año de plantación: "+planta+"<br/>Hileras: "+feature.properties.Hileras+"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"+"<br/>Responsable: "+respon+
 				"<br/><p style='cursor: pointer; color:#0000ff' onclick='return Funcion_Modal(\""+id_parcela+"\", \""+variedad_parcela+"\", \""+responsable_parcela+
@@ -1297,13 +1411,14 @@
 			if (feature.properties.Plantacion !=null) {planta=feature.properties.Plantacion};
 			if (feature.properties.Conduccion !=null) {conduc=feature.properties.Conduccion};
 			if (feature.properties.Variedad !=null) {varied=feature.properties.Variedad};
-			<!--PopUp a mostrar SI: La parcela tiene un cultivo y no tiene datos de producción-->
+			//PopUp a mostrar SI: La parcela tiene un cultivo y no tiene datos de producción
 			var contenidoPopup="<b><h4>Especie: "+feature.properties.Especie+"   "+"<img src="+logo+" width='35' height='35' /img>"+"</b></h4><br/>Variedad: "+varied+"<br/>Conducción: "+conduc+
 				"<br/>Año de plantación: "+planta+"<br/>Hileras: "+hileras+"<br/>Superficie: "+superficie+"<br/>Responsable: "+respon};
 		if (feature.properties.Cobertura !="Cultivo") {
-			<!--PopUp a mostrar SI: La parcela no tiene cultivo-->
+			//PopUp a mostrar SI: La parcela no tiene cultivo
 			var contenidoPopup="Cobertura: "+feature.properties.Cobertura+"   "+"<img src="+logo+" width='35' height='35' /img>"+"<br/>Descripción: "+feature.properties.Descripcio+
-				"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"};
+				"<br/>Superficie: "+feature.properties.Sup_Croqui+" ha"
+		};
 		layer.bindPopup(contenidoPopup, formatoPopup);
 		mapa.flyTo(coordenadas, zum)}
 		else {if (feature.properties.Descripcio==sector) {
@@ -1339,24 +1454,24 @@
 		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		cobertura_vid.value="";
 		criterio=valor;
-		document.getElementById("responsable").style.visibility='hidden';
-		document.getElementById("conduccion").style.visibility='hidden';
-		document.getElementById("riego").style.visibility='hidden';
-		document.getElementById("clon").style.visibility='hidden';
-		document.getElementById("superficie").style.visibility='hidden';
-		document.getElementById("plantacion").style.visibility='hidden';
-		document.getElementById("cobertura").style.visibility='hidden';
-		document.getElementById("especie").style.visibility='hidden';
-		document.getElementById("quitartodo").style.visibility='hidden';
-		document.getElementById("mostrartodo").style.visibility='hidden';
-		document.getElementById("sel_clon").style.visibility='hidden';
-		document.getElementById("sel_cobertura").style.visibility='hidden';
-		document.getElementById("sel_conduccion").style.visibility='hidden';
-		document.getElementById("sel_especie").style.visibility='hidden';
-		document.getElementById("sel_plantacion").style.visibility='hidden';
-		document.getElementById("sel_responsable").style.visibility='hidden';
-		document.getElementById("sel_riego").style.visibility='hidden';
-		document.getElementById("sel_superficie").style.visibility='hidden';
+		document.getElementById("responsable").classList.add("ocultar");
+		document.getElementById("conduccion").classList.add("ocultar");
+		document.getElementById("riego").classList.add("ocultar");
+		document.getElementById("clon").classList.add("ocultar");
+		document.getElementById("superficie").classList.add("ocultar");
+		document.getElementById("plantacion").classList.add("ocultar");
+		document.getElementById("cobertura").classList.add("ocultar");
+		document.getElementById("especie").classList.add("ocultar");
+		document.getElementById("quitartodo").classList.add("ocultar");
+		document.getElementById("mostrartodo").classList.add("ocultar");
+		document.getElementById("sel_clon").classList.add("ocultar");
+		document.getElementById("sel_cobertura").classList.add("ocultar");
+		document.getElementById("sel_conduccion").classList.add("ocultar");
+		document.getElementById("sel_especie").classList.add("ocultar");
+		document.getElementById("sel_plantacion").classList.add("ocultar");
+		document.getElementById("sel_responsable").classList.add("ocultar");
+		document.getElementById("sel_riego").classList.add("ocultar");
+		document.getElementById("sel_superficie").classList.add("ocultar");
 		document.getElementById("sel_clon").value="";
 		document.getElementById("sel_cobertura").value="";
 		document.getElementById("sel_conduccion").value="";
@@ -1366,31 +1481,31 @@
 		document.getElementById("sel_riego").value="";
 		document.getElementById("sel_superficie").value="";
 		if (otro_criterio.value=="Responsable") {
-			document.getElementById("responsable").style.visibility='visible';
-			document.getElementById("sel_responsable").style.visibility='visible'};
+			document.getElementById("responsable").classList.remove("ocultar");
+			document.getElementById("sel_responsable").classList.remove("ocultar")};
 		if (otro_criterio.value=="Clon") {
-			document.getElementById("clon").style.visibility='visible';
-			document.getElementById("sel_clon").style.visibility='visible'};
+			document.getElementById("clon").classList.remove("ocultar");
+			document.getElementById("sel_clon").classList.remove("ocultar")};
 		if (otro_criterio.value=="Superficie") {
-			document.getElementById("superficie").style.visibility='visible';
-			document.getElementById("sel_superficie").style.visibility='visible'};
+			document.getElementById("superficie").classList.remove("ocultar");
+			document.getElementById("sel_superficie").classList.remove("ocultar")};
 		if (otro_criterio.value=="Riego") {
-			document.getElementById("riego").style.visibility='visible';
-			document.getElementById("sel_riego").style.visibility='visible'};
+			document.getElementById("riego").classList.remove("ocultar");
+			document.getElementById("sel_riego").classList.remove("ocultar")};
 		if (otro_criterio.value=="Plantacion") {
-			document.getElementById("plantacion").style.visibility='visible';
-			document.getElementById("sel_plantacion").style.visibility='visible'};
+			document.getElementById("plantacion").classList.remove("ocultar");
+			document.getElementById("sel_plantacion").classList.remove("ocultar")};
 		if (otro_criterio.value=="Conduccion") {
-			document.getElementById("conduccion").style.visibility='visible';
-			document.getElementById("sel_conduccion").style.visibility='visible'};
+			document.getElementById("conduccion").classList.remove("ocultar");
+			document.getElementById("sel_conduccion").classList.remove("ocultar")};
 		if (otro_criterio.value=="Cobertura") {
-			document.getElementById("cobertura").style.visibility='visible';
-			document.getElementById("sel_cobertura").style.visibility='visible'};
+			document.getElementById("cobertura").classList.remove("ocultar");
+			document.getElementById("sel_cobertura").classList.remove("ocultar")};
 		if (otro_criterio.value=="Especie") {
-			document.getElementById("especie").style.visibility='visible';
-			document.getElementById("sel_especie").style.visibility='visible'};
-		document.getElementById("quitartodo").style.visibility='visible';
-		document.getElementById("mostrartodo").style.visibility='visible';
+			document.getElementById("especie").classList.remove("ocultar");
+			document.getElementById("sel_especie").classList.remove("ocultar")};
+		document.getElementById("quitartodo").classList.remove("ocultar");
+		document.getElementById("mostrartodo").classList.remove("ocultar");
 	};
 
 	<!--Funcion para filtrar con otro criterio distinto a vid-->
@@ -1403,15 +1518,15 @@
 		tot_parc=0;
 		prom_prod=0;
 		anios_prod=0;
-		document.getElementById("responsable").style.visibility='hidden';
-		document.getElementById("conduccion").style.visibility='hidden';
-		document.getElementById("riego").style.visibility='hidden';
-		document.getElementById("clon").style.visibility='hidden';
-		document.getElementById("superficie").style.visibility='hidden';
-		document.getElementById("plantacion").style.visibility='hidden';
-		document.getElementById("cobertura").style.visibility='hidden';
-		document.getElementById("especie").style.visibility='hidden';
-		modal.style.visibility='hidden';
+		document.getElementById("responsable").classList.add("ocultar");
+		document.getElementById("conduccion").classList.add("ocultar");
+		document.getElementById("riego").classList.add("ocultar");
+		document.getElementById("clon").classList.add("ocultar");
+		document.getElementById("superficie").classList.add("ocultar");
+		document.getElementById("plantacion").classList.add("ocultar");
+		document.getElementById("cobertura").classList.add("ocultar");
+		document.getElementById("especie").classList.add("ocultar");
+		modal.classList.add("ocultar");
 		document.getElementById("otro_criterio").value="";
 		if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
 		if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
@@ -1419,8 +1534,8 @@
 		if (lugar !==""){lugar.remove()};
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		capa_filtrada=L.geoJSON(parcelas,{filter:Filtrar_Vid, style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
-		document.getElementById("quitartodo").style.visibility='visible';
-		document.getElementById("mostrartodo").style.visibility='visible';
+		document.getElementById("quitartodo").classList.remove("ocultar");
+		document.getElementById("mostrartodo").classList.remove("ocultar");
 	};
 
 	<!--Funcion para filtrar parcelas con valores distintos a vid-->
@@ -1441,15 +1556,15 @@
 		var resumen='<span>Criterio de filtro: <span style=color:blue><strong>'+criterio+" - "+valor+'</strong>.</span><br><span>Cantidad de parcelas: <span style=color:blue><strong>'+tot_parc+
 			'</strong>.</span></span><br><span>Superficie: <span style=color:blue><strong>'+sup_total.toFixed(2)+'</strong>.</span></span><br><span>Promedio de Producción Anual: <span style=color:blue><strong>'+
 			(prom_prod/anios_prod/sup_total).toFixed(2)+" qq/ha"+'</strong>.</span></span>';
-		document.getElementById("cuadroestadisticasbarralateral").style.visibility='visible';
-		modal.style.visibility='visible';
+		document.getElementById("cuadroestadisticasbarralateral").classList.remove("ocultar");
+		modal.classList.remove("ocultar");
 		document.getElementById("estadisticasbarralateral").innerHTML=resumen;
 		if (anios_prod !==0) {document.getElementById("titulomodalestadistico").innerText=("Resumen Estadístico"); document.getElementById("cuerpomodalestadistico").innerHTML=resumen;AbrirModalEstadistico()};
 		if (anios_prod ==0) {document.getElementById("titulomodalestadistico").innerText=("Resumen Estadístico"); document.getElementById("cuerpomodalestadistico").innerText="Criterios de filtro: "+criterio+
 			" - "+valor+"\nCantidad de parcelas: "+tot_parc+"\nSuperficie: "+sup_total.toFixed(2)+" ha"};
 		cobertura_vid.value="";
-		document.getElementById("quitartodo").style.visibility='visible';
-		document.getElementById("mostrartodo").style.visibility='visible';
+		document.getElementById("quitartodo").classList.remove("ocultar");
+		document.getElementById("mostrartodo").classList.remove("ocultar");
 		barralateral.close();
 	};
 
@@ -1467,8 +1582,8 @@
 		var resumen='<span>Criterio de filtro: <span style=color:blue><strong>Vid</strong>.</span><br><span>Variedad: <span style=color:blue><strong>'+busqueda+
 			'</strong>.</span></span><br><span>Cantidad de Parcelas: <span style=color:blue><strong>'+tot_parc+'</strong>.</span></span><br><span>Superficie: <span style=color:blue><strong>'+
 			sup_total.toFixed(2)+'</strong>.</span></span><br><span>Promedio de Producción Anual: <span style=color:blue><strong>'+prom_gral_prod.toFixed(2)+" qq/ha"+'</strong>.</span></span>';
-		document.getElementById("cuadroestadisticasbarralateral").style.visibility='visible';
-		modal.style.visibility='visible';
+		document.getElementById("cuadroestadisticasbarralateral").classList.remove("ocultar");
+		modal.classList.remove("ocultar");
 		document.getElementById("estadisticasbarralateral").innerHTML=resumen;
 		if (cobertura_vid.value !="") {if (criterio.test(feature.properties.Variedad)) return true; document.getElementById("titulomodalestadistico").innerText=("Resumen estadístico");
 			document.getElementById("cuerpomodalestadistico").innerHTML=resumen;AbrirModalEstadistico()};
@@ -1525,7 +1640,7 @@
 			if (sel_superficie.value=="Mayor a 3 ha") {if (feature.properties.Sup_Croqui>='3' && feature.properties.Sup_Croqui!=null) return true};
 			resumen=otro_criterio.value+": "+sel_superficie.value;
 		};
-		modal.style.visibility='visible';
+		modal.classList.remove("ocultar");
 	};
 
 	<!--Funcion para buscar sector/actividad-->
@@ -1555,7 +1670,6 @@
 		<!--Resetear variables-->
 		barralateral.close();
 		var buscado=encontrar;
-		//ResetearTodo();
 		coincidencia="";
 		sector="";
 		oficina="";
@@ -1573,35 +1687,39 @@
 		<!--Generar la capa con el resultado de la búsqueda-->
 		capa_buscar=L.geoJSON(parcelas,{filter:Filtrar_Buscar, style: PersonalizarBusquedas, onEachFeature}).addTo(mapa);
 		<!--No se encontró lo que se busca por coincidencia con el Sector o la especialidad de éste; así que se pasa a buscar por coincidencia con persona o sus especialidades-->
-		if (Object.keys(capa_buscar._layers).length ==0) {capa_buscar=L.geoJSON(personal,{filter:Filtrar_Buscar1,style: PersonalizarBusquedas, onEachFeature}).addTo(mapa),
-		capa_buscar1=L.geoJSON(parcelas,{filter:Filtrar_Buscar2, style:PersonalizarBusquedas, onEachFeature}).addTo(mapa);
-		capa_buscar.remove();
+		if (Object.keys(capa_buscar._layers).length ==0) {
+			capa_buscar=L.geoJSON(personal,{filter:Filtrar_Buscar1,style: PersonalizarBusquedas, onEachFeature}).addTo(mapa),
+			capa_buscar1=L.geoJSON(parcelas,{filter:Filtrar_Buscar2, style:PersonalizarBusquedas, onEachFeature}).addTo(mapa);
+			capa_buscar.remove();
 		};
-		mapa.flyToBounds(capa_buscar.getBounds(),18);
-		if (!coordenadas_ubicacion_real=="" && orientarme=="") {
-			titulomodalflash.innerText="TRAZAR RUTA";
-			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
-			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
-			btnindicacionesmodalflash.style.display='flex';
-			btncerrarmodalflash.style.display='flex';
-			btncerrarmodalflash.textContent = "No";
-			tiempomodalflash=5000;
-			ModalFlash(tiempomodalflash);
+		if (marca_ubicacion_real) {
+			mapa.flyToBounds(capa_buscar.getBounds(),18);
+			mapa.flyToBounds(capa_buscar1.getBounds(),18);
+			dentroeeamza = Chequeardentroeeamza(coordenadas_ubicacion_real);
+			if (dentroeeamza && coord.length !== 0) {alertaZonaMedia = false;TrazarRutaDentroEEA()};
+			if (!dentroeeamza && aviso===0) {
+				trazarRutaInteligente(coordenadas_ubicacion_real,entradaeea)}
 		};
 	};
 
 	<!--Funcion para resetear todo-->
 	function ResetearTodo() {
-		document.getElementById("volvereea").style.visibility='hidden';
+		document.getElementById("volvereea").classList.add("ocultar");
 		if (lugar){lugar.remove()};
 		if (aer){aer.remove()};
-		if (ruta) {ruta.remove()};
-		if (marca_ubicacion_real) {marca_ubicacion_real.remove()};
+		if (ruta){ruta.off(); // elimina listeners
+			ruta.remove();
+			ruta = null;
+		};
+		if (marca_ubicacion_real){
+		   marca_ubicacion_real.off();
+		   mapa.removeLayer(marca_ubicacion_real);
+		   marca_ubicacion_real=null;
+		};
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		if (perimetro) {mapa.removeLayer(perimetro)};
-		//if (superficie) {mapa.removeLayer(superficie)};
 		if (tot_parc) {CerrarModalEstadistico()};
-		botondetallesruta.style.display='none';
+		botondetallesruta.classList.add("ocultar");
 		clearInterval(intervalo);
 		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
@@ -1648,28 +1766,12 @@
 	function MostrarTodo() {
 		ResetearTodo();
 		capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
-		document.getElementById("quitartodo").style.visibility='visible';
-		document.getElementById("mostrartodo").style.visibility='hidden';
+		document.getElementById("quitartodo").classList.remove("ocultar");
+		document.getElementById("mostrartodo").classList.add("ocultar");
 	};
 
 	<!--Verificar Sistema Operativo-->
 	function VerificarDispositivo() {
-		//const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-		//let so = "Desconocido";
-		//if (/windows phone/i.test(userAgent)) {
-		//	so = "Windows Phone";
-		//} else if (/win/i.test(userAgent)) {
-		//	so = "Windows";
-		//} else if (/android/i.test(userAgent)) {
-		//	so = "Android";
-		//} else if (/ipad|iphone|ipod/i.test(userAgent)) {
-		//	so = "iOS";
-		//} else if (/mac/i.test(userAgent)) {
-		//	so = "MacOS";
-		//} else if (/linux/i.test(userAgent)) {
-		//	so = "Linux";
-		//};
-		//sistema_operativo=so;
 		const ancho = window.screen.width;
 		const alto = window.screen.height;
 		if (Math.min(ancho, alto) < 768) {so="movil"}  // teléfonos y tablets
@@ -1721,7 +1823,7 @@
 				'Debido a: '+msg1+'.-</span>';
 				tiempomodalflash=5000;
 				ModalFlash(tiempomodalflash);
-				botondetallesruta.style.display="none";
+				botondetallesruta.classList.add("ocultar");
 			},
 			{
 				enableHighAccuracy: true,
@@ -1736,41 +1838,103 @@
 		sondeo_posicion=0;
 		barralateral.close();
 		document.getElementById("gps").src="./images/slide_on.jpg";
-		document.getElementById("gpson").style.visibility='visible';
-		document.getElementById("gpsoff").style.visibility='hidden';
-		document.getElementById("dondestoy").style.visibility='visible';
+		document.getElementById("gpson").classList.remove("ocultar");
+		document.getElementById("gpsoff").classList.add("ocultar");
+		document.getElementById("dondestoy").classList.remove("ocultar");
 		document.getElementById("ubicacion_estado").href="javascript:desactivar_seguimiento(seguimiento)";
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
-			if (dispositivo==="pc" && orientarme==="") {
-				titulomodalflash.innerText="TRAZAR RUTA";
-				visitas.style.display="none";
-				cantidadvisitas.style.display="none";
-				cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
-				btnindicacionesmodalflash.style.display='none';
-				btncerrarmodalflash.textContent = "Cerrar";
-				tiempomodalflash=9000;
-				ModalFlash(tiempomodalflash);
+			if (dispositivo==="movil") {
+				if (seguimiento==="no") {
+					titulomodalflash.innerText="TRAZAR RUTA";
+					cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>Asegurate de tener activado el sonido y en un volumen cómodo.</b><br><br><span style="color:black">Recibirás alertas con voz cuando estés cerca y al llegar al destino.-<br></span>';
+					btnindicacionesmodalflash.classList.add("ocultar");
+					tiempomodalflash=9000;
+					ModalFlash(tiempomodalflash);
+				};
 			};
-			if (dispositivo==="pc") {botoncentrado.style.display='block'};
-			cajadistancia.classList.add("visible");
+			if (dispositivo==="pc") {
+				if (seguimiento==="no") {
+					titulomodalflash.innerText="TRAZAR RUTA";
+					cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Puede que la ubicación que te muestre NO SEA LA REAL.</b><br><br><span style="color:black">Parece que estás conectado desde una PC; por lo que la ubicación tal vez sea la de tu proveedor de internet; en vez del lugar donde estás.-<br></span>';
+					btnindicacionesmodalflash.classList.add("ocultar");
+					tiempomodalflash=9000;
+					ModalFlash(tiempomodalflash);
+				};
+			};
 			seguimiento="si";
+			botoncentrado.classList.remove("ocultar");
 			mapa.locate({setView: false, watch: true, enableHighAccuracy: true});
 			mapa.on('locationfound', ActualizarUbicacion);
 			mapa.on('locationerror', ErrorGPS);
 		};
 	};
+	
+	// Evento en caso de error
+	function ErrorGPS(e) {
+		cajadistancia.classList.add("visible");
+		cajadistancia.textContent = "No se pudo obtener la ubicación: " + e.message;
+		cajadistancia.style.background = "white";
+		cajadistancia.style.color = "red";
+		botondetallesruta.classList.add("ocultar");
+	};
+
+	//Probando....
+	function debeActualizarRuta() {
+		let ahora = Date.now();
+		// si nunca calculó
+		if (!ultimaUbicacionRuta) {
+			ultimaUbicacionRuta = coordenadas_ubicacion_real;
+			ultimaActualizacionRuta = ahora;
+			return true;
+		}
+		// tiempo transcurrido
+		let pasaron2Min = (ahora - ultimaActualizacionRuta) >= 120000;
+		// cambio GPS
+		let movioDistancia =
+			mapa.distance(ultimaUbicacionRuta,coordenadas_ubicacion_real) > 200;
+		if (pasaron2Min && movioDistancia) {
+			ultimaActualizacionRuta = ahora;
+			ultimaUbicacionRuta = coordenadas_ubicacion_real;
+			return true;
+		}
+		return false;
+	};
+	
+	function actualizarRutaForzada(destino){
+		if (!coordenadas_ubicacion_real || !destino) return;
+		// cancelar consulta previa si hubiera una en curso
+		calculandoRuta = false;
+		// si existe ruta dibujada vieja, opcional limpiar
+		if (ruta){
+			ruta.setWaypoints([]);
+		}
+		// resetear control temporal para nuevo destino
+		ultimaActualizacionRuta = Date.now();
+		ultimaUbicacionRuta = coordenadas_ubicacion_real;
+		ultimoDestino = destino;
+		trazarRutaInteligente(coordenadas_ubicacion_real,destino);
+	};
 
 	// Evento al encontrar la ubicación
 	function ActualizarUbicacion(e) {
 		if (coordenadas_ubicacion_real) {
-			marca_ubicacion_real.remove();
+			if (marca_ubicacion_real){
+			   marca_ubicacion_real.off();
+			   mapa.removeLayer(marca_ubicacion_real);
+			   marca_ubicacion_real=null;
+			};
+			//LA PROXIMA LINEA ES PARA MANIPULAR LA UBICACION
+			//marca_ubicacion_real = L.marker(coordenadas_ubicacion_real,{icon:icono_posicion}).addTo(mapa)
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
 				.bindPopup("Vas por aquí");
 			coordenadas_ubicacion_real=e.latlng;
 		};
 		if (!coordenadas_ubicacion_real) {
+			//LAS DOS PROXIMAS LINEAS SON PARA MANIPULAR LA UBICACION
+			//coordenadas_ubicacion_real=L.latLng(-32.94949373638869, -68.81989938649201);
+			//marca_ubicacion_real = L.marker(coordenadas_ubicacion_real,{icon:icono_posicion}).addTo(mapa)
 			marca_ubicacion_real = L.marker(e.latlng,{icon:icono_posicion}).addTo(mapa)
 				.bindPopup("Estás por aquí")
 				.openPopup();
@@ -1779,81 +1943,61 @@
 		};
 		dentroeeamza = Chequeardentroeeamza(coordenadas_ubicacion_real);
 		distancia=DistanciaEnTiempoReal();
-		if (orientarme=="") {
-			if (distancia>1100) {
-				titulomodalflash.innerText="TRAZAR RUTA";
-				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
-				'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
-				btnindicacionesmodalflash.style.display='flex';
-				btncerrarmodalflash.style.display='flex';
-				btncerrarmodalflash.innerHTML = "No";
-				tiempomodalflash=5000;
-				ModalFlash(tiempomodalflash);
-			};
-			if (distancia<=1100 && distancia>10) {
-				titulomodalflash.innerText="TRAZAR RUTA";
-				cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo mostrarte en tiempo real por dónde vas '+
-				'y el destino con vista de ambos puntos en el mapa.-<br></span>';
-				btnindicacionesmodalflash.style.display='flex';
-				btncerrarmodalflash.style.display='flex';
-				btncerrarmodalflash.innerHTML = "No";
-				tiempomodalflash=5000;
-				ModalFlash(tiempomodalflash);
-			};
+		ultimoDestino=null;
+		if (dentroeeamza && coord.length !== 0) {botondetallesruta.classList.add("ocultar");panelrutas.classList.add("ocultar");if (capaRutaPrincipal) {mapa.removeLayer(capaRutaPrincipal)};if (capaRutaAlternativa) {mapa.removeLayer(capaRutaAlternativa)};TrazarRutaDentroEEA()};
+		if (!dentroeeamza && aviso===0) {
+			if (!dentroeeamza && aviso===0 && debeActualizarRuta()) {
+				trazarRutaInteligente(coordenadas_ubicacion_real,entradaeea);
+			}
 		};
 		if (orientarme=="si") {
 			if (distancia<=1100) {
-				botondetallesruta.style.display="none";
-				panelrutas.style.display="none";
-				if (ruta) {
-					ruta.remove();
+				botondetallesruta.classList.add("ocultar");
+				panelrutas.classList.add("ocultar");
+				if (ruta){
+				   ruta.off(); // elimina listeners
+				   ruta.remove();
+				   ruta = null;
 				};
 			};
 			if (distancia>1100) {
-				botondetallesruta.style.display="block";
+				botondetallesruta.classList.remove("ocultar");
 			};
 		};
 		if (distancia > 10) {
 			if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
 			if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
 		};
-		if (!dentroeeamza || aer || lugar) {
-			cajadistancia.textContent = msg+" (En línea recta).-";
-			cajadistancia.style.background = "#d4edda";
-			cajadistancia.style.color = "#155724"
-		} else {
-			if (dispositivo=="movil") {cajadistancia.innerHTML = "Estás dentro de la EEA Mendoza.<br>La velocidad máxima recomendada para circular aqui es de 30 km/h.-"};
-			if (dispositivo=="pc") {cajadistancia.innerHTML = "Estás dentro de la EEA Mendoza.-"};
-			cajadistancia.style.background = "#d4edda";
-			cajadistancia.style.color = "#155724";
-			botondetallesruta.style.display="none";
-		};
-		if (distancia>180) {avisollegada="si"};
+		if (distancia>180) {alertaZonaMedia=false;avisollegada="si"};
 		if (distancia >80 && distancia <= 180 && dispositivo=="movil") {
-			msg="Avanza despacio y con atención. ¡Estás a pocos metros del destino!. Recorda que la velocidad maxima recomendada dentro del inta es de 30 kilometros por hora";
-			if (avisollegada=="si") {AlertaLlegada(msg)};
+			if (!alertaZonaMedia) {
+				msg="Avanzá despacio y con atención. ¡Estás a pocos metros del destino!. Recordá que la velocidad maxima recomendada dentro del inta es de 30 kilometros por hora";
+				if (avisollegada=="si") {AlertaLlegada(msg)};
+				alertaZonaMedia=true;
+			};
 		};
 		if (distancia>10 && distancia<80) {avisollegada="si"};
-		if (distancia <= 10 && dispositivo=="movil") {
-			cajadistancia.textContent = "¡Has llegado a tu destino!.-";
-			//refrescoRutaActivo = false;
-			//clearInterval(intervaloRuta);
-			//intervaloRuta = null;
-			//setTimeout(() => {
-			//	cajadistancia.classList.remove("visible");
-			//}, 10000);
-			mapa.setView(coordenadas_ubicacion_real, 19);
-			if (avisollegada=="si") {AlertaLlegada("Has llegado a tu destino "+msgencontrado)};
+		let timeoutLlegada = null;
+		if (distancia <= 7 && !timeoutLlegada) {
+			timeoutLlegada = setTimeout(() => {
+				cajadistancia.classList.add("visible");
+				cajadistancia.textContent = "¡Has llegado a tu destino!.";
+				cajadistancia.style.color = "#155724";
+				timeoutLlegada = null;
+			}, 10000);
 		};
-	};
-
-	// Evento en caso de error
-	function ErrorGPS(e) {
-		cajadistancia.classList.add("visible");
-		cajadistancia.textContent = "No se pudo obtener la ubicación: " + e.message;
-		cajadistancia.style.background = "white";
-		cajadistancia.style.color = "red";
-		botondetallesruta.style.display='none';
+		if (distancia <= 10 && dispositivo=="movil" && !yaLlegue) {
+			yaLlegue = true;
+			avisollegada = "no";
+			cajadistancia.classList.add("visible");
+			cajadistancia.textContent = "¡Has llegado a tu destino!.";
+			mapa.setView(coordenadas_ubicacion_real, 19);
+			AlertaLlegada("Has llegado a tu destino " + msgencontrado);
+		};
+		if (distancia > 50) {
+			yaLlegue = false;
+			avisollegada = "si";
+		};
 	};
 	
 	//Anuncio en voz alta de cercanía/llegada a destino
@@ -1861,7 +2005,7 @@
 		const utterance = new SpeechSynthesisUtterance(leerdistancia);
 		speechSynthesis.speak(utterance);
 		if (distancia>10) {avisollegada="no"};
-		if (distancia<=10) {avisollegada="no"};//DetenerActualizarUbicacion()};
+		if (distancia<=10) {avisollegada="no"};
 		clearTimeout(temporizadormodalflash);
 	};
 	
@@ -1914,28 +2058,32 @@
 	function DetenerActualizarUbicacion() {
 		clearInterval(intervalo);
 		//clearInterval(intervaloRuta);
-		clearTimeout(temporizadormodalflash);
 		//clearTimeout(tiempo);
+		clearTimeout(temporizadormodalflash);
 		actualizarruta="si";
-		document.getElementById("dondestoy").style.visibility='hidden';
-		if (ruta) {ruta.remove()};
-		botondetallesruta.style.display='none';
+		document.getElementById("dondestoy").classList.add("ocultar");
+		if (ruta){
+		   ruta.off(); // elimina listeners
+		   ruta.remove();
+		   ruta = null;
+		};
+		botondetallesruta.classList.add("ocultar");
 		coordenadas_ubicacion_real="";
 		distancia="";
 		mapa.stopLocate();
 		mapa.off('locationfound', ActualizarUbicacion);
 		mapa.off('locationerror', ErrorGPS);
-		if (marca_ubicacion_real) {
-			marca_ubicacion_real.remove();
-			coordenadas_ubicacion_real = "";
-			marca_ubicacion_real = "";
+		if (marca_ubicacion_real){
+		   marca_ubicacion_real.off();
+		   mapa.removeLayer(marca_ubicacion_real);
+		   marca_ubicacion_real=null;
+		   coordenadas_ubicacion_real = "";
 		};
 		titulomodalflash.innerText="SEGUIMIENTO DETENIDO";
 		cuerpomodalflash.innerHTML = '<span style="display: block; text-align: center; width: 100%; color:green;"><br><b>Servicio de seguimiento en tiempo real detenido.</b><br><br><span style="color:black">'+
 		'No podrás visualizar tu posición ni recibir indicaciones para llegar a un lugar.'+
 		'<br><br>Podrás volver a activarla en el momento que lo desees.</span>';
 		tiempomodalflash=5000;
-		//btncerrarmodalflash.textContent === "Cerrar";
 		ModalFlash(tiempomodalflash);
 	};
 
@@ -1947,30 +2095,34 @@
 
 	<!--Función para detener el seguimiento en tiempo real-->
 	function desactivar_seguimiento(seguimiento) {
-		botondetallesruta.style.display='none';
+		//clearInterval(intervaloRuta);
+		//clearTimeout(tiempo);
+		botondetallesruta.classList.add("ocultar");
 		barralateral.close();
 		seguimiento="";
 		orientarme="";
 		document.getElementById("gps").src="./images/slide_off.jpg";
-		document.getElementById("gpson").style.visibility='hidden';
-		document.getElementById("gpsoff").style.visibility='visible';
-		botoncentrado.style.display='none';
+		document.getElementById("gpson").classList.add("ocultar");
+		document.getElementById("gpsoff").classList.remove("ocultar");
+		botoncentrado.classList.add("ocultar");
 		cajadistancia.classList.remove("visible");
-		document.getElementById("dondestoy").style.visibility='hidden';
+		document.getElementById("dondestoy").classList.add("ocultar");
 		document.getElementById("ubicacion_estado").href="javascript:activar_seguimiento(seguimiento)";
 		clearInterval(intervalo);
-		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		//clearTimeout(tiempo);
-		if (ruta) {ruta.remove()};
-		botondetallesruta.style.display='none';
+		if (ruta){
+		   ruta.off(); // elimina listeners
+		   ruta.remove();
+		   ruta = null;
+		};
 		coordenadas_ubicacion_real="";
 		distancia="";
 		mapa.stopLocate();
-		if (marca_ubicacion_real) {
-			marca_ubicacion_real.remove();
-			coordenadas_ubicacion_real = "";
-			marca_ubicacion_real = "";
+		if (marca_ubicacion_real){
+		   marca_ubicacion_real.off();
+		   mapa.removeLayer(marca_ubicacion_real);
+		   marca_ubicacion_real=null;
+		   coordenadas_ubicacion_real = "";
 		};
 		titulomodalflash.innerText="SEGUIMIENTO DETENIDO";
 		cuerpomodalflash.innerHTML = '<span style="display: block; text-align: center; width: 100%; color:green;"><br><b>Servicio de seguimiento en tiempo real detenido.</b><br><br><span style="color:black">'+
@@ -1979,116 +2131,628 @@
 		btncerrarmodalflash.textContent = "Cerrar";
 		tiempomodalflash=5000;
 		ModalFlash(tiempomodalflash);
-		if (ruta) {ruta.remove()};
+		if (ruta){
+		   ruta.off(); // elimina listeners
+		   ruta.remove();
+		   ruta = null;
+		};
 		iraaer="";
 		mail="";
 	};
 	
-	function TrazarRuta() {
-		clearTimeout(temporizadormodalflash);
-		//clearTimeout(tiempo);
-		modalinicial.close();
-		mimodalflash.style.display='none';
-		btnindicacionesmodalflash.style.display='none';
-		visitas.style.display='none';
-		document.getElementById("borrableinicial").style.display='none';
-		botoncentrado.style.display="block";
-		VerificarConexion();
-		if (conexion === "si") VerificarGPS();
-		distancia = DistanciaEnTiempoReal();
-		avisollegada = "si";
-		// 🚶 Cerca del destino → NO rutea, pero NO mata el intervalo
-		if (distancia <= 1100) {
-			ActualizarUbicacion();
-			return;
-		}
-		// 🔥 eliminar ruta anterior
-		if (ruta) {
-			mapa.removeControl(ruta);
-			ruta = null;
-		}
-		// 🔥 crear nueva ruta
-		ruta = L.Routing.control({
-			waypoints: [
-				L.latLng(coordenadas_ubicacion_real.lat, coordenadas_ubicacion_real.lng),
-				L.latLng(centroide.lat, centroide.lng)
-			],
-			router: L.Routing.osrmv1({
-				serviceUrl: 'https://router.project-osrm.org/route/v1',
-				language: 'es'
-			}),
-			showAlternatives: true,
-			draggableWaypoints: false,
-			createMarker: () => null,
-			lineOptions: {
-				styles: [{ color: 'red', weight: 9, opacity: 0.9 }]},
-			altLineOptions: {styles: [{color: 'blue', weight: 6, opacity: 0.6, dashArray: '8,12'}]} 
-		}).addTo(mapa);
-		
-		
-		//Probando desde acá......
-		function segundosAHorasMinutos(segundos) {
-			const horas = Math.floor(segundos / 3600);
-			const minutos = Math.round((segundos % 3600) / 60);
-			if (horas > 0) {
-				return `${horas} h ${minutos} min`;
+	//###########################################################
+	//##### NUEVO BLOQUE DENTRO DEL PREDIO DE LA EEA MENDOZA ####
+	//###########################################################
+	
+	//---------------- EXTRAER SEGMENTOS
+	var segmentos=[];
+	caminosinternos.features.forEach(f=>{
+		f.geometry.coordinates.forEach(line=>{
+			for(var i=0;i<line.length-1;i++){
+			segmentos.push([line[i],line[i+1]]);
 			}
-			return `${minutos} min`;
-		};
-		
-		ruta.on('routesfound', function (e) {
-			e.routes.forEach((route, index) => {
-				const distanciaKm = (route.summary.totalDistance / 1000).toFixed(2);
-				const tiempoFormateado = segundosAHorasMinutos(route.summary.totalTime);
-				cajadistancia.insertAdjacentHTML("beforeend", `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}: Distancia: ${distanciaKm} km, Tiempo estimado: ${tiempoFormateado}.`);
-			});
-			botondetallesruta.style.display = "block";
-			panelrutas.style.display = "block";
-			panelrutas.replaceChildren(ruta.getContainer());
 		});
-		//Hasta acá.-
+	});
+	
+	//---------------- GRAFO
+	var graph={};
+	function addEdge(a,b){
+		var A=a.join(",");
+		var B=b.join(",");
+		var d=turf.distance(
+		turf.point(a),
+		turf.point(b),
+		{units:"kilometers"}
+		);
+		if(!graph[A])graph[A]=[];
+		if(!graph[B])graph[B]=[];
+		graph[A].push({node:B,weight:d});
+		graph[B].push({node:A,weight:d});
+	};
+	
+	// crear aristas base
+	segmentos.forEach(s=>addEdge(s[0],s[1]));
+	
+	//---------------- SNAP AL SEGMENTO
+	function snapSegment(pt){
+		var min=Infinity;
+		var mejor=null;
+		var segA,segB;
+		segmentos.forEach(s=>{
+			var line=turf.lineString([s[0],s[1]]);
+			var snap=turf.nearestPointOnLine(line,turf.point(pt));
+			var d=snap.properties.dist;
+			if(d<min){
+				min=d;
+				mejor=snap.geometry.coordinates;
+				segA=s[0];
+				segB=s[1];
+			}
+		});
+		return {p:mejor,a:segA,b:segB};
+	};
+	
+	//---------------- INSERTAR NODO
+	function insertarNodo(info){
+		var p = info.p;
+		var a = info.a;
+		var b = info.b;
+		var A = a.join(",");
+		var B = b.join(",");
+		var P = p.join(",");
+		if (graph[P]) return P;
+		// 🔥 eliminar conexión directa A-B
+		graph[A] = graph[A].filter(e => e.node !== B);
+		graph[B] = graph[B].filter(e => e.node !== A);
+		// 🔥 agregar conexiones correctas
+		addEdge(a, p);
+		addEdge(p, b);
+		return P;
+	};
+	
+	//---------------- DIJKSTRA
+	function dijkstra(start,end){
+		var dist={},prev={},pq=[start];
+		for(var n in graph) dist[n]=Infinity;
+		dist[start]=0;
+		while(pq.length){
+		pq.sort((a,b)=>dist[a]-dist[b]);
+		var u=pq.shift();
+		if(u==end) break;
+		graph[u].forEach(e=>{
+		var alt=dist[u]+e.weight;
+		if(alt<dist[e.node]){
+		dist[e.node]=alt;
+		prev[e.node]=u;
+		pq.push(e.node);
+		}
+		});
+		}
+		var path=[],u=end;
+		while(u){
+			path.unshift(u);
+			u=prev[u];
+		}
+		return path;
+	};
+	
+	function TrazarRutaDentroEEA(){
+		if (dentroeeamza) {
+			mapa.removeLayer(osm);
+			mapa.addLayer(googlesatelite);
+			capa=googlesatelite;
+			mapa.removeLayer(predioeeamza);
+		};
+		if (marcadoreeamzaeste) {marcadoreeamzaeste.remove()};
+		if (marcadoreeamzaoeste) {marcadoreeamzaoeste.remove()};
+		let coord_ubic_real = [coordenadas_ubicacion_real.lng, coordenadas_ubicacion_real.lat];
+		let sentroide = [centroide.lng, centroide.lat];
+		var s1 = snapSegment(coord_ubic_real);
+		var s2 = snapSegment(sentroide);
+		var start = insertarNodo(s1);
+		var end = insertarNodo(s2);
+		var path = dijkstra(start, end);
+		var coords = [];
+		var distancia = 0;
+		// 🔥 armar coords correctamente
+		for (var i = 0; i < path.length; i++) {
+			var c = path[i].split(",");
+			let lat = Number(c[1]);
+			let lng = Number(c[0]);
+			coords.push([lat, lng]);
+			if (i > 0) {
+				var a = path[i - 1].split(",");
+				var b = path[i].split(",");
+				distancia += turf.distance(
+					turf.point([Number(a[0]), Number(a[1])]),
+					turf.point([Number(b[0]), Number(b[1])]),
+					{units: "kilometers"}
+				);
+			}
+		};
+		// 🔴 limpiar coords (ANTI BUG)
+		coords = coords
+			.filter(c =>
+				Array.isArray(c) &&
+				c.length === 2 &&
+				typeof c[0] === "number" &&
+				typeof c[1] === "number" &&
+				!isNaN(c[0]) &&
+				!isNaN(c[1]) &&
+				Math.abs(c[0]) <= 90 &&
+				Math.abs(c[1]) <= 180
+			)
+			.map(c => [
+				parseFloat(c[0].toFixed(6)),
+				parseFloat(c[1].toFixed(6))
+			]);
+		// 🔥 agregar puntos SNAP reales (NO los originales)
+		coords.unshift([s1.p[1], s1.p[0]]);
+		coords.push([s2.p[1], s2.p[0]]);
+		// 🚨 evitar error si no hay ruta
+		if (coords.length < 2) {
+			return;
+		};
+		// ✅ DIBUJO SEGURO (segmento por segmento)
+		if (ruta) {mapa.removeLayer(ruta)};
+		// crear grupo nuevo
+		ruta = L.layerGroup().addTo(mapa);
+		// agregar segmentos al grupo
+		for (let i = 0; i < coords.length - 1; i++) {
+			L.polyline([coords[i], coords[i + 1]], {
+				color: "red",
+				weight: 8
+			}).addTo(ruta);
+		};
+		// 🔥 centrar mapa SOLO UNA VEZ
+		if (!mapaCentrado) {
+			mapa.fitBounds(coords);
+			mapaCentrado = true;
+		};
+		// ⏱️ tiempos
+		var velPie = 5;   // km/h
+		var velAuto = 30; // km/h
+		var tiempoPie = (distancia / velPie) * 60;
+		var tiempoAuto = (distancia / velAuto) * 60;
+		// 🔥 función para formatear tiempo
+		function formatearTiempo(minutos) {
+			if (minutos < 1) {
+				let segundos = Math.round(minutos * 60);
+				return segundos + " seg";
+			}
+			return Math.round(minutos) + " min";
+		}
+		cajadistancia.classList.add("visible");
+		cajadistancia.innerHTML = `
+			📏 Distancia: ${(distancia * 1000).toFixed(0)} m<br>
+			🚶 : ${formatearTiempo(tiempoPie)}<br>
+			🚗 : ${formatearTiempo(tiempoAuto)}
+		`;
+	};
+
+	//###########################################################
+	//##### NUEVO BLOQUE FUERA DEL PREDIO DE LA EEA MENDOZA ####
+	//###########################################################
+
+	function trazarRutaInteligente(origen, destino) {
+		if (calculandoRuta) return;
+		calculandoRuta = true;
+		let intentos = 0;
+		const proveedores = [
+			{ nombre: "GraphHopper", fn: usarGraphHopper },
+			{ nombre: "OSRM", fn: usarOSRM }
+		];
+		function intentarSiguiente() {
+			if (intentos >= proveedores.length) {
+				calculandoRuta = false;
+				cajadistancia.classList.add("visible");
+				cajadistancia.innerHTML = `❌ No se pudo obtener ruta con ningún servicio <div style="text-align:center;"><img src="images/todomal.jpg" style="width:120px;border-radius:10px;margin-bottom:8px;"></div>`;
+				return;
+			}
+			let proveedor = proveedores[intentos];
+			intentos++;
+			proveedor.fn(origen, destino)
+				.then(resultado => {
+					calculandoRuta = false;
+					// opcional: mostrar en UI
+					cajadistancia.innerHTML = "Ruta usando: " + proveedor.nombre;
+					MostrarRuta(resultado,proveedor.nombre);
+				})
+				.catch(err => {
+					intentarSiguiente();
+				});
+		}
+		intentarSiguiente();
+		TrazarRutaDentroEEA();
+	};
+	let datosRutas = {
+		principal: {
+			tiempo: null,
+			distancia: null
+		},
+		alternativa: {
+			tiempo: null,
+			distancia: null
+		}
+	};
+	
+	function usarGraphHopper(origen, destino) {
+		return new Promise((resolve, reject) => {
+			// ✅ 1. Validación inicial
+			if (!origen || !destino || 
+				origen.lat == null || origen.lng == null || 
+				destino.lat == null || destino.lng == null) {
+				return reject("Coords inválidas GraphHopper");
+			}
+			if (!datosRutas.principal) datosRutas.principal = {};
+			if (!datosRutas.alternativa) datosRutas.alternativa = {};
+			const url = `https://graphhopper.com/api/1/route?
+				point=${origen.lat},${origen.lng}&
+				point=${destino.lat},${destino.lng}&
+				profile=car&
+				locale=es&
+				instructions=true&
+				calc_points=true&
+				points_encoded=false&
+				algorithm=alternative_route&
+				alternative_route.max_paths=2&
+				key=${apikeygraphhopper}`.replace(/\s+/g, '');
+			
+			// ✅ 2. AbortController para timeout REAL
+			const controller = new AbortController();
+			const timeout = setTimeout(() => {
+				controller.abort();
+				reject("Timeout GraphHopper");
+			}, 6000);
+			fetch(url, { signal: controller.signal })
+			// ✅ 3. Control de errores HTTP
+			.then(res => {
+				if (!res.ok) {
+					throw new Error(`HTTP ${res.status} - ${res.statusText}`);
+				}
+				return res.json();
+			})
+			.then(data => {
+				clearTimeout(timeout);
+				// ✅ 4. Validación de contenido
+				if (!data || !data.paths || data.paths.length === 0) {
+					return reject("Sin ruta GraphHopper");
+				}
+				const rutaPrincipal = data.paths[0];
+				const rutaAlternativa = data.paths[1] || null;
+				const tiempoPrincipal = Math.round(rutaPrincipal.time / 60000);
+				const tiempoAlternativo = rutaAlternativa 
+					? Math.round(rutaAlternativa.time / 60000) 
+					: null;
+				const distanciaPrincipal = (rutaPrincipal.distance / 1000).toFixed(2);
+				const distanciaAlternativa = rutaAlternativa
+					? (rutaAlternativa.distance / 1000).toFixed(2)
+					: null;
+				datosRutas.principal.tiempo = tiempoPrincipal;
+				datosRutas.principal.distancia = distanciaPrincipal;
+				datosRutas.alternativa.tiempo = tiempoAlternativo;
+				datosRutas.alternativa.distancia = distanciaAlternativa;
+				resolve({
+					principal: rutaPrincipal,
+					alternativa: rutaAlternativa,
+					instruccionesPrincipal: rutaPrincipal.instructions || [],
+					instruccionesAlternativa: rutaAlternativa 
+					? rutaAlternativa.instructions || [] : [],
+					tiempoPrincipal,
+					tiempoAlternativo,
+					distanciaPrincipal,
+					distanciaAlternativa
+				});
+			})
+			// ✅ 5. Manejo completo de errores
+			.catch(err => {
+				clearTimeout(timeout);
+				if (err.name === "AbortError") {
+					return reject("Timeout GraphHopper (abortado)");
+				}
+				reject(err.message || "Error desconocido GraphHopper");
+			});
+		});
+	};
 		
-		//Centrar el mapa para que se vean ubicación en tiempo real y EEA ó Sector/Persona buscado **SOLO la primera vez**
-		if (actualizarruta=="si") {const centrar = L.latLngBounds(coordenadas_ubicacion_real, centroide);mapa.fitBounds(centrar, {padding: [50, 50]});};
-		if (distancia>1100) {
-			actualizarruta=setInterval(()=>{
-				if (ruta) {ruta.remove()};
-				ruta=L.Routing.control({
-				waypoints: [coordenadas_ubicacion_real, centroide],
+	let controlOSRM = null;
+	function usarOSRM(origen, destino) {
+		return new Promise((resolve, reject) => {
+			if (!origen || !destino) {
+				return reject("Coords inválidas OSRM");
+			}
+			// 🧹 Eliminar control anterior (clave para que no se acumulen rutas)
+			if (controlOSRM) {
+				controlOSRM.off(); // limpiar eventos
+				mapa.removeControl(controlOSRM);
+				controlOSRM = null;
+			}
+			let timeout = setTimeout(() => {
+				if (controlOSRM) {
+					controlOSRM.off();
+					mapa.removeControl(controlOSRM);
+					controlOSRM = null;
+				}
+				reject("Timeout OSRM");
+			}, 6000);
+			controlOSRM = L.Routing.control({
+				waypoints: [origen, destino],
 				router: L.Routing.osrmv1({
 					serviceUrl: 'https://router.project-osrm.org/route/v1',
-					language: 'es',
+					language: 'es'
 				}),
-				showAlternatives: true,
-				routeWhileDragging: true,
+				createMarker: () => null,
+				addWaypoints: false,
 				draggableWaypoints: false,
-				collapsible: true,
-				waypointMode: 'snap',
-				lineOptions: {styles: [{color: 'red', opacity: 0.6, weight: 6}]},
-				altLineOptions: {styles: [{color: 'blue', opacity: 0.5, weight: 4}]},
-				createMarker: function(i, wp) {
-					return L.marker(wp.latLng, {
-						draggable: false,
-						icon: L.icon({
-							iconUrl: './images/posicion.png',
-							iconSize: [0, 0]
-						})
-					});
-				}
-				}).addTo(mapa);
-				panelrutas.replaceChildren(ruta.getContainer());
-				ruta.on('routesfound', function (e) {
-					e.routes.forEach((route, index) => {
-						const distanciaKm = (route.summary.totalDistance / 1000).toFixed(2);
-						const tiempoFormateado = segundosAHorasMinutos(route.summary.totalTime);
-						cajadistancia.insertAdjacentHTML('beforeend', `<br>Ruta ${index === 0 ? 'Recomendada (Rojo)' : 'Alternativa (Azul)'}: Distancia: ${distanciaKm} km, Tiempo estimado: ${tiempoFormateado}.`);
-					});
+				routeWhileDragging: false,
+				show: false,
+				collapsible: false,
+			});
+			controlOSRM.on('routesfound', function (e) {
+				clearTimeout(timeout);
+				let ruta = e.routes[0];
+				let tiempo = Math.round(ruta.summary.totalTime / 60);
+				let distancia = (ruta.summary.totalDistance / 1000).toFixed(2);
+				datosRutas.principal.tiempo = tiempo;
+				datosRutas.principal.distancia = distancia;
+				let instrucciones = ruta.instructions.map(i=>({
+				   text:i.text,
+				   distance:i.distance
+				}));
+				resolve({
+					points: {
+						coordinates: ruta.coordinates.map(c => [c.lng, c.lat])
+					},
+					// 👇 ESTO ES LO QUE TE FALTABA
+					principal: {
+						points: {
+							coordinates: ruta.coordinates.map(c => [c.lng, c.lat])
+						}
+					},
+					distanciaPrincipal: distancia,
+					tiempoPrincipal: tiempo,
+					instruccionesPrincipal: instrucciones,
+					alternativa: null,
+					distanciaAlternativa: null,
+					tiempoAlternativo: null,
+					instruccionesAlternativa: [],
+					tiempo,
+					distancia,
+					instrucciones,
+					raw: ruta
 				});
-			},60000);
+				panelrutas.replaceChildren(controlOSRM.getContainer());
+			});
+			controlOSRM.on('routingerror', function(e){
+				clearTimeout(timeout);
+				if(controlOSRM){
+					controlOSRM.off();
+					mapa.removeControl(controlOSRM);
+					controlOSRM=null;
+				}
+				reject("Error OSRM");
+			});
+			controlOSRM.addTo(mapa);
+		});
+	};
+	
+	let capaRutaPrincipal = null;
+	let capaRutaAlternativa = null;
+	function MostrarRuta(route,proveedor) {
+		botondetallesruta.classList.remove("ocultar");
+		let instrucciones = route.instruccionesPrincipal;
+		if (proveedor==="OpenRouteService") {
+			let minutos=Math.round(route.summary.duration/60);
+			let horas=Math.floor(minutos/60);
+			minutos=minutos%60;
+			let distancia=(route.summary.distance/1000)
+			   .toFixed(1)
+			   .replace(".",",");
+			cajadistancia.innerHTML=
+			"Ruta: "+distancia+" km<br>"+
+			"Tiempo en 🚗: "+horas+" hs "+minutos+" min"+"Servidor: "+proveedor;
+		}
+		else {
+			let horas=Math.round(datosRutas.principal.tiempo/60);
+			let minutos=Math.round(datosRutas.principal.tiempo);
+			if (minutos>60) {minutos=Math.round(minutos-horas*60)};
+			let distancia = datosRutas.principal.distancia.replace(".", ",");
+			cajadistancia.classList.add("visible");
+			let distanciaP = route.distanciaPrincipal?.replace(".", ",");
+			let tiempoP = route.tiempoPrincipal;
+			let html = `
+			<div id="rutaPrincipalUI" style="cursor:pointer;">
+			   <span style="
+				  display:inline-block;
+				  width:10px;
+				  height:10px;
+				  background:red;
+				  border-radius:50%;
+				  margin-right:6px;
+			   "></span>
+			   <b>Ruta principal</b>: ${distanciaP} km - 🚗 ${tiempoP} min - Servidor: ${proveedor}
+			</div>
+			`;
+			if (route.alternativa) {
+			   let distanciaA = route.distanciaAlternativa?.replace(".", ",");
+			   let tiempoA = route.tiempoAlternativo;
+			   html += `
+			   <div id="rutaAlternativaUI" style="cursor:pointer; margin-top:5px;">
+				  <span style="
+					 display:inline-block;
+					 width:10px;
+					 height:10px;
+					 background:blue;
+					 border-radius:50%;
+					 margin-right:6px;
+				  "></span>
+				  <b>Alternativa</b>: ${distanciaA} km - 🚗 ${tiempoA} min - Servidor: ${proveedor}
+			   </div>
+			   `;
+			}
+			cajadistancia.innerHTML = html;
+			let btnPrincipal = document.getElementById("rutaPrincipalUI");
+			if (btnPrincipal) {
+			   btnPrincipal.onclick = () => {
+				  activarRuta(route, proveedor, "principal");
+			   };
+			}
+			let btnAlternativa = document.getElementById("rutaAlternativaUI");
+			if (btnAlternativa) {
+			   btnAlternativa.onclick = () => {
+				  activarRuta(route, proveedor, "alternativa");
+			   };
+			};
 		};
-		//botondetallesruta.style.display = "block";
-		//panelrutas.style.display = "block";
-		//panelrutas.replaceChildren(ruta.getContainer());
+		// 🔵 CASO 1: GraphHopper con múltiples rutas
+		if (route.principal) {
+			// 👉 Principal
+			let coordsPrincipal = route.principal.points.coordinates.map(c => [c[1], c[0]]);
+			if (capaRutaPrincipal) {mapa.removeLayer(capaRutaPrincipal)};
+			capaRutaPrincipal = L.polyline(coordsPrincipal, {
+				color: '#ff0000',
+				opacity: 0.9,
+				weight: 7
+			}).addTo(mapa);
+			// 👉 Alternativa
+			if (route.alternativa) {
+				let coordsAlt = route.alternativa.points.coordinates.map(c => [c[1], c[0]]);
+				if (capaRutaAlternativa) {mapa.removeLayer(capaRutaAlternativa)};
+				capaRutaAlternativa = L.polyline(coordsAlt, {
+					color: 'blue',
+					opacity: 0.6,
+					weight: 6,
+					dashArray: "8, 10",
+				}).addTo(mapa);
+			}
+			// Ajustar mapa
+			mapa.fitBounds(capaRutaPrincipal.getBounds());
+			botondetallesruta.classList.remove("ocultar");
+			panelrutas.classList.remove("ocultar");
+					// 👉 Instrucciones paso a paso
+					let lista = document.createElement("ol");
+					let contenedor = document.createElement("div");
+					//// 🟥 PRINCIPAL
+					let tituloP = document.createElement("h4");
+					tituloP.innerHTML = `
+					<span style="
+					   display:inline-block;
+					   width:10px;
+					   height:10px;
+					   background:red;
+					   border-radius:50%;
+					   margin-right:6px;
+					"></span>
+					<span style="color:red;">Ruta principal</span>
+					`;
+					tituloP.style.cursor = "pointer";
+					tituloP.onclick = () => {
+					   activarRuta(route, proveedor, "principal");
+					};
+					contenedor.appendChild(tituloP);
+					let listaP = document.createElement("ol");
+					route.instruccionesPrincipal.forEach((inst) => {
+					   let li = document.createElement("li");
+					   li.innerHTML = `${inst.text} (${(inst.distance/1000).toFixed(2)} km)`;
+					   listaP.appendChild(li);
+					});
+					contenedor.appendChild(listaP);
+					//// 🔵 SEPARADOR
+					if (route.alternativa && route.instruccionesAlternativa.length > 0) {
+					   let separador = document.createElement("hr");
+					   separador.style.margin = "15px 0";
+					   separador.style.border = "1px solid #ccc";
+					   contenedor.appendChild(separador);
+					   //// 🔵 ALTERNATIVA
+					   let tituloA = document.createElement("h4");
+					   tituloA.innerHTML = `
+					   <span style="
+						  display:inline-block;
+						  width:10px;
+						  height:10px;
+						  background:blue;
+						  border-radius:50%;
+						  margin-right:6px;
+					   "></span>
+					   <span style="color:blue;">Ruta alternativa</span>
+					   `;
+					   tituloA.style.cursor = "pointer";
+						tituloA.onclick = () => {
+						   activarRuta(route, proveedor, "alternativa");
+						};
+					   contenedor.appendChild(tituloA);
+					   let listaA = document.createElement("ol");
+					   route.instruccionesAlternativa.forEach((inst) => {
+						  let li = document.createElement("li");
+						  li.innerHTML = `${inst.text} (${(inst.distance/1000).toFixed(2)} km)`;
+						  listaA.appendChild(li);
+					   });
+					   contenedor.appendChild(listaA);
+					};
+					panelrutas.innerHTML = "";
+					panelrutas.replaceChildren(contenedor);
+			return;
+		}
+		// 🔴 CASO 2: GraphHopper simple (compatibilidad)
+		if (route.points) {
+			let coords = route.points.coordinates.map(c => [c[1], c[0]]);
+			if (capaRutaPrincipal) {mapa.removeLayer(capaRutaPrincipal)};
+			capaRutaPrincipal = L.polyline(coords, { color: 'red', weight: 6 }).addTo(mapa);
+			return;
+		}
+		// 🔵 CASO 3: OpenRouteService
+		if(route.geometry){
+		   let coords = route.geometry.coordinates.map(
+			  c => [c[1], c[0]]
+		   );
+		   if(capaRutaPrincipal){
+			  mapa.removeLayer(capaRutaPrincipal);
+		   }
+		   capaRutaPrincipal = L.polyline(coords,{
+			  color:"blue",
+			  weight:6
+		   }).addTo(mapa);
+		   mapa.fitBounds(capaRutaPrincipal.getBounds());
+		   if(route.segments?.[0]?.steps){
+		   botondetallesruta.classList.remove("ocultar");
+		   panelrutas.classList.remove("ocultar");
+		   let lista=document.createElement("ol");
+		   route.segments[0].steps.forEach(step=>{
+			  let li=document.createElement("li");
+			  li.innerHTML=
+				step.instruction +
+				" (" +
+				(step.distance/1000).toFixed(2)+
+				" km)";
+			  lista.appendChild(li);
+		   });
+		   panelrutas.innerHTML = "";
+		   panelrutas.replaceChildren(lista);
+		}
+		   return;
+		};
+	};
+
+	<!--Función para alternar rutas desde el panel de indicaciones-->
+	function activarRuta(route, proveedor, tipo) {
+	   if (tipo === "alternativa" && route.alternativa) {
+		  // 🔁 intercambiar geometría
+		  [route.principal, route.alternativa] = [route.alternativa, route.principal];
+		  // 🔁 instrucciones
+		  [route.instruccionesPrincipal, route.instruccionesAlternativa] =
+		  [route.instruccionesAlternativa, route.instruccionesPrincipal];
+		  // 🔁 tiempos
+		  [route.tiempoPrincipal, route.tiempoAlternativo] =
+		  [route.tiempoAlternativo, route.tiempoPrincipal];
+		  // 🔁 distancias
+		  [route.distanciaPrincipal, route.distanciaAlternativa] =
+		  [route.distanciaAlternativa, route.distanciaPrincipal];
+		  // 🔁 actualizar global (UI)
+		  datosRutas.principal.tiempo = route.tiempoPrincipal;
+		  datosRutas.principal.distancia = route.distanciaPrincipal;
+	   }
+	   // 🔄 redibujar todo
+	   MostrarRuta(route, proveedor);
 	};
 
 	<!--Funcion para mostrar imagen estadísticas en ventana modal-->
@@ -2159,7 +2823,7 @@
 		
 	function PrepararMail() {
 		barralateral.close();
-		visitas.style.display='none';
+		visitas.classList.add("ocultar");
 		titulomodalflash.innerText="ENVIAR MAIL AL DESARROLLADOR";
 		cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>En un momento, enviarás el mail al desarrollador.</b><br><br><span style="color:black">Por parámetros de configuración de tu dispositivo, '+
 		'es probable que no sea posible hacer un envío semi-automático del mail.<br><br>Si al cerrar este mensaje no se envía, abrí tu aplicación de correo electrónico y pegá la dirección de mail que ha sido '+
@@ -2188,6 +2852,8 @@
 	};
 
 	function IrUnidad(agencia) {
+		//clearTimeout(tiempo);
+		//clearInterval(intervaloRuta);
 		iraaer="si";
 		mail="";
 		encontrar_a.value = "";
@@ -2196,10 +2862,12 @@
 		encontrar_abis.placeholder = "¿Buscás algo o alguien?...";
 		if (aer !=="") {aer.remove()};
 		clearInterval(intervalo);
-		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		//clearTimeout(tiempo);
-		if (ruta) {ruta.remove()};
+		if (ruta){
+		   ruta.off(); // elimina listeners
+		   ruta.remove();
+		   ruta = null;
+		};
 		if (lugar) {lugar.remove()};
 		lugar="";
 		if (agencia=="Agencia de Extensión Lavalle") {
@@ -2214,7 +2882,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Agencia de Extensión Luján de Cuyo") {
 			var formatoPopup = {
@@ -2227,7 +2895,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Agencia de Extensión Maipú") {
 			var formatoPopup = {
@@ -2240,7 +2908,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Oficina de Información Uspallata") {
 			var formatoPopup = {
@@ -2253,7 +2921,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Experimental San Juan") {
 			var formatoPopup = {
@@ -2266,7 +2934,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Experimental Junín") {
 			var formatoPopup = {
@@ -2279,7 +2947,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Agencia de Extensión Junín") {
 			var formatoPopup = {
@@ -2292,7 +2960,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Experimental La Consulta") {
 			var formatoPopup = {
@@ -2305,7 +2973,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Agencia de Extensión La Consulta") {
 			var formatoPopup = {
@@ -2318,7 +2986,7 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
 		if (agencia=="Experimental Rama Caída") {
 			var formatoPopup = {
@@ -2331,24 +2999,19 @@
 			aer=L.marker(coord).addTo(mapa)
 				.bindPopup(contenidoPopup, formatoPopup)
 				.openPopup();
-			document.getElementById("volvereea").style.visibility='visible';
+			document.getElementById("volvereea").classList.remove("ocultar");
 		};
-		if (!coordenadas_ubicacion_real=="" && orientarme=="") {
-			titulomodalflash.innerText="TRAZAR RUTA";
-			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>¿Necesitás ayuda para llegar?.</b><br><br><span style="color:black">Puedo trazarte una ruta '+
-			'a partir de tu ubicación actual y brindarte algunas indicaciones.-<br></span>';
-			btnindicacionesmodalflash.style.display='flex';
-			btncerrarmodalflash.style.display='flex';
-			btncerrarmodalflash.textContent = "No";
-			tiempomodalflash=5000;
-			ModalFlash(tiempomodalflash);
+		if (marca_ubicacion_real) {
+			dentroeeamza = Chequeardentroeeamza(coordenadas_ubicacion_real);
+			if (dentroeeamza && coord.length !== 0) {alertaZonaMedia = false;TrazarRutaDentroEEA()};
+			if (!dentroeeamza && aviso===0) {trazarRutaInteligente(coordenadas_ubicacion_real,centroide)}
 		};
 	};
 
 	function VolverEEA () {
 		if (aer !="") {aer.remove(),document.getElementById("buscarunidad").value=""};
 		let coord="-33.00598405638592, -68.85600484779212".split(",");
-		document.getElementById("volvereea").style.visibility='hidden';
+		document.getElementById("volvereea").classList.add("ocultar");
 		barralateral.close();
 		mapa.flyTo(coord,16);
 		grupoeeamza.addTo(mapa);
@@ -2363,10 +3026,10 @@
 	inputbusquedabisunidad.addEventListener('input', () => {
 		if (inputbusquedabisunidad.value.trim() === '') {
 			inputbusquedabisunidad.classList.remove('filled');
-			sugerencia.style.visibility='hidden';
+			sugerencia.classList.add("ocultar");
 		  };
 		if (inputbusquedabisunidad.value.trim() !=="") {
-			sugerencia.style.visibility='visible';
+			sugerencia.classList.remove("ocultar");
 			inputbusquedabisunidad.classList.add('filled');
 			const query = inputbusquedabisunidad.value.toLowerCase();
 			sugerencia.innerHTML = '';
@@ -2378,19 +3041,18 @@
 				const div = document.createElement('div');
 				div.textContent = item;
 				div.classList.add('sugerencia-item');
-				div.addEventListener('click', () => {
-					inputbusquedabisunidad.value = item;
-					sugerencia.innerHTML = '';
-					IrUnidad(item);
-					barralateral.close();
+				div.addEventListener('click', function(e){
+				   e.preventDefault();
+				   e.stopPropagation();
+				   inputbusquedabisunidad.value=item;
+				   sugerencia.innerHTML='';
+				   setTimeout(()=>{
+					  IrUnidad(item);
+					  barralateral.close();
+				   },0);
 				});
 				sugerencia.appendChild(div);
 			});
-		};
-	});
-	document.addEventListener('click', function(e) {
-		if (!sugerencia.contains(e.target) && e.target !== inputbusquedabisunidad) {
-			sugerencia.innerHTML = '';
 		};
 	});
 	
@@ -2401,11 +3063,11 @@
 		if (inputbusqueda.value.trim() === '') {
 			inputbusqueda.classList.remove('filled');
 			sugerenciaz.style.visibility='hidden';
+			document.getElementById("ventanaSugerencias").style.display = "none";
 		  };
 		if (inputbusqueda.value.trim() !=="") {
-			//botondetallesruta.style.display="none";
 			sugerenciaz.style.visibility='visible';
-			//inputbusquedabis.classList.add('filled');
+			document.getElementById("ventanaSugerencias").style.display = "block";
 			if (!inputbusqueda.classList.contains('filled')) {
 				inputbusqueda.classList.add('filled');
 			};
@@ -2413,8 +3075,6 @@
 			sugerenciaz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultados = listabusquedafiltrada
-			//.filter(item => item.toLowerCase().includes(query))
-			//.filter(item => item && item.toLowerCase().includes(query))
 			.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
 			.slice(0,5); //Limitar a las primeras 5 coincidencias
 			resultados.forEach(item => {
@@ -2432,12 +3092,6 @@
 				sugerenciaz.appendChild(div);
 			});
 		};
-		//inputbusqueda.setSelectionRange(pos, pos);
-	});
-	document.addEventListener('click', function(e) {
-		if (!sugerenciaz.contains(e.target) && e.target !== inputbusqueda) {
-			sugerenciaz.innerHTML = '';
-		};
 	});
 	
 	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Barra Lateral-->
@@ -2449,14 +3103,12 @@
 			sugerenciasbiz.style.visibility='hidden';
 		  };
 		if (inputbusquedabis.value.trim() !=="") {
-			//botondetallesruta.style.display="none";
 			sugerenciasbiz.style.visibility='visible';
 			inputbusquedabis.classList.add('filled');
 			const query = inputbusquedabis.value.toLowerCase();
 			sugerenciasbiz.innerHTML = '';
 			if (query.length === 0) return;
 			const resultadosbis = listabusquedafiltrada
-			//.filter(item => item.toLowerCase().includes(query))
 			.filter(item => typeof item === "string" && item.toLowerCase().includes(query))
 			.slice(0,5); //Limitar a las primeras 5 coincidencias
 			resultadosbis.forEach(item => {
@@ -2476,11 +3128,18 @@
 		};
 	});
 	document.addEventListener('click', function(e) {
+		if (!sugerencia.contains(e.target) && e.target !== inputbusquedabisunidad) {
+			sugerencia.innerHTML = '';
+		};
+		if (!sugerenciaz.contains(e.target) && e.target !== inputbusqueda) {
+			sugerenciaz.innerHTML = '';
+			document.getElementById("ventanaSugerencias").style.display = "none";
+		};
 		if (!sugerenciasbiz.contains(e.target) && e.target !== inputbusquedabis) {
 			sugerenciasbiz.innerHTML = '';
 		};
 	});
-
+	
 	// Bloque de la ventana modal
 	const modal = document.getElementById("modalestadistico");
 	const resizer = document.getElementById("resizeHandle");
@@ -2501,7 +3160,7 @@
 	};
 	
 	function CerrarModalEstadistico() {
-		modal.style.visibility='hidden';
+		modal.classList.add("ocultar");
 	};
 	
 	function MinimizarModalEstadistico() {
@@ -2649,11 +3308,11 @@
 		const valor = document.getElementById("username").value.trim().toLowerCase();
 		const contra=document.getElementById("password").value.trim();
 		if (usuarios.includes(valor) && contrasenias==contra) {
-			document.getElementById("cerrarsesion").style.visibility='visible';
-			document.getElementById("username").style.visibility='hidden';
-			document.getElementById("password").style.visibility='hidden';
-			document.getElementById("botonmostrarocultar").style.visibility='hidden';
-			document.getElementById("botoningresar").style.visibility='hidden';
+			document.getElementById("cerrarsesion").classList.remove("ocultar");
+			document.getElementById("username").classList.add("ocultar");
+			document.getElementById("password").classList.add("ocultar");
+			document.getElementById("botonmostrarocultar").classList.add("ocultar");
+			document.getElementById("botoningresar").classList.add("ocultar");
 			tiempomodalflash=6000;
 			titulomodalflash.innerText="INICIO DE SESION";
 			cuerpomodalflash.innerHTML = '<span style="display: block; text-align: center; width: 100%; color:green;"><br><b>Te has validado correctamente.</b><br><br><span style="color:black">'+
@@ -2694,11 +3353,11 @@
 	
 	//Función para cerrar sesión
 	function CerrarSesion() {
-		document.getElementById("username").style.visibility='visible';
-		document.getElementById("password").style.visibility='visible';
-		document.getElementById("botonmostrarocultar").style.visibility='visible';
-		document.getElementById("botoningresar").style.visibility='visible';
-		document.getElementById("cerrarsesion").style.visibility='hidden';
+		document.getElementById("cerrarsesion").classList.add("ocultar");
+		document.getElementById("username").classList.remove("ocultar");
+		document.getElementById("password").classList.remove("ocultar");
+		document.getElementById("botonmostrarocultar").classList.remove("ocultar");
+		document.getElementById("botoningresar").classList.remove("ocultar");
 		barralateral.close();
 		cuerpomodalflash.innerHTML = '<span style="display: block; text-align: center; width: 100%; color:red;"><br><b>Has cerrado sesión correctamente.</b><br><br><span style="color:black">Sólo tendrás acceso a la información<br>básica de la EEA Mendoza.</span>';
 		version="publica";
@@ -2717,7 +3376,7 @@
 	
 	//Bloque Modal Flash
 	function ModalFlash(tiempo) {
-		mimodalflash.style.display='block';
+		mimodalflash.classList.remove("ocultar");
 		clearTimeout(temporizadormodalflash);
 		clearTimeout(tiempomodalflash);
 		clearInterval(intervalo);
@@ -2729,13 +3388,13 @@
 			if (restante <= 0) clearInterval(intervalo);
 			}, 1000);
 		temporizadormodalflash=setTimeout(() => {
-			btnindicacionesmodalflash.style.display='none';
-			mimodalflash.style.display='none';
+			btnindicacionesmodalflash.classList.add("ocultar");
+			mimodalflash.classList.add("ocultar");
 			clearTimeout(temporizadormodalflash);
 			clearTimeout(tiempomodalflash);
 			clearInterval(intervalo);
 			btncerrarmodalflash.click();
-			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);document.getElementById("borrableinicial").style.display="none"};
+			if (nomostrarinicial.checked) {localStorage.setItem('MOSTRAR_INICIAL', Version);borrableinicial.classList.add("ocultar")};
 			if (mail=="si") {EnviarMail()};
 		}, tiempo);
 	};
@@ -2743,36 +3402,36 @@
 	<!--Función Mostrar/Habilitar u Ocultar/Deshabilitar elementos según la versión de trabajo-->
 	function VerificarVersion() {
 		if (version=="publica") {
-			document.getElementById("cerrarsesion").style.visibility='hidden';
-			mimodalflash.style.display='none';
-			document.getElementById("titulo_vid").style.visibility='hidden';
-			document.getElementById("titulo_otro_criterio").style.visibility='hidden';
-			document.getElementById("cobertura_vid").style.visibility='hidden';
-			document.getElementById("opciones_otr").style.visibility='hidden';
-			document.getElementById("sel_cobertura").style.visibility='hidden';
-			document.getElementById("sel_clon").style.visibility='hidden';
-			document.getElementById("sel_conduccion").style.visibility='hidden';
-			document.getElementById("sel_especie").style.visibility='hidden';
-			document.getElementById("sel_plantacion").style.visibility='hidden';
-			document.getElementById("sel_responsable").style.visibility='hidden';
-			document.getElementById("sel_riego").style.visibility='hidden';
-			document.getElementById("sel_superficie").style.visibility='hidden';
-			document.getElementById("mostrartodo").style.visibility='hidden';
-			document.getElementById("quitartodo").style.visibility='hidden';
-			document.getElementById("titulousuario").style.visibility='visible';
-			document.getElementById("titulocontrasenia").style.visibility='visible';
+			document.getElementById("cerrarsesion").classList.add("ocultar");
+			mimodalflash.classList.add("ocultar");
+			document.getElementById("titulo_vid").classList.add("ocultar");
+			document.getElementById("titulo_otro_criterio").classList.add("ocultar");
+			document.getElementById("cobertura_vid").classList.add("ocultar");
+			document.getElementById("opciones_otr").classList.add("ocultar");
+			document.getElementById("sel_cobertura").classList.add("ocultar");
+			document.getElementById("sel_clon").classList.add("ocultar");
+			document.getElementById("sel_conduccion").classList.add("ocultar");
+			document.getElementById("sel_especie").classList.add("ocultar");
+			document.getElementById("sel_plantacion").classList.add("ocultar");
+			document.getElementById("sel_responsable").classList.add("ocultar");
+			document.getElementById("sel_riego").classList.add("ocultar");
+			document.getElementById("sel_superficie").classList.add("ocultar");
+			document.getElementById("mostrartodo").classList.add("ocultar");
+			document.getElementById("quitartodo").classList.add("ocultar");
+			document.getElementById("titulousuario").classList.remove("ocultar");
+			document.getElementById("titulocontrasenia").classList.remove("ocultar");
 		};
 		if (version=="completa") {
-			document.getElementById("cerrarsesion").style.visibility='visible';
-			mimodalflash.style.display='block';
-			document.getElementById("titulo_vid").style.visibility='visible';
-			document.getElementById("titulo_otro_criterio").style.visibility='visible';
-			document.getElementById("cobertura_vid").style.visibility='visible';
-			document.getElementById("opciones_otr").style.visibility='visible';
-			document.getElementById("mostrartodo").style.visibility='visible';
-			document.getElementById("quitartodo").style.visibility='visible';
-			document.getElementById("titulousuario").style.visibility='hidden';
-			document.getElementById("titulocontrasenia").style.visibility='hidden';
+			document.getElementById("cerrarsesion").classList.remove("ocultar");
+			mimodalflash.classList.remove("ocultar");
+			document.getElementById("titulo_vid").classList.remove("ocultar");
+			document.getElementById("titulo_otro_criterio").classList.remove("ocultar");
+			document.getElementById("cobertura_vid").classList.remove("ocultar");
+			document.getElementById("opciones_otr").classList.remove("ocultar");
+			document.getElementById("mostrartodo").classList.remove("ocultar");
+			document.getElementById("quitartodo").classList.remove("ocultar");
+			document.getElementById("titulousuario").classList.add("ocultar");
+			document.getElementById("titulocontrasenia").classList.add("ocultar");
 		};
 	};
 	
@@ -2887,16 +3546,16 @@
 	document.getElementById("medir").addEventListener("click", function() {
 		barralateral.close();
 		cant_mediciones=1;
-		document.getElementById("contenedorMediciones").style.visibility='visible';
-		document.getElementById("BotonLimpiarPantalla").style.visibility='visible';
+		document.getElementById("contenedorMediciones").classList.remove("ocultar");
+		document.getElementById("BotonLimpiarPantalla").classList.remove("ocultar");
 		capturaActiva = !capturaActiva;
 		const icono=document.getElementById("imagenmediciones");
 		if (capturaActiva) {
 			mapa.on('click', AgregarPunto);
-			document.getElementById("contenedorMediciones").style.visibility='visible';
+			document.getElementById("contenedorMediciones").classList.remove("ocultar");
 		} else {
 			mapa.off('click', AgregarPunto);
-			document.getElementById("contenedorMediciones").style.visibility='hidden';
+			document.getElementById("contenedorMediciones").classList.add("ocultar");
 			ResetearMediciones();
 		};
 	});
@@ -2905,32 +3564,37 @@
 	function LimpiarPantalla() {
 		// Opción 1: vaciar todo el body (excepto el botón)
 		document.getElementById("medir").click();
-		document.getElementById("contenedorMediciones").style.visibility='hidden';
-		document.getElementById("BotonLimpiarPantalla").style.visibility='hidden';
+		document.getElementById("contenedorMediciones").classList.add("ocultar");
+		document.getElementById("BotonLimpiarPantalla").classList.add("ocultar");
 		ResetearMediciones();
 	};
 	
 	//Capturar evento sobre botones
 	btncerrarmodalflash.addEventListener("click",()=>{
-		btnindicacionesmodalflash.style.display='none';
-		mimodalflash.style.display='none';
-		visitas.style.display='none';
-		document.getElementById("borrableinicial").style.display='none';
+		//clearTimeout(tiempo);
+		//clearInterval(intervaloRuta);
+		btnindicacionesmodalflash.classList.add("ocultar");
+		mimodalflash.classList.add("ocultar");
+		visitas.classList.add("ocultar");
+		borrableinicial.classList.add("ocultar");
 		modalinicial.close();
 		clearInterval(intervalo);
-		//clearInterval(intervaloRuta);
 		clearTimeout(temporizadormodalflash);
-		//clearTimeout(tiempo);
-		if (ruta) {ruta.remove();botondetallesruta.style.display="none"};
+		if (ruta){
+		   ruta.off(); // elimina listeners
+		   ruta.remove();
+		   ruta = null;
+		   botondetallesruta.classList.add("ocultar");
+		};
 		if (avisovelocidadmaxima=="" && avisollegada=="si" && dentroeeamza && dispositivo=="movil") {
-			const utterance = new SpeechSynthesisUtterance("La velocidad maxima recomendada para circular dentro del inta es de 30 kilometros por hora.-");
+			const utterance = new SpeechSynthesisUtterance("Estas dentro del inta. La velocidad maxima recomendada para circular aqui dentro es de 30 kilometros por hora.-");
 			speechSynthesis.speak(utterance);
 			avisovelocidadmaxima="si";
 		};
 		if (nomostrarinicial.checked) {
 			try {
 				localStorage.setItem('MOSTRAR_INICIAL', Version);
-				document.getElementById("borrableinicial").style.display="none";
+				borrableinicial.classList.add("ocultar");
 			} catch(e){
 				// ignore storage errors
 				console.warn('No se pudo guardar preferencia en localStorage', e);
@@ -2939,27 +3603,32 @@
 		if (btncerrarmodalflash.textContent.trim() === "No") {orientarme = "no"};
 		avisollegada="no";
 		if (mail==="si") {EnviarMail()};
-		if (iraaer==="si") {TrazarRuta()};
-		visitas.style.display='none';
+		if (iraaer==="si") {trazarRutaInteligente(coordenadas_ubicacion_real,puntomascercano)};
+		visitas.classList.add("ocultar");
 	});
 	
 	btnindicacionesmodalflash.addEventListener("click",()=>{
-		visitas.style.display='none';
+		//clearInterval(intervaloRuta);
+		//clearTimeout(tiempo);
+		visitas.classList.add("ocultar");
 		clearTimeout(temporizadormodalflash);
 		orientarme="si";
 		avisollegada="si";
 		if (distancia>6000) {msg="¡Estás a unos "+(Math.round(distancia/1000).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" kilómetros del destino!"};
 		if (distancia<6001) {msg="¡Estás a unos "+(Math.round(distancia).toString().replace(/\B(?=(\d{3})+(?!\d))/g, "."))+" metros del destino!"};
-		if (distancia<1100 && ruta) {ruta.remove();botondetallesruta.style.display='none'};
+		if (distancia<1100 && ruta) {
+			ruta.off(); // elimina listeners
+			ruta.remove();
+			ruta = null;
+			botondetallesruta.classList.add("ocultar")
+		};//ruta.remove();botondetallesruta.classList.add("ocultar");};
 		cajadistancia.classList.add("visible");
 		cajadistancia.textContent = msg+" (En línea recta).-";
 		clearInterval(intervalo);
-		//clearInterval(intervaloRuta);
-		//clearTimeout(tiempo);
 		if (dispositivo=="movil") {
 			titulomodalflash.innerText="TRAZAR RUTA";
 			cuerpomodalflash.innerHTML = '<span style="color:green"><br><b>Se te ofrecerán alertas por voz.</b><br><br><span style="color:black">Por lo tanto, asegurate de tener activado el sonido del dispositivo y a un volumen que puedas escucharlo sin distraerte demasiado.-<br></span>';
-			btnindicacionesmodalflash.style.display='none';
+			btnindicacionesmodalflash.classList.add("ocultar");
 			btncerrarmodalflash.textContent = "Cerrar";
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
@@ -2967,7 +3636,7 @@
 	});
 
 	// === BOTÓN MOSTRAR / OCULTAR DETALLES RUTAS===
-	let abierto = true;
+	let abierto = false;
 	botondetallesruta.onclick = () => {
 		abierto = !abierto;
 		panelrutas.style.display = abierto ? "block" : "none";
@@ -2980,8 +3649,12 @@
 	btncerrarmodalgrafico.addEventListener("click",()=>{modalgrafico.close();});
 	const botonnorte=document.getElementById("botonnorte");
 	btncerrarmodalinicial.addEventListener("click",()=>{
-		document.getElementById("borrablecelular").style.display='none';
+		borrablecelular.classList.add("ocultar");
 		modalinicial.close()
+	});
+	    
+	document.getElementById("cerrarSugerencias").addEventListener("click", () => {
+		ventanaSugerencias.classList.add("ocultar");
 	});
 	
 	//Bloque para resaltar o remarcar lo nuevo
@@ -3010,7 +3683,7 @@
 			cartelnuevo.style.display = 'block';
 			//posicionar la guía apuntando al botón
 			//Cancelamos temporalmente las flechas rojas apuntando a la barra lateral
-			//if (dispositivo !=="movil") {document.getElementById("flecharoja").style.visibility='visible'};
+			//if (dispositivo !=="movil") {document.getElementById("flecharoja").classList.remove"ocultar"};
 			posicionnovedad();
 			// animación de aparición
 			requestAnimationFrame(()=> cartelnuevo.classList.add('show'));
@@ -3020,7 +3693,7 @@
 			cartelnuevo.classList.remove('show');
 			// después de la transición, ocultamos
 			setTimeout(()=> cartelnuevo.style.display = 'none', 160);
-			document.getElementById("flecharoja").style.visibility='hidden';
+			document.getElementById("flecharoja").classList.add("ocultar");
 			if (nomostrarlonuevo.checked) {
 				try {
 					localStorage.setItem('MOSTRAR_NUEVO', Version);
@@ -3105,13 +3778,13 @@
 		});
 		
 		nomostrarinicial.addEventListener("click",()=>{
-			btnindicacionesmodalflash.style.display='none';
-			mimodalflash.style.display='none';
+			btnindicacionesmodalflash.classList.add("ocultar");
+			mimodalflash.classList.add("ocultar");
 			modalinicial.close();
 			if (nomostrarinicial.checked) {
 				try {
 					localStorage.setItem('MOSTRAR_INICIAL', Version);
-					document.getElementById("borrableinicial").style.display="none";
+					borrableinicial.classList.add("ocultar");
 				} catch(e){
 					// ignore storage errors
 					console.warn('No se pudo guardar preferencia en localStorage', e);
@@ -3126,7 +3799,7 @@
 			if (nomostrarcelular.checked) {
 				try {
 					localStorage.setItem('MOSTRAR_CELULAR', 'no');
-					document.getElementById("borrablecelular").style.display="none";
+					borrablecelular.classList.add("ocultar");
 				} catch(e){
 					// ignore storage errors
 					console.warn('No se pudo guardar preferencia en localStorage', e);
@@ -3139,7 +3812,7 @@
 			cartelnuevo.classList.remove('show');
 			// después de la transición, ocultamos
 			setTimeout(()=> cartelnuevo.style.display = 'none', 160);
-			document.getElementById("flecharoja").style.visibility='hidden';
+			document.getElementById("flecharoja").classList.add("ocultar");
 			if (nomostrarlonuevo.checked) {
 				try {
 					localStorage.setItem('MOSTRAR_NUEVO', Version);
@@ -3165,26 +3838,51 @@
 	
 	//Función No Volver a mostrar sugerencia para girar el celular
 	function VerificarNoVolverAMostrar(){
-		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL') || null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrableinicial").style.display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
-		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {document.getElementById("borrablecelular").style.display="none";document.getElementById("restablecernomostrar").style.visibility="visible"};
-		//if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").style.visibility='visible';console.log(Version+localStorage.getItem('MOSTRAR_NUEVO'))} else {document.getElementById("flecharoja").style.visibility='hidden'};
-		if (dispositivo=="movil") {document.getElementById("flecharoja").style.visibility='hidden'};
+		if (Version !== (localStorage.getItem('MOSTRAR_INICIAL') || null)) {ModalFlash(tiempomodalflash);document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrableinicial.classList.add("ocultar");document.getElementById("restablecernomostrar").classList.remove("ocultar")};
+		if (localStorage.getItem('MOSTRAR_CELULAR') !=="no" && dispositivo !=="pc") {modalinicial.showModal();document.getElementById("restablecernomostrar").style.visibility="hidden"} else {borrablecelular.classList.add("ocultar");document.getElementById("restablecernomostrar").classList.remove("ocultar")};
+		//if (Version !== (localStorage.getItem('MOSTRAR_NUEVO') || null)) {document.getElementById("flecharoja").classList.remove("ocultar");console.log(Version+localStorage.getItem('MOSTRAR_NUEVO'))} else {document.getElementById("flecharoja").style.visibility='hidden'};
+		if (dispositivo=="movil") {document.getElementById("flecharoja").classList.add("ocultar")};
 	};
 	
+	//######BORRAR.....!!!!
+	function formatearFecha(fechaStr) {
+	  let fecha = new Date(fechaStr);
+	  if (isNaN(fecha)) return "No disponible";
+	  let dia = String(fecha.getDate()).padStart(2, '0');
+	  let mes = String(fecha.getMonth() + 1).padStart(2, '0');
+	  let anio = fecha.getFullYear();
+	  let horas = String(fecha.getHours()).padStart(2, '0');
+	  let minutos = String(fecha.getMinutes()).padStart(2, '0');
+	  let segundos = String(fecha.getSeconds()).padStart(2, '0');
+	  return `${dia}/${mes}/${anio} a las ${horas}:${minutos}:${segundos}`;
+	}
+
+	function mostrarFechaActualizacion() {
+	  try {
+		let fechaMod = document.lastModified;
+		let fechaFormateada = formatearFecha(fechaMod);
+		alert("Ultima actualización: "+fechaFormateada);
+	  } catch (e) {
+		alert("Error al obtener la fecha"+error(e));
+	  }
+	}
+	// Ejecutar al cargar
+	//mostrarFechaActualizacion();
+	//HASTA ACA...
 
 	//Activar/Desactivar/Mostrar/Ocultar/Ejecutar lo que corresponda al iniciar
-	document.getElementById("gpson").style.visibility='hidden';
-	document.getElementById("cuadroestadisticasbarralateral").style.visibility='hidden';
-	btnindicacionesmodalflash.style.display='none';
-	cajadistancia.style.visibility='hidden';
-	botoncentrado.style.display='none';
-	document.getElementById("dondestoy").style.visibility='hidden';
-	document.getElementById("botonnorte").style.visibility='hidden';
-	document.getElementById("contenedorMediciones").style.visibility='hidden';
-	document.getElementById("Conectividad").style.visibility='hidden';
-	document.getElementById("BotonLimpiarPantalla").style.visibility='hidden';
-	botondetallesruta.style.display='none';
-	mimodalflash.style.display='none';
+	document.getElementById("gpson").classList.add("ocultar");
+	document.getElementById("cuadroestadisticasbarralateral").classList.add("ocultar");
+	btnindicacionesmodalflash.classList.add("ocultar");
+	cajadistancia.classList.remove("visible");
+	botoncentrado.classList.add("ocultar");
+	document.getElementById("dondestoy").classList.add("ocultar");
+	document.getElementById("botonnorte").classList.add("ocultar");
+	document.getElementById("contenedorMediciones").classList.add("ocultar");
+	document.getElementById("Conectividad").classList.add("ocultar");
+	document.getElementById("BotonLimpiarPantalla").classList.add("ocultar");
+	botondetallesruta.classList.add("ocultar");
+	mimodalflash.classList.add("ocultar");
 	const contenedorzoom = document.querySelector('.leaflet-top.leaflet-right');
 	contenedorzoom.style.setProperty('top', '1px', 'important');
 	contenedorzoom.style.setProperty('right', '1px', 'important');
@@ -3218,7 +3916,6 @@
 			//enviando.textContent = 'Hubo un error; por lo que no se pudo enviar la información. Por favor, intentalo nuevamente.-';
 		}
 	});
-	//ActualizarVisitas();
 </script>
 <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
 </html>

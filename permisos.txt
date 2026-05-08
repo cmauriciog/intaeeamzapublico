@@ -1,6 +1,8 @@
 var contadorvisitasdrive11="https://script.google.com/macros/s/AKfycbz3syJdQjAK1aBiPvgKoNmZe5gisMqEz6VSru7nA4kcpy-6AsE2G_gY_7Qqj-0eFcYQ/exec?callback=ProcesarRespuestaVisitas";
 var contadorvisitasdrive="https://script.google.com/macros/s/AKfycbzIqj-d4rQhHxrUTdeZQB6lX5cX8Bn3UKXfmnrtto8RtmeWg32hVGmrnDVHa7Pu4ngUkg/exec";
 var contrasenias="INTAEEAMza";
+var apikeyors="5b3ce3597851110001cf62488ddec758c2a8463d94f008f37aff296f";
+var apikeygraphhopper="33491870-874e-4387-a016-4b04185ce4a3";
 var usuarios=[
 "demes.isabel",
 "ambrogetti.alejandro",
