@@ -1721,9 +1721,9 @@
 		if (tot_parc) {CerrarModalEstadistico()};
 		botondetallesruta.classList.add("ocultar");
 		clearInterval(intervalo);
-		if (intervaloRuta) {clearInterval(intervaloRuta)};
+		//if (intervaloRuta) {clearInterval(intervaloRuta)};
 		clearTimeout(temporizadormodalflash);
-		if (tiempo) {clearTimeout(tiempo)};
+		//if (tiempo) {clearTimeout(tiempo)};
 		aer="";
 		mail="";
 		coordenadas_ubicacion_real="";
@@ -1845,7 +1845,6 @@
 		VerificarConexion();
 		if (conexion==="si") {
 			VerificarGPS();
-			if (senialgps !== "si") return;
 			if (dispositivo==="movil") {
 				if (seguimiento==="no") {
 					titulomodalflash.innerText="TRAZAR RUTA";
@@ -2059,8 +2058,8 @@
 	// Función para detener geolocalización
 	function DetenerActualizarUbicacion() {
 		clearInterval(intervalo);
-		if (intervaloRuta) {clearInterval(intervaloRuta)};
-		if (tiempo) {clearTimeout(tiempo)};
+		//if (intervaloRuta) {clearInterval(intervaloRuta)};
+		//if (tiempo) {clearTimeout(tiempo)};
 		clearTimeout(temporizadormodalflash);
 		actualizarruta="si";
 		document.getElementById("dondestoy").classList.add("ocultar");
@@ -2097,8 +2096,8 @@
 
 	<!--Función para detener el seguimiento en tiempo real-->
 	function desactivar_seguimiento(seguimiento) {
-		if (intervaloRuta) {clearInterval(intervaloRuta)};
-		if (tiempo) {clearTimeout(tiempo)};
+		//if (intervaloRuta) {clearInterval(intervaloRuta)};
+		//if (tiempo) {clearTimeout(tiempo)};
 		botondetallesruta.classList.add("ocultar");
 		barralateral.close();
 		seguimiento="";
@@ -2396,7 +2395,6 @@
 				instructions=true&
 				calc_points=true&
 				points_encoded=false&
-				ch.disable=true&
 				algorithm=alternative_route&
 				alternative_route.max_paths=2&
 				key=${apikeygraphhopper}`.replace(/\s+/g, '');
@@ -2855,8 +2853,8 @@
 	};
 
 	function IrUnidad(agencia) {
-		if (intervaloRuta) {clearInterval(intervaloRuta)};
-		if (tiempo) {clearTimeout(tiempo)};
+		//if (intervaloRuta) {clearInterval(intervaloRuta)};
+		//if (tiempo) {clearTimeout(tiempo)};
 		iraaer="si";
 		mail="";
 		encontrar_a.value = "";
@@ -3574,8 +3572,8 @@
 	
 	//Capturar evento sobre botones
 	btncerrarmodalflash.addEventListener("click",()=>{
-		if (intervaloRuta) {clearInterval(intervaloRuta)};
-		if (tiempo) {clearTimeout(tiempo)};
+		//if (intervaloRuta) {clearInterval(intervaloRuta)};
+		//if (tiempo) {clearTimeout(tiempo)};
 		btnindicacionesmodalflash.classList.add("ocultar");
 		mimodalflash.classList.add("ocultar");
 		visitas.classList.add("ocultar");
@@ -3611,8 +3609,8 @@
 	});
 	
 	btnindicacionesmodalflash.addEventListener("click",()=>{
-		if (intervaloRuta) {clearInterval(intervaloRuta)};
-		if (tiempo) {clearTimeout(tiempo)};
+		//if (intervaloRuta) {clearInterval(intervaloRuta)};
+		//if (tiempo) {clearTimeout(tiempo)};
 		visitas.classList.add("ocultar");
 		clearTimeout(temporizadormodalflash);
 		orientarme="si";
