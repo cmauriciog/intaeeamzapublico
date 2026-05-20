@@ -1128,7 +1128,7 @@
 
 <script>
 	var Version = "2"; //Cambiar este valor para volver a mostrar el modal de presentacion cada vez que haya una actualizacion importante
-	<!--Mapas o capas bases-->
+	//Mapas o capas bases
 	var ign = new L.tileLayer('https://wms.ign.gob.ar/geoserver/gwc/service/tms/1.0.0/capabaseargenmap@EPSG%3A3857@png/{z}/{x}/{-y}.png', {
 		attribution: 'Teselas <a href="https://www.ign.gob.ar/" target="_blank">IGN</a> &copy; <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a> |Versión: '+Version,
 		}
@@ -1159,7 +1159,7 @@
 		attribution: 'Map data: © OpenStreetMap contributors, SRTM | Map style: © OpenTopoMap (CC-BY-SA); <a href="javascript:PrepararMail()">Desarrollado por: Mauricio Godoy</a>|Versión: '+Version,
 		});
 
-	<!--Selector de las capas base-->
+	//Selector de las capas base
 	var capasBase = {
 		osm,
 		googlecallejero,
@@ -1170,7 +1170,7 @@
 		igngris
 	};
 
-	<!--Establecer el área para el mapa y definir cuál será la capa base por defecto-->
+	//Establecer el área para el mapa y definir cuál será la capa base por defecto
 	var mapa = L.map('mapa', {editable:true,
 		center: ["-33.00598405638592", "-68.85600484779212"],
 		zoom: 16,
@@ -1184,10 +1184,10 @@
 	
 	L.control.zoom({
 		position:'topright'}).addTo(mapa);
-	<!--Añadir el mini-mapa al lienzo-->
+	//Añadir el mini-mapa al lienzo
 	var minimapamundial = L.control.worldMiniMap({position: 'bottomright', style: {opacity: 0.9, borderRadius: '0px', backgroundColor: 'lightblue'}}).addTo(mapa);
 
-	<!--Defino las variables globales-->
+	//Defino las variables globales
 	var capa_filtrada={};
 	var capa_buscar={};
 	var capa_buscar1={};
@@ -1268,7 +1268,7 @@
 	var marcadoreeamzaoeste = L.marker([-33.00451232201417, -68.8614969142567], {icon: icono_inta}).addTo(grupoeeamza);
 	var marcadoreeamzaeste = L.marker([-33.006887629673, -68.85250615069111], {icon: icono_inta}).addTo(grupoeeamza);
 	
-	<!--Añadir la barra lateral-->
+	//Añadir la barra lateral
 	var barralateral = L.control.sidebar('barralateral').addTo(mapa);
 	
 	//Capturar evento sobre botones
@@ -1297,17 +1297,17 @@
       };
     };
 	
-	<!--Funcion para colorear el fondo según el tipo de coberura (cultivos/edificios)-->
+	//Funcion para colorear el fondo según el tipo de coberura (cultivos/edificios)
 	function ColorFondo(d) {
 		return d == 'Cultivo' ? '#0aa621':
 			'#0b08a1'};
 
-	<!--Funcion para colorear perímetro cultivos/edificios-->
+	//Funcion para colorear perímetro cultivos/edificios
 	function ColorPerimetro(d) {
 		return d=='Cultivo' ? 'white':
 			'black'};
 
-	<!--Funcion para llamar subfunciones de coloreo perímetros y áreas-->
+	//Funcion para llamar subfunciones de coloreo perímetros y áreas
 	function PersonalizarPerimetro(feature) {
 		return {
 		fillColor: ColorFondo(feature.properties.Cobertura),
@@ -1446,7 +1446,7 @@
 		};
 	};
 
-	<!--Funcion para filtrar con criterio distinto a vid. Es insensible al uso de mayúsculas/minúsculas y busca con criterio tipo "*...*" -->
+	//Funcion para filtrar con criterio distinto a vid. Es insensible al uso de mayúsculas/minúsculas y busca con criterio tipo "*...*"
 	function CriterioAbuscar(valor) {
 		encontrar_a.value = "";
 		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
@@ -1508,7 +1508,7 @@
 		document.getElementById("mostrartodo").classList.remove("ocultar");
 	};
 
-	<!--Funcion para filtrar con otro criterio distinto a vid-->
+	//Funcion para filtrar con otro criterio distinto a vid
 	function CoberturasAbuscar(valor) {
 		encontrar_a.value = "";
 		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
@@ -1538,7 +1538,7 @@
 		document.getElementById("mostrartodo").classList.remove("ocultar");
 	};
 
-	<!--Funcion para filtrar parcelas con valores distintos a vid-->
+	//Funcion para filtrar parcelas con valores distintos a vid
 	function BuscarOtro(valor) {
 		encontrar_a.value = "";
 		encontrar_a.placeholder = "¿Buscás algo o alguien?...";
@@ -1568,7 +1568,7 @@
 		barralateral.close();
 	};
 
-	<!--Funcion para filtrar parcelas con vid-->
+	//Funcion para filtrar parcelas con vid
 	function Filtrar_Vid(feature) {
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		barralateral.close();
@@ -1591,7 +1591,7 @@
 			document.getElementById("cuerpomodalestadistico").innerHTML=resumen;AbrirModalEstadistico()};
 	};
 
-	<!--Funcion para filtrado general-->	
+	//Funcion para filtrado general
 	function Filtrar_Gral(feature) {
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		if (criterio=="Clon" && sel_clon.value !=""){if (feature.properties.Clon==sel_clon.value) return true; resumen=otro_criterio.value+" "+sel_clon.value};
@@ -1643,7 +1643,7 @@
 		modal.classList.remove("ocultar");
 	};
 
-	<!--Funcion para buscar sector/actividad-->
+	//Funcion para buscar sector/actividad
 	function Filtrar_Buscar(feature) {
 		if (grupoeeamza) {mapa.removeLayer(grupoeeamza)};
 		criterio="";
@@ -1652,7 +1652,7 @@
 		|| feature.properties.Actividad3==inputbusquedabis.value) {return true,sector=feature.properties.Descripcio,coincidencia="actividad"};
 	};
 
-	<!--Funcion para buscar persona/especialidad-->
+	//Funcion para buscar persona/especialidad
 	function Filtrar_Buscar1(feature) {
 		if (feature.properties.Persona==inputbusquedabis.value && feature.properties.Ofi_Lab !==null) {return true,sector=feature.properties.Sector,coincidencia="persona",oficina=feature.properties.Ofi_Lab};
 		if (feature.properties.Persona==inputbusquedabis.value && feature.properties.Ofi_Lab ==null) {return true,sector=feature.properties.Sector,coincidencia="persona"};
@@ -1665,9 +1665,9 @@
 		if (feature.properties.Descripcio==sector) {return true,sector=feature.properties.Descripcio};
 	};
 
-	<!--Función para encontrar una persona o lugar-->
+	//Función para encontrar una persona o lugar
 	function EncontrarA(encontrar) {
-		<!--Resetear variables-->
+		//Resetear variables
 		barralateral.close();
 		var buscado=encontrar;
 		coincidencia="";
@@ -1676,7 +1676,7 @@
 		msgencontrado="";
 		actualizarruta="si";
 		aer="";
-		<!--Borrar las búsquedas anteriores-->
+		//Borrar las búsquedas anteriores
 		if (version=="completa") {
 			if (Object.keys(capa_parcelas).length !==0) {capa_parcelas.remove()};
 			if (Object.keys(capa_filtrada).length !== 0) {capa_filtrada.remove()};
@@ -1684,9 +1684,9 @@
 		if (Object.keys(capa_buscar).length !==0) {capa_buscar.remove()};
 		if (Object.keys(capa_buscar1).length !==0) {capa_buscar1.remove()};
 		if (lugar !==""){lugar.remove()};
-		<!--Generar la capa con el resultado de la búsqueda-->
+		//Generar la capa con el resultado de la búsqueda
 		capa_buscar=L.geoJSON(parcelas,{filter:Filtrar_Buscar, style: PersonalizarBusquedas, onEachFeature}).addTo(mapa);
-		<!--No se encontró lo que se busca por coincidencia con el Sector o la especialidad de éste; así que se pasa a buscar por coincidencia con persona o sus especialidades-->
+		//No se encontró lo que se busca por coincidencia con el Sector o la especialidad de éste; así que se pasa a buscar por coincidencia con persona o sus especialidades
 		if (Object.keys(capa_buscar._layers).length ==0) {
 			capa_buscar=L.geoJSON(personal,{filter:Filtrar_Buscar1,style: PersonalizarBusquedas, onEachFeature}).addTo(mapa),
 			capa_buscar1=L.geoJSON(parcelas,{filter:Filtrar_Buscar2, style:PersonalizarBusquedas, onEachFeature}).addTo(mapa);
@@ -1702,7 +1702,7 @@
 		};
 	};
 
-	<!--Funcion para resetear todo-->
+	//Funcion para resetear todo
 	function ResetearTodo() {
 		document.getElementById("volvereea").classList.add("ocultar");
 		if (lugar){lugar.remove()};
@@ -1762,7 +1762,7 @@
 		};
 	};
 
-	<!-- Funcion para mostrar todas las parcelas-->
+	//Funcion para mostrar todas las parcelas
 	function MostrarTodo() {
 		ResetearTodo();
 		capa_parcelas=L.geoJson(parcelas,{style: PersonalizarPerimetro, onEachFeature}).addTo(mapa);
@@ -1770,7 +1770,7 @@
 		document.getElementById("mostrartodo").classList.add("ocultar");
 	};
 
-	<!--Verificar Sistema Operativo-->
+	//Verificar Sistema Operativo
 	function VerificarDispositivo() {
 		const ancho = window.screen.width;
 		const alto = window.screen.height;
@@ -1780,7 +1780,7 @@
 		if (dispositivo=="pc") {document.getElementById("botonnorte").style.visibility="visible";minimapamundial.addTo(mapa)};
     };
 	
-	<!--Funcion para verificar estado de conectividad-->
+	//Funcion para verificar estado de conectividad
 	function VerificarConexion() {
 		const online = navigator.onLine;
 		online ? conexion="si" : conexion="no";
@@ -1792,9 +1792,9 @@
 		};
 	};
 
-	<!--Función para verificar GPS-->
+	//Función para verificar GPS
 	function VerificarGPS() {
-		<!--Sin GPS-->
+		//Sin GPS-->
 		if (!navigator.geolocation) {
 			titulomodalflash.innerText="SIN GPS";
 			cuerpomodalflash.innerHTML = '<span style="color:red"><br><b>Oho...!!!.</b><br><br><span style="color:black">Parece que tu navegador o dispositivo no está funcionando con GPS...!!!.-<br>'+
@@ -1802,16 +1802,17 @@
 			tiempomodalflash=5000;
 			ModalFlash(tiempomodalflash);
 			senialgps="no";
+			return;
 		};
 		if (dispositivo !=="pc") {navigator.geolocation.getCurrentPosition(
-			<!--GPS Perfecto-->
+			//GPS Perfecto-->
 			(pos) => {
 				senialgps="si";
 				const lat = pos.coords.latitude.toFixed(6);
 				const lon = pos.coords.longitude.toFixed(6);
 				const accuracy = pos.coords.accuracy;
 			},
-			<!--Algún problema con el GPS-->
+			//Algún problema con el GPS-->
 			(error) => {
 				senialgps="no";
 				msg="❌ No se pudo acceder al GPS";
@@ -1833,7 +1834,7 @@
 		)};
 	};
 
-	<!--Función para activar el seguimiento en tiempo real y hacer zoom en él-->
+	//Función para activar el seguimiento en tiempo real y hacer zoom en él-->
 	function activar_seguimiento(seguimiento) {
 		sondeo_posicion=0;
 		barralateral.close();
@@ -2088,13 +2089,13 @@
 		ModalFlash(tiempomodalflash);
 	};
 
-	<!--Función para Centrar en Mi Ubicación Actual-->
+	//Función para Centrar en Mi Ubicación Actual-->
 	function CentrarMiUbicacion() {
 		barralateral.close();
 		mapa.setView(coordenadas_ubicacion_real, 17);
 	};
 
-	<!--Función para detener el seguimiento en tiempo real-->
+	//Función para detener el seguimiento en tiempo real-->
 	function desactivar_seguimiento(seguimiento) {
 		//if (intervaloRuta) {clearInterval(intervaloRuta)};
 		//if (tiempo) {clearTimeout(tiempo)};
@@ -2734,7 +2735,7 @@
 		};
 	};
 
-	<!--Función para alternar rutas desde el panel de indicaciones-->
+	//Función para alternar rutas desde el panel de indicaciones-->
 	function activarRuta(route, proveedor, tipo) {
 	   if (tipo === "alternativa" && route.alternativa) {
 		  // 🔁 intercambiar geometría
@@ -2756,7 +2757,7 @@
 	   MostrarRuta(route, proveedor);
 	};
 
-	<!--Funcion para mostrar imagen estadísticas en ventana modal-->
+	//Funcion para mostrar imagen estadísticas en ventana modal-->
 	function Funcion_Modal(imagen, titulo, leyenda, ancho, alto) {
 		var left = (screen.weight / 2)-(ancho/2);
 		var top = (screen.height / 2)-(alto/2);
@@ -2768,7 +2769,7 @@
 		document.getElementById("Modal_Grafico").showModal();
 	};
 
-	<!--Función para armar el arreglo de sectores-->
+	//Función para armar el arreglo de sectores-->
 	function ListaSectores(feature, layer) {
 		if (feature.properties.Cobertura !="Cultivo" && feature.properties.Descripcio !="Vivienda" && feature.properties.Cobertura !="Invernaculo" && feature.properties.Descripcio !="Deposito"
 			&& feature.properties.Descripcio !=null) {
@@ -2791,7 +2792,7 @@
 		if (feature.properties.id==2) {listabusqueda.push(feature.properties.Descripcio)};
 	};
 
-	<!--Función para armar el arreglo de personas y especialidades-->
+	//Función para armar el arreglo de personas y especialidades-->
 	function ListaPersonas(feature, layer) {
 		if (feature.properties.Persona !=null) {
 			listabusqueda.push(feature.properties.Persona);
@@ -2810,7 +2811,7 @@
 		};
 	};
 
-	<!--Función para cargar el listbox-->
+	//Función para cargar el listbox-->
 	function CargarListbox() {
 		geojson = L.geoJson(parcelas, {onEachFeature: ListaSectores}).addTo(mapa);
 		geojson.remove();
@@ -3018,10 +3019,10 @@
 		grupoeeamza.addTo(mapa);
 	};
 
-	<!-- Control de la escala que se irá actualizando conforme se haga zoom -->
+	// Control de la escala que se irá actualizando conforme se haga zoom -->
 	new L.control.scale({imperial:false}).addTo(mapa);
 
-	<!--Bloque Busqueda Unidades-->
+	//Bloque Busqueda Unidades-->
 	const inputbusquedabisunidad = document.getElementById('buscarunidad');
 	const sugerencia = document.getElementById('sugerenciasunidad');
 	inputbusquedabisunidad.addEventListener('input', () => {
@@ -3057,7 +3058,7 @@
 		};
 	});
 	
-	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Superior-->
+	//Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Superior-->
 	var inputbusqueda = document.getElementById('encontrar_a');
 	const sugerenciaz = document.getElementById('sugerenciasbusqueda');
 	inputbusqueda.addEventListener('input', () => {
@@ -3095,7 +3096,7 @@
 		};
 	});
 	
-	<!--Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Barra Lateral-->
+	//Bloque Busqueda Sectores, servicios, personas, especialidades Entrada Barra Lateral-->
 	var inputbusquedabis = document.getElementById('encontrar_abis');
 	const sugerenciasbiz = document.getElementById('sugerenciasbusquedabis');
 	inputbusquedabis.addEventListener('input', () => {
@@ -3400,7 +3401,7 @@
 		}, tiempo);
 	};
 	
-	<!--Función Mostrar/Habilitar u Ocultar/Deshabilitar elementos según la versión de trabajo-->
+	//Función Mostrar/Habilitar u Ocultar/Deshabilitar elementos según la versión de trabajo-->
 	function VerificarVersion() {
 		if (version=="publica") {
 			document.getElementById("cerrarsesion").classList.add("ocultar");
