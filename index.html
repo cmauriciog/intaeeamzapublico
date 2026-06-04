@@ -1721,9 +1721,7 @@
 		if (tot_parc) {CerrarModalEstadistico()};
 		botondetallesruta.classList.add("ocultar");
 		clearInterval(intervalo);
-		//if (intervaloRuta) {clearInterval(intervaloRuta)};
 		clearTimeout(temporizadormodalflash);
-		//if (tiempo) {clearTimeout(tiempo)};
 		aer="";
 		mail="";
 		coordenadas_ubicacion_real="";
@@ -1946,7 +1944,7 @@
 		dentroeeamza = Chequeardentroeeamza(coordenadas_ubicacion_real);
 		distancia=DistanciaEnTiempoReal();
 		ultimoDestino=null;
-		if (dentroeeamza && coord.length !== 0) {botondetallesruta.classList.add("ocultar");panelrutas.classList.add("ocultar");if (capaRutaPrincipal) {mapa.removeLayer(capaRutaPrincipal)};if (capaRutaAlternativa) {mapa.removeLayer(capaRutaAlternativa)};TrazarRutaDentroEEA()};
+		if (dentroeeamza && coord.length !== 0) {botondetallesruta.classList.add("ocultar");panelrutas.classList.add("ocultar");if (capaRutaPrincipal) {mapa.removeLayer(capaRutaPrincipal)};if (capaRutaAlternativa) {mapa.removeLayer(capaRutaAlternativa)};if (distancia > 10) {TrazarRutaDentroEEA()}};
 		if (!dentroeeamza && aviso===0) {
 			if (!dentroeeamza && aviso===0 && debeActualizarRuta()) {
 				trazarRutaInteligente(coordenadas_ubicacion_real,entradaeea);
@@ -2239,7 +2237,6 @@
 	};
 	
 	function TrazarRutaDentroEEA(){
-		if (distancia <= 10) return;
 		if (dentroeeamza) {
 			mapa.removeLayer(osm);
 			mapa.addLayer(googlesatelite);
@@ -2367,7 +2364,7 @@
 				});
 		}
 		intentarSiguiente();
-		if (Object.keys(capa_buscar).length !==0 || Object.keys(capa_buscar1).length !==0) {console.log("Trazando ruta dentro.-");TrazarRutaDentroEEA()};
+		if (Object.keys(capa_buscar).length !==0 || Object.keys(capa_buscar1).length !==0) {if (distancia > 10) {TrazarRutaDentroEEA()}};
 	};
 	let datosRutas = {
 		principal: {
@@ -2856,8 +2853,6 @@
 	};
 
 	function IrUnidad(agencia) {
-		//if (intervaloRuta) {clearInterval(intervaloRuta)};
-		//if (tiempo) {clearTimeout(tiempo)};
 		iraaer="si";
 		mail="";
 		encontrar_a.value = "";
