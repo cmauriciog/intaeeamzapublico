@@ -1980,6 +1980,7 @@
 		let timeoutLlegada = null;
 		if (distancia <= 7 && !timeoutLlegada) {
 			timeoutLlegada = setTimeout(() => {
+				if (ruta) {mapa.removeLayer(ruta)};
 				cajadistancia.classList.add("visible");
 				cajadistancia.textContent = "¡Has llegado a tu destino!.";
 				cajadistancia.style.color = "#155724";
@@ -1987,6 +1988,7 @@
 			}, 10000);
 		};
 		if (distancia <= 10 && dispositivo=="movil" && !yaLlegue) {
+			if (ruta) {mapa.removeLayer(ruta)};
 			yaLlegue = true;
 			avisollegada = "no";
 			cajadistancia.classList.add("visible");
