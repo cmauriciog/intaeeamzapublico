@@ -1693,8 +1693,8 @@
 			capa_buscar.remove();
 		};
 		if (marca_ubicacion_real) {
-			mapa.flyToBounds(capa_buscar.getBounds(),18);
-			mapa.flyToBounds(capa_buscar1.getBounds(),18);
+			if (Object.keys(capa_buscar).length !== 0) {mapa.flyToBounds(capa_buscar.getBounds(),18)};
+			if (Object.keys(capa_buscar1).length !== 0) {mapa.flyToBounds(capa_buscar1.getBounds(),18)};
 			dentroeeamza = Chequeardentroeeamza(coordenadas_ubicacion_real);
 			if (dentroeeamza && coord.length !== 0) {alertaZonaMedia = false;TrazarRutaDentroEEA()};
 			if (!dentroeeamza && aviso===0) {
